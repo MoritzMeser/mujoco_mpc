@@ -39,34 +39,36 @@
 #include "mjpc/tasks/swimmer/swimmer.h"
 #include "mjpc/tasks/walker/walker.h"
 #include "mjpc/tasks/H1/walk/H1_walk.h"
+#include "mjpc/tasks/H1/balance_simple/balance_simple.h"
 
 namespace mjpc {
 
-std::vector<std::shared_ptr<Task>> GetTasks() {
-  return {
-      std::make_shared<H1_walk>(),
-      std::make_shared<Acrobot>(),
-      std::make_shared<Allegro>(),
-      std::make_shared<aloha::Handover>(),
-      std::make_shared<aloha::Reorient>(),
-      std::make_shared<Cartpole>(),
-      std::make_shared<Fingers>(),
-      std::make_shared<humanoid::Stand>(),
-      std::make_shared<humanoid::Tracking>(),
-      std::make_shared<humanoid::Walk>(),
-      std::make_shared<manipulation::Bring>(),
-      // DEEPMIND INTERNAL TASKS
-      std::make_shared<OP3>(),
-      std::make_shared<Panda>(),
-      std::make_shared<Particle>(),
-      std::make_shared<ParticleFixed>(),
-      std::make_shared<Rubik>(),
-      std::make_shared<ShadowReorient>(),
-      std::make_shared<Quadrotor>(),
-      std::make_shared<QuadrupedFlat>(),
-      std::make_shared<QuadrupedHill>(),
-      std::make_shared<Swimmer>(),
-      std::make_shared<Walker>(),
-  };
-}
+    std::vector<std::shared_ptr<Task>> GetTasks() {
+        return {
+                std::make_shared<H1_walk>(),
+                std::make_shared<Balance_Simple>(),
+                std::make_shared<Acrobot>(),
+                std::make_shared<Allegro>(),
+                std::make_shared<aloha::Handover>(),
+                std::make_shared<aloha::Reorient>(),
+                std::make_shared<Cartpole>(),
+                std::make_shared<Fingers>(),
+                std::make_shared<humanoid::Stand>(),
+                std::make_shared<humanoid::Tracking>(),
+                std::make_shared<humanoid::Walk>(),
+                std::make_shared<manipulation::Bring>(),
+                // DEEPMIND INTERNAL TASKS
+                std::make_shared<OP3>(),
+                std::make_shared<Panda>(),
+                std::make_shared<Particle>(),
+                std::make_shared<ParticleFixed>(),
+                std::make_shared<Rubik>(),
+                std::make_shared<ShadowReorient>(),
+                std::make_shared<Quadrotor>(),
+                std::make_shared<QuadrupedFlat>(),
+                std::make_shared<QuadrupedHill>(),
+                std::make_shared<Swimmer>(),
+                std::make_shared<Walker>(),
+        };
+    }
 }  // namespace mjpc

@@ -143,6 +143,8 @@ add_library(
         $<TARGET_OBJECTS:mujoco::platform_ui_adapter>
         tasks/H1/walk/H1_walk.h
         tasks/H1/utility/reward_computation.cpp
+        tasks/H1/balance_simple/balance_simple.h
+        tasks/H1/balance_simple/balance_simple.cc
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})
