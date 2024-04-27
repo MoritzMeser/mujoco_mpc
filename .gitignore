@@ -34,5 +34,6 @@ MJMODEL.TXT
 # Python
 python/dist/
 cmake-build-debug/
-Cmkae-build-release/
+cmake-build-release/
+.idea/
 
