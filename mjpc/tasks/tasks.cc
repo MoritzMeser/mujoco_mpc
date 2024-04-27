@@ -38,11 +38,13 @@
 #include "mjpc/tasks/shadow_reorient/hand.h"
 #include "mjpc/tasks/swimmer/swimmer.h"
 #include "mjpc/tasks/walker/walker.h"
+#include "mjpc/tasks/H1/walk/H1_walk.h"
 
 namespace mjpc {
 
 std::vector<std::shared_ptr<Task>> GetTasks() {
   return {
+      std::make_shared<H1_walk>(),
       std::make_shared<Acrobot>(),
       std::make_shared<Allegro>(),
       std::make_shared<aloha::Handover>(),
