@@ -1,7 +1,7 @@
 <mujoco model="H1">
     <include file="../../common.xml"/>
     <!--   modified from humanoid bench - removed sensors and added a plane as floor-->
-    <include file="../h1/h1_pos.xml"/>
+    <include file="../h1/h1_balance_pos.xml"/>
 
     <custom>
         <!-- Parameters to adjust the reward function in the GUI-->
