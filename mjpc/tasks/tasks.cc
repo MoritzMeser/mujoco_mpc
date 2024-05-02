@@ -40,6 +40,7 @@
 #include "mjpc/tasks/walker/walker.h"
 #include "mjpc/tasks/H1/walk/H1_walk.h"
 #include "mjpc/tasks/H1/balance_simple/balance_simple.h"
+#include "mjpc/tasks/H1/package/package.h"
 
 namespace mjpc {
 
@@ -47,6 +48,7 @@ namespace mjpc {
         return {
                 std::make_shared<H1_walk>(),
                 std::make_shared<Balance_Simple>(),
+                std::make_shared<H1_package>(),
                 std::make_shared<Acrobot>(),
                 std::make_shared<Allegro>(),
                 std::make_shared<aloha::Handover>(),
