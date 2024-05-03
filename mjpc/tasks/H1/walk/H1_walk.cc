@@ -34,6 +34,7 @@ namespace mjpc {
 // -------------------------------------------------------------
     void H1_walk::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                        double *residual) const {
+        int counter = 0;
         // get values from GUI
         double stand_height = parameters_[1];
         double move_speed = parameters_[0];
@@ -67,39 +68,6 @@ namespace mjpc {
         small_control = (4 + small_control) / 5;
 
 
-        // ----- actuator velocity ----- //
-        double margin = parameters_[2];
-        double vel_bounds = parameters_[3];
-        double actuator_velocity = 0.0;
-        for (int i = 0; i < model->nu; i++) {
-            double value_at_margin = 0.0;
-            x = data->actuator_velocity[i];
-            actuator_velocity += tolerance(x, {-vel_bounds, value_at_margin}, margin, "quadratic", value_at_margin);
-        }
-        actuator_velocity /= model->nu;  // average over all controls
-        actuator_velocity = (2 + actuator_velocity) / 3;
-
-        // ----- foot height ----- //
-        double right_foot_height = SensorByName(model, data, "right_foot_height")[2];
-        double left_foot_height = SensorByName(model, data, "left_foot_height")[2];
-        double right_foot_reward = tolerance(right_foot_height, {0.0, 0.2}, 0.1);
-        double left_foot_reward = tolerance(left_foot_height, {0.0, 0.2}, 0.1);
-        double foot_reward = (right_foot_reward + left_foot_reward) / 2;
-        foot_reward = (4 + foot_reward) / 5;
-
-
-//        // ----- foot distance ----- //
-//        double left_foot_x = SensorByName(model, data, "left_foot_height")[0];
-//        double right_foot_x = SensorByName(model, data, "right_foot_height")[0];
-//        double left_foot_y = SensorByName(model, data, "left_foot_height")[1];
-//        double right_foot_y = SensorByName(model, data, "right_foot_height")[1];
-//        double foot_distance = std::sqrt(std::pow(left_foot_x - right_foot_x, 2) +
-//                                         std::pow(left_foot_y - right_foot_y, 2));
-//        foot_distance = tolerance(foot_distance, {0.2, 0.6}, 0.1);
-//        foot_reward *= foot_distance;
-//
-//        foot_reward = (4 + foot_reward) / 5;
-
         // ----- reward computation ----- //
         double reward;
         // ----- move speed ----- //
@@ -108,16 +76,44 @@ namespace mjpc {
             double horizontal_velocity_y = SensorByName(model, data, "center_of_mass_velocity")[1];
             double dont_move = (tolerance(horizontal_velocity_x, {0.0, 0.0}, 2) +
                                 tolerance(horizontal_velocity_y, {0.0, 0.0}, 2)) / 2;
-            reward = small_control * stand_reward * dont_move * actuator_velocity * foot_reward;
+            reward = small_control * stand_reward * dont_move;
         } else {
             double com_velocity = SensorByName(model, data, "center_of_mass_velocity")[0];
             double move = tolerance(com_velocity, {move_speed, infinity}, std::abs(move_speed), "linear", 0.0);
             move = (5 * move + 1) / 6;
-            reward = small_control * stand_reward * move * actuator_velocity * foot_reward;
+            reward = small_control * stand_reward * move;
         }
 
         // ----- residuals ----- //
-        residual[0] = 1.0 - reward;
+        residual[counter] = 1.0 - reward;
+        counter++;
+
+
+
+
+        // ----- foot height ----- //
+        double right_foot_height = SensorByName(model, data, "right_foot_height")[2];
+        double left_foot_height = SensorByName(model, data, "left_foot_height")[2];
+        double right_foot_reward = tolerance(right_foot_height, {0.0, 0.3}, 0.4, "gaussian", 0.1);
+        double left_foot_reward = tolerance(left_foot_height, {0.0, 0.3}, 0.4, "gaussian", 0.1);
+        double foot_reward = (right_foot_reward + left_foot_reward) / 2;
+
+        // ----- residuals ----- //
+        residual[counter] = 1.0 - foot_reward;
+        counter++;
+
+        // ---- actuator velocity ----- //
+        double vel_bounds = parameters_[2];
+        double margin = parameters_[3];
+
+        double vel_reward = 0.0;
+        for (int i = 0; i < model->nu; i++) {
+            x = data->actuator_velocity[i];
+            vel_reward += tolerance(x, {-vel_bounds, vel_bounds}, margin, "gaussian", 0.1);
+        }
+        vel_reward /= model->nu;  // average over all controls
+        residual[counter] = 1.0 - vel_reward;
+        counter++;
     }
 
 // -------- Transition for H1 walk task --------
