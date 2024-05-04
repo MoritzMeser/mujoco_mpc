@@ -8,18 +8,17 @@
         <!-- Parameters to adjust the reward function in the GUI-->
         <numeric name="residual_Speed Goal" data="0 0 3.0"/>
         <numeric name="residual_Height Goal" data="1.6 1.0 2.0"/>
-        <numeric name="residual_velocity_bounds" data="6 0 10.0"/>
-        <numeric name="residual_velocity_margin" data="2 0 10.0"/>
+        <numeric name="residual_velocity_margin" data="5 0 10.0"/>
+        <numeric name="residual_moment_margin" data="100 0 200.0"/>
+        <!--        <numeric name="residual_velocity_bounds" data="6 0 10.0"/>-->
 
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>
         <numeric name="agent_horizon" data="0.8"/>
         <numeric name="agent_timestep" data="0.01"/>
         <numeric name="sampling_spline_points" data="3"/>
-                <numeric name="sampling_exploration" data="0.5"/>
-<!--        <numeric name="sampling_trajectories" data="60"/>-->
-<!--        <numeric name="sampling_exploration" data="0.1"/>-->
-        <numeric name="gradient_spline_points" data="5"/>
+        <numeric name="sampling_exploration" data="0.5"/>
+
 
         <!-- estimator -->
         <numeric name="estimator" data="0"/>
