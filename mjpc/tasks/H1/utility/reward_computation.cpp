@@ -5,6 +5,7 @@
 #include "reward_computation.h"
 #include <cmath>
 #include <stdexcept>
+#include "mujoco/mujoco.h"
 
 double sigmoid(double x, double value_at_1, std::string sigmoid_type) {
     if (sigmoid_type == "cosine" || sigmoid_type == "linear" || sigmoid_type == "quadratic") {
@@ -27,7 +28,7 @@ double sigmoid(double x, double value_at_1, std::string sigmoid_type) {
         double scale = std::sqrt(1 - value_at_1);
         double scaled_x = x * scale;
         return std::abs(scaled_x) < 1.0 ? 1.0 - scaled_x * scaled_x : 0.0;
-    // TODO: in the python implementation there are some more sigmoid types, but they are currently not used
+        // TODO: in the python implementation there are some more sigmoid types, but they are currently not used
     } else {
         throw std::invalid_argument("Unknown sigmoid type.");
     }
@@ -57,4 +58,14 @@ double tolerance(double x, std::pair<double, double> bounds, double margin,
         }
     }
     return value;
+}
+
+
+void rotateVector(mjtNum *vector, const mjtNum *rotationMatrix, const mjtNum *inputVector) {
+    for (int i = 0; i < 3; i++) {
+        vector[i] = 0;
+        for (int j = 0; j < 3; j++) {
+            vector[i] += rotationMatrix[i + 3 * j] * inputVector[j];
+        }
+    }
 }

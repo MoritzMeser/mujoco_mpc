@@ -75,56 +75,99 @@ namespace mjpc {
 
         // ----- actuator velocity ----- //
         double vel_margin = parameters_[2];
-        double actuator_velocity = 0.0;
+        double vel_bound = parameters_[3];
+//        double actuator_velocity = 0.0;
         for (int i = 0; i < model->nu; i++) {
+//            actuator_velocity += tolerance(data->actuator_velocity[i], {-vel_bound, +vel_bound}, vel_margin, "quadratic", 0.0);
+            reward *= (3 +
+                       tolerance(data->actuator_velocity[i], {-vel_bound, +vel_bound}, vel_margin, "linear", 0.2)) /
+                      4;
 
-            x = data->actuator_velocity[i];
-//            x = data->cvel[i];
-
-            actuator_velocity += tolerance(x, {0, 0}, vel_margin, "quadratic", 0.0);
         }
-        actuator_velocity /= model->nu;  // average over all controls
-        actuator_velocity = (2 + actuator_velocity) / 3;
+//        actuator_velocity /= model->nu;  // average over all controls
+//        actuator_velocity = (2 + actuator_velocity) / 3;
 
-        reward *= actuator_velocity;
-        // the moment seems to do nothing (most values are always zero anyway)
-
-//        // ----- actuator moment ----- //
-//        double moment_margin = parameters_[3];
-//        double actuator_moment = 0.0;
-//        for (int i = 0; i < model->nu; i++) {
-//            x = data->actuator_moment[i];
-//            printf("actuator_moment: %f\n", x);
-//            actuator_moment += tolerance(x, {0, 0}, moment_margin, "gaussian", 0.1);
-//        }
-//        actuator_moment /= model->nu;  // average over all controls
-//        actuator_moment = (2 + actuator_moment) / 3;
-//
-//        reward *= actuator_moment;
+//        reward *= actuator_velocity;
 
         // ----- foot height ----- //
         double right_foot_height = SensorByName(model, data, "right_foot_height")[2];
         double left_foot_height = SensorByName(model, data, "left_foot_height")[2];
-        double right_foot_reward = tolerance(right_foot_height, {0.0, 0.2}, 0.1);
-        double left_foot_reward = tolerance(left_foot_height, {0.0, 0.2}, 0.1);
+        double right_foot_reward = tolerance(right_foot_height, {0.0, 0.1}, 0.1);
+        double left_foot_reward = tolerance(left_foot_height, {0.0, 0.1}, 0.1);
         double foot_reward = (right_foot_reward + left_foot_reward) / 2;
-        foot_reward = (4 + foot_reward) / 5;
+//        foot_reward = (4 + foot_reward) / 5;
 
         reward *= foot_reward;
 
-//        // ----- foot distance ----- //
-//        double left_foot_x = SensorByName(model, data, "left_foot_height")[0];
-//        double right_foot_x = SensorByName(model, data, "right_foot_height")[0];
-//        double left_foot_y = SensorByName(model, data, "left_foot_height")[1];
-//        double right_foot_y = SensorByName(model, data, "right_foot_height")[1];
-//        double foot_distance = std::sqrt(std::pow(left_foot_x - right_foot_x, 2) +
-//                                         std::pow(left_foot_y - right_foot_y, 2));
-//        foot_distance = tolerance(foot_distance, {0.2, 0.6}, 0.1);
-//        foot_reward *= foot_distance;
+//        // ----- foot position ----- //
+////        double *pelvis_x_orientation = SensorByName(model, data, "pelvis_x_orientation");
+////        double *pelvis_y_orientation = SensorByName(model, data, "pelvis_y_orientation");
+////        double *pelvis_z_orientation = SensorByName(model, data, "pelvis_z_orientation");
 //
-//        foot_reward = (4 + foot_reward) / 5;
+//        // Get the x, y, and z axes of the pelvis
+//        mjtNum *pelvis_x_axis = SensorByName(model, data, "pelvis_x_orientation");
+//        mjtNum *pelvis_y_axis = SensorByName(model, data, "pelvis_y_orientation");
+//        mjtNum *pelvis_z_axis = SensorByName(model, data, "pelvis_z_orientation");
+//
+//// Form the rotation matrix of the pelvis
+//        mjtNum pelvis_rot[9];
+//        for (int i = 0; i < 3; i++) {
+//            pelvis_rot[i] = pelvis_x_axis[i];
+//            pelvis_rot[i + 3] = pelvis_y_axis[i];
+//            pelvis_rot[i + 6] = pelvis_z_axis[i];
+//        }
+//
+//        double *left_foot_pos_global = SensorByName(model, data, "left_foot_height");
+//        double *right_foot_pos_global = SensorByName(model, data, "right_foot_height");
+//        double *pelvis_pos_global = SensorByName(model, data, "pelvis_position");
+//
+//
+//// Compute the position of the left foot in the coordinate frame of the pelvis
+//        mjtNum left_foot_pos_pelvis_global[3];
+//        for (int i = 0; i < 3; i++) {
+//            left_foot_pos_pelvis_global[i] = left_foot_pos_global[i] - pelvis_pos_global[i];
+//        }
+//        mjtNum left_foot_pos_pelvis[3];
+//        rotateVector(left_foot_pos_pelvis, pelvis_rot, left_foot_pos_pelvis_global);
+//
+//// Compute the position of the right foot in the coordinate frame of the pelvis
+//        mjtNum right_foot_pos_pelvis_global[3];
+//        for (int i = 0; i < 3; i++) {
+//            right_foot_pos_pelvis_global[i] = right_foot_pos_global[i] - pelvis_pos_global[i];
+//        }
+//        mjtNum right_foot_pos_pelvis[3];
+//        rotateVector(right_foot_pos_pelvis, pelvis_rot, right_foot_pos_pelvis_global);
+//
+//        // ----- foot distance ----- //
+//        double foot_position_reward = 1.0;
+//        foot_position_reward *= tolerance(left_foot_pos_pelvis[0], {-0.3, 0.3}, 0.2, "linear", 0.0);  // x position of each foot should be around zero
+//        foot_position_reward *= tolerance(left_foot_pos_pelvis[1], {-1.0, 1.0}, 0.2, "linear", 0.0);  // y position of left foot should be negative TODO: check this
+//        foot_position_reward *= tolerance(right_foot_pos_pelvis[0], {-0.3, 0.3}, 0.2, "linear", 0.0);  // x position of each foot should be around zero
+////        foot_position_reward *= tolerance(right_foot_pos_pelvis[1], {0.2, 0.6}, 0.2, "linear", 0.0);  // y position of right foot should be positive TODO: check this
+//
+//        reward *= foot_position_reward;
 
-        // ----- reward computation ----- //
+        // ----- hand height ----- //
+        double right_hand_height = SensorByName(model, data, "right_hand_position")[2];
+        double left_hand_height = SensorByName(model, data, "left_hand_position")[2];
+        double right_hand_reward = tolerance(right_hand_height, {0.0, 1.8}, 0.1);  // not much above the head height
+        double left_hand_reward = tolerance(left_hand_height, {0.0, 1.8}, 0.1);  // not much above the head height
+        double hand_reward = (right_hand_reward + left_hand_reward) / 2;
+        reward *= hand_reward;
+
+
+        // ----- hand velocity ----- //
+        double *right_hand_velocity = SensorByName(model, data, "right_hand_velocity");
+        double *left_hand_velocity = SensorByName(model, data, "left_hand_velocity");
+        double right_hand_speed = std::sqrt(right_hand_velocity[0] * right_hand_velocity[0] +
+                                            right_hand_velocity[1] * right_hand_velocity[1] +
+                                            right_hand_velocity[2] * right_hand_velocity[2]);
+        double left_hand_speed = std::sqrt(left_hand_velocity[0] * left_hand_velocity[0] +
+                                           left_hand_velocity[1] * left_hand_velocity[1] +
+                                           left_hand_velocity[2] * left_hand_velocity[2]);
+        reward *= tolerance(right_hand_speed, {0.0, 0.3}, 0.05, "linear", 0.0);
+        reward *= tolerance(left_hand_speed, {0.0, 0.3}, 0.05, "linear", 0.0);
+
         // ----- move speed ----- //
         if (move_speed == 0.0) {
             double horizontal_velocity_x = SensorByName(model, data, "center_of_mass_velocity")[0];

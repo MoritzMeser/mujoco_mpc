@@ -8,9 +8,8 @@
         <!-- Parameters to adjust the reward function in the GUI-->
         <numeric name="residual_Speed Goal" data="0 0 3.0"/>
         <numeric name="residual_Height Goal" data="1.6 1.0 2.0"/>
-        <numeric name="residual_velocity_margin" data="5 0 10.0"/>
-        <numeric name="residual_moment_margin" data="100 0 200.0"/>
-        <!--        <numeric name="residual_velocity_bounds" data="6 0 10.0"/>-->
+        <numeric name="residual_velocity_margin" data="8 0 20.0"/>
+        <numeric name="residual_velocity_bounds" data="8 0 20.0"/>
 
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>
@@ -81,6 +80,11 @@
 
         <!--        &lt;!&ndash; right hand orientation &ndash;&gt;-->
         <!--        <frame name="right_hand_orientation" objtype="site" objname="right_hand"/>-->
+        <framexaxis name="pelvis_x_orientation" objtype="body" objname="pelvis"/>
+        <frameyaxis name="pelvis_y_orientation" objtype="body" objname="pelvis"/>
+        <framezaxis name="pelvis_z_orientation" objtype="body" objname="pelvis"/>
+
+        <framepos name="pelvis_position" objtype="body" objname="pelvis"/>
     </sensor>
 
 </mujoco>
