@@ -2,7 +2,7 @@
     <include file="../../common.xml"/>
     <!--   modified from humanoid bench - removed sensors and added a plane as floor-->
     <include file="../h1/h1_pos.xml"/>
-    <!--        <include file="../h1/h1_motor.xml"/>-->
+    <!--            <include file="../h1/h1_motor.xml"/>-->
 
     <custom>
         <!-- Parameters to adjust the reward function in the GUI-->
@@ -10,6 +10,7 @@
         <numeric name="residual_Height Goal" data="1.6 1.0 2.0"/>
         <numeric name="residual_velocity_margin" data="8 0 20.0"/>
         <numeric name="residual_velocity_bounds" data="8 0 20.0"/>
+        <numeric name="residual_tradeoff" data="0.5 0 1"/>
 
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>

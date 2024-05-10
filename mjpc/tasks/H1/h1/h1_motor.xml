@@ -245,26 +245,30 @@
         </body>
     </worldbody>
 
+    <default class="torque">
+        <general gainprm="40" ctrllimited="true" ctrlrange="-1 1"/>
+    </default>
+
     <actuator>
-        <motor class="h1" name="left_hip_yaw_joint" joint="left_hip_yaw" ctrlrange="-200 200"/>
-        <motor class="h1" name="left_hip_roll_joint" joint="left_hip_roll" ctrlrange="-200 200"/>
-        <motor class="h1" name="left_hip_pitch_joint" joint="left_hip_pitch" ctrlrange="-200 200"/>
-        <motor class="h1" name="left_knee_joint" joint="left_knee" ctrlrange="-300 300"/>
-        <motor class="h1" name="left_ankle_joint" joint="left_ankle" ctrlrange="-40 40"/>
-        <motor class="h1" name="right_hip_yaw_joint" joint="right_hip_yaw" ctrlrange="-200 200"/>
-        <motor class="h1" name="right_hip_roll_joint" joint="right_hip_roll" ctrlrange="-200 200"/>
-        <motor class="h1" name="right_hip_pitch_joint" joint="right_hip_pitch" ctrlrange="-200 200"/>
-        <motor class="h1" name="right_knee_joint" joint="right_knee" ctrlrange="-300 300"/>
-        <motor class="h1" name="right_ankle_joint" joint="right_ankle" ctrlrange="-40 40"/>
-        <motor class="h1" name="torso_joint" joint="torso" ctrlrange="-200 200"/>
-        <motor class="h1" name="left_shoulder_pitch_joint" joint="left_shoulder_pitch" ctrlrange="-40 40"/>
-        <motor class="h1" name="left_shoulder_roll_joint" joint="left_shoulder_roll" ctrlrange="-40 40"/>
-        <motor class="h1" name="left_shoulder_yaw_joint" joint="left_shoulder_yaw" ctrlrange="-18 18"/>
-        <motor class="h1" name="left_elbow_joint" joint="left_elbow" ctrlrange="-18 18"/>
-        <motor class="h1" name="right_shoulder_pitch_joint" joint="right_shoulder_pitch" ctrlrange="-40 40"/>
-        <motor class="h1" name="right_shoulder_roll_joint" joint="right_shoulder_roll" ctrlrange="-40 40"/>
-        <motor class="h1" name="right_shoulder_yaw_joint" joint="right_shoulder_yaw" ctrlrange="-18 18"/>
-        <motor class="h1" name="right_elbow_joint" joint="right_elbow" ctrlrange="-18 18"/>
+        <general class="torque" name="left_hip_yaw_joint" joint="left_hip_yaw"/>
+        <general class="torque" name="left_hip_roll_joint" joint="left_hip_roll"/>
+        <general class="torque" name="left_hip_pitch_joint" joint="left_hip_pitch"/>
+        <general class="torque" name="left_knee_joint" joint="left_knee" />
+        <general class="torque" name="left_ankle_joint" joint="left_ankle"/>
+        <general class="torque" name="right_hip_yaw_joint" joint="right_hip_yaw"/>
+        <general class="torque" name="right_hip_roll_joint" joint="right_hip_roll"/>
+        <general class="torque" name="right_hip_pitch_joint" joint="right_hip_pitch"/>
+        <general class="torque" name="right_knee_joint" joint="right_knee"/>
+        <general class="torque" name="right_ankle_joint" joint="right_ankle"/>
+        <general class="torque" name="torso_joint" joint="torso"/>
+        <general class="torque" name="left_shoulder_pitch_joint" joint="left_shoulder_pitch"/>
+        <general class="torque" name="left_shoulder_roll_joint" joint="left_shoulder_roll"/>
+        <general class="torque" name="left_shoulder_yaw_joint" joint="left_shoulder_yaw"/>
+        <general class="torque" name="left_elbow_joint" joint="left_elbow"/>
+        <general class="torque" name="right_shoulder_pitch_joint" joint="right_shoulder_pitch"/>
+        <general class="torque" name="right_shoulder_roll_joint" joint="right_shoulder_roll"/>
+        <general class="torque" name="right_shoulder_yaw_joint" joint="right_shoulder_yaw"/>
+        <general class="torque" name="right_elbow_joint" joint="right_elbow"/>
     </actuator>
 
     <!--    <sensor>-->
