@@ -41,8 +41,6 @@ namespace mjpc {
         // get values from GUI
         double move_speed = parameters_[0];
         double stand_height = parameters_[1];
-        double vel_margin = parameters_[2];
-        double vel_bound = parameters_[3];
 
         // ----- standing ----- //
         double head_height = SensorByName(model, data, "head_height")[2];
@@ -92,13 +90,17 @@ namespace mjpc {
         // ----- additional reward terms ----- //
         // ----------------------------------- //
 
-        double additional_reward = calculateReward(model, data, vel_margin, vel_bound);
+        double vel_margin = parameters_[2];
+        double vel_bound = parameters_[3];
+        double hand_vel_bound = parameters_[4]; // 1.0
+        double hand_vel_margin = parameters_[5]; // 0.05
+        double additional_reward = calculateReward(model, data, vel_margin, vel_bound, hand_vel_margin, hand_vel_bound);
 
         // ----- residuals ----- //
         // idea: use a sum of two terms for the reward. First, the normal reward, second, the normal reward times the vel_reward.
         // This should give a positive reward even if a slow velocity cannot be achieved
         // at the same time, just no movement on the floor gives no positive reward
-        double tradeoff = parameters_[4];
+        double tradeoff = parameters_[6];
         double total_reward =
                 tradeoff * humanoid_bench_reward + (1 - tradeoff) * humanoid_bench_reward * additional_reward;
         residual[0] = 1.0 - total_reward;

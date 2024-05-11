@@ -5,7 +5,12 @@
 #include "universal_reward.h"
 
 namespace mjpc {
-    double calculateReward(const mjModel *model, const mjData *data, double vel_margin, double vel_bound) {
+    double calculateReward(const mjModel *model,
+                           const mjData *data,
+                           double vel_margin,
+                           double vel_bound,
+                           double hand_vel_margin,
+                           double hand_vel_bound) {
         double reward = 1.0;
 
         // ----- hand height ----- //
@@ -28,8 +33,8 @@ namespace mjpc {
         double left_hand_speed = std::sqrt(left_hand_velocity[0] * left_hand_velocity[0] +
                                            left_hand_velocity[1] * left_hand_velocity[1] +
                                            left_hand_velocity[2] * left_hand_velocity[2]);
-        reward *= tolerance(right_hand_speed, {0.0, 1.0}, 0.05, "linear", 0.0);
-        reward *= tolerance(left_hand_speed, {0.0, 1.0}, 0.05, "linear", 0.0);
+        reward *= tolerance(right_hand_speed, {0.0, hand_vel_bound}, hand_vel_margin, "linear", 0.0);
+        reward *= tolerance(left_hand_speed, {0.0, hand_vel_bound}, hand_vel_margin, "linear", 0.0);
 
 
         // ----- actuator velocity ----- //
