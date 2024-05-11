@@ -22,6 +22,7 @@
 #include "mjpc/utilities.h"
 
 #include "mjpc/utility/dm_control_utils_rewards.h"
+#include "mjpc/tasks/H1/universal_reward.h"
 
 namespace mjpc {
     std::string H1_walk::XmlPath() const {
@@ -40,6 +41,8 @@ namespace mjpc {
         // get values from GUI
         double move_speed = parameters_[0];
         double stand_height = parameters_[1];
+        double vel_margin = parameters_[2];
+        double vel_bound = parameters_[3];
 
         // ----- standing ----- //
         double head_height = SensorByName(model, data, "head_height")[2];
@@ -88,51 +91,8 @@ namespace mjpc {
         // ----------------------------------- //
         // ----- additional reward terms ----- //
         // ----------------------------------- //
-        double additional_reward = 1.0;
 
-        // ----- hand height ----- //
-        // idea: limit the height of the hands, as it is not that natural to have them above the head
-        double right_hand_height = SensorByName(model, data, "right_hand_position")[2];
-        double left_hand_height = SensorByName(model, data, "left_hand_position")[2];
-        double right_hand_reward = tolerance(right_hand_height, {0.0, 1.8}, 0.1);  // not much above the head height
-        double left_hand_reward = tolerance(left_hand_height, {0.0, 1.8}, 0.1);  // not much above the head height
-        double hand_reward = (right_hand_reward + left_hand_reward) / 2;
-        additional_reward *= hand_reward;
-
-
-        // ----- hand velocity ----- //
-        // idea: limit the velocity of the hands in cartesian space, as they tend to move around very fast
-        double *right_hand_velocity = SensorByName(model, data, "right_hand_velocity");
-        double *left_hand_velocity = SensorByName(model, data, "left_hand_velocity");
-        double right_hand_speed = std::sqrt(right_hand_velocity[0] * right_hand_velocity[0] +
-                                            right_hand_velocity[1] * right_hand_velocity[1] +
-                                            right_hand_velocity[2] * right_hand_velocity[2]);
-        double left_hand_speed = std::sqrt(left_hand_velocity[0] * left_hand_velocity[0] +
-                                           left_hand_velocity[1] * left_hand_velocity[1] +
-                                           left_hand_velocity[2] * left_hand_velocity[2]);
-        additional_reward *= tolerance(right_hand_speed, {0.0, 1.0}, 0.05, "linear", 0.0);
-        additional_reward *= tolerance(left_hand_speed, {0.0, 1.0}, 0.05, "linear", 0.0);
-
-
-        // ----- actuator velocity ----- //
-        // idea: limit the velocity of the actuators in joint space
-        double vel_margin = parameters_[2];
-        double vel_bound = parameters_[3];
-        double vel_reward = 1.0;
-        for (int i = 0; i < model->nu; i++) {
-            vel_reward *= tolerance(data->actuator_velocity[i], {-vel_bound, +vel_bound}, vel_margin, "quadratic", 0.0);
-        }
-        additional_reward *= vel_reward;
-
-        //----- foot height ----- //
-        // idea: force the robot to keep the feet near the ground
-        double right_foot_height = SensorByName(model, data, "right_foot_height")[2];
-        double left_foot_height = SensorByName(model, data, "left_foot_height")[2];
-        double right_foot_reward = tolerance(right_foot_height, {0.0, 0.1}, 0.1);
-        double left_foot_reward = tolerance(left_foot_height, {0.0, 0.1}, 0.1);
-        double foot_reward = (right_foot_reward + left_foot_reward) / 2;
-
-        additional_reward *= foot_reward;
+        double additional_reward = calculateReward(model, data, vel_margin, vel_bound);
 
         // ----- residuals ----- //
         // idea: use a sum of two terms for the reward. First, the normal reward, second, the normal reward times the vel_reward.
