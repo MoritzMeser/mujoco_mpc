@@ -15,7 +15,8 @@
 #include "H1_walk.h"
 
 #include <string>
-# include <limits>
+#include <limits>
+#include <cmath>
 
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
@@ -32,29 +33,24 @@ namespace mjpc {
 // ----------------- Residuals for H1 walk task ----------------
 
 // -------------------------------------------------------------
-    void H1_walk::ResidualFn::Residual(const mjModel *model, const mjData *data,
-                                       double *residual) const {
+    void H1_walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         // initialize reward
         double reward = 1.0;
 
         // get values from GUI
-        double stand_height = parameters_[1];
         double move_speed = parameters_[0];
+        double stand_height = parameters_[1];
 
         // ----- standing ----- //
-        double infinity = std::numeric_limits<double>::infinity();
-        std::pair<double, double> bounds = {stand_height, infinity};
-
-        double x = SensorByName(model, data, "head_height")[2];
-        double standing = tolerance(x, bounds, stand_height / 4);
+        double head_height = SensorByName(model, data, "head_height")[2];
+        double standing = tolerance(head_height, {stand_height, INFINITY}, stand_height / 4);
 
         reward *= standing;
 
 
         // ----- torso upright ----- //
-        bounds = {0.9, infinity};
-        x = SensorByName(model, data, "torso_upright")[2];
-        double upright = tolerance(x, bounds, 1.9);
+        double torso_upright = SensorByName(model, data, "torso_upright")[2];
+        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
 
         reward *= upright;
 
@@ -62,10 +58,7 @@ namespace mjpc {
         // ----- small control ----- //
         double small_control = 0.0;
         for (int i = 0; i < model->nu; i++) {
-            double margin = 10;
-            double value_at_margin = 0.0;
-            x = data->ctrl[i];
-            small_control += tolerance(x, {0.0, 0.0}, margin, "quadratic", value_at_margin);
+            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic", 0.0);
         }
         small_control /= model->nu;  // average over all controls
         small_control = (4 + small_control) / 5;
@@ -81,89 +74,24 @@ namespace mjpc {
             reward *= dont_move;
         } else {
             double com_velocity = SensorByName(model, data, "center_of_mass_velocity")[0];
-            double move = tolerance(com_velocity, {move_speed, infinity}, std::abs(move_speed), "linear", 0.0);
+            double move = tolerance(com_velocity, {move_speed, INFINITY}, std::abs(move_speed), "linear", 0.0);
             move = (5 * move + 1) / 6;
             reward *= move;
         }
+
+        // this is the reward as implemented in the original task in humanoid bench
+        // https://humanoid-bench.github.io
+        double const humanoid_bench_reward = reward;
+
+
+
 
         //  ----- --- --- --- --- --- ----- //
         // ----- modification of reward ----- //
         //  ----- --- --- --- --- --- ----- //
 
 
-//        // ----- actuator velocity ----- //
-//        double vel_margin = parameters_[2];
-//        double vel_bound = parameters_[3];
-////        double actuator_velocity = 0.0;
-//        for (int i = 0; i < model->nu; i++) {
-////            actuator_velocity += tolerance(data->actuator_velocity[i], {-vel_bound, +vel_bound}, vel_margin, "quadratic", 0.0);
-//            reward *= (3 +
-//                       tolerance(data->actuator_velocity[i], {-vel_bound, +vel_bound}, vel_margin, "linear", 0.2)) /
-//                      4;
-//
-//        }
-//        actuator_velocity /= model->nu;  // average over all controls
-//        actuator_velocity = (2 + actuator_velocity) / 3;
 
-//        reward *= actuator_velocity;
-
-//        // ----- foot height ----- //
-//        double right_foot_height = SensorByName(model, data, "right_foot_height")[2];
-//        double left_foot_height = SensorByName(model, data, "left_foot_height")[2];
-//        double right_foot_reward = tolerance(right_foot_height, {0.0, 0.1}, 0.1);
-//        double left_foot_reward = tolerance(left_foot_height, {0.0, 0.1}, 0.1);
-//        double foot_reward = (right_foot_reward + left_foot_reward) / 2;
-////        foot_reward = (4 + foot_reward) / 5;
-//
-//        reward *= foot_reward;
-//
-////        // ----- foot position ----- //
-//////        double *pelvis_x_orientation = SensorByName(model, data, "pelvis_x_orientation");
-//////        double *pelvis_y_orientation = SensorByName(model, data, "pelvis_y_orientation");
-//////        double *pelvis_z_orientation = SensorByName(model, data, "pelvis_z_orientation");
-////
-////        // Get the x, y, and z axes of the pelvis
-////        mjtNum *pelvis_x_axis = SensorByName(model, data, "pelvis_x_orientation");
-////        mjtNum *pelvis_y_axis = SensorByName(model, data, "pelvis_y_orientation");
-////        mjtNum *pelvis_z_axis = SensorByName(model, data, "pelvis_z_orientation");
-////
-////// Form the rotation matrix of the pelvis
-////        mjtNum pelvis_rot[9];
-////        for (int i = 0; i < 3; i++) {
-////            pelvis_rot[i] = pelvis_x_axis[i];
-////            pelvis_rot[i + 3] = pelvis_y_axis[i];
-////            pelvis_rot[i + 6] = pelvis_z_axis[i];
-////        }
-////
-////        double *left_foot_pos_global = SensorByName(model, data, "left_foot_height");
-////        double *right_foot_pos_global = SensorByName(model, data, "right_foot_height");
-////        double *pelvis_pos_global = SensorByName(model, data, "pelvis_position");
-////
-////
-////// Compute the position of the left foot in the coordinate frame of the pelvis
-////        mjtNum left_foot_pos_pelvis_global[3];
-////        for (int i = 0; i < 3; i++) {
-////            left_foot_pos_pelvis_global[i] = left_foot_pos_global[i] - pelvis_pos_global[i];
-////        }
-////        mjtNum left_foot_pos_pelvis[3];
-////        rotateVector(left_foot_pos_pelvis, pelvis_rot, left_foot_pos_pelvis_global);
-////
-////// Compute the position of the right foot in the coordinate frame of the pelvis
-////        mjtNum right_foot_pos_pelvis_global[3];
-////        for (int i = 0; i < 3; i++) {
-////            right_foot_pos_pelvis_global[i] = right_foot_pos_global[i] - pelvis_pos_global[i];
-////        }
-////        mjtNum right_foot_pos_pelvis[3];
-////        rotateVector(right_foot_pos_pelvis, pelvis_rot, right_foot_pos_pelvis_global);
-////
-////        // ----- foot distance ----- //
-////        double foot_position_reward = 1.0;
-////        foot_position_reward *= tolerance(left_foot_pos_pelvis[0], {-0.3, 0.3}, 0.2, "linear", 0.0);  // x position of each foot should be around zero
-////        foot_position_reward *= tolerance(left_foot_pos_pelvis[1], {-1.0, 1.0}, 0.2, "linear", 0.0);  // y position of left foot should be negative TODO: check this
-////        foot_position_reward *= tolerance(right_foot_pos_pelvis[0], {-0.3, 0.3}, 0.2, "linear", 0.0);  // x position of each foot should be around zero
-//////        foot_position_reward *= tolerance(right_foot_pos_pelvis[1], {0.2, 0.6}, 0.2, "linear", 0.0);  // y position of right foot should be positive TODO: check this
-////
-////        reward *= foot_position_reward;
 //
 //        // ----- hand height ----- //
 //        double right_hand_height = SensorByName(model, data, "right_hand_position")[2];
@@ -206,7 +134,8 @@ namespace mjpc {
         // This should give a positive reward even if a slow velocity cannot be achieved
         // at the same time, just no movement on the floor gives no positive reward
         double tradeoff = parameters_[4];
-        double total_reward = tradeoff * reward + (1 - tradeoff) * reward * vel_reward * foot_reward;
+        double total_reward =
+                tradeoff * humanoid_bench_reward + (1 - tradeoff) * humanoid_bench_reward * vel_reward * foot_reward;
         residual[0] = 1.0 - total_reward;
     }
 
