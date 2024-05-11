@@ -2,10 +2,16 @@
 // Created by Moritz Meser on 26.04.24.
 //
 
-#include "reward_computation.h"
+#include "dm_control_utils_rewards.h"
 #include <cmath>
 #include <stdexcept>
-#include "mujoco/mujoco.h"
+
+//
+// this file contains the reimplementation of some of the utility functions from dm_control
+// the original implementation is from Google DeepMind and can be found here:
+// https://github.com/google-deepmind/dm_control/tree/main/dm_control/utils/rewards.py
+//
+
 
 double sigmoid(double x, double value_at_1, std::string sigmoid_type) {
     if (sigmoid_type == "cosine" || sigmoid_type == "linear" || sigmoid_type == "quadratic") {
@@ -58,14 +64,4 @@ double tolerance(double x, std::pair<double, double> bounds, double margin,
         }
     }
     return value;
-}
-
-
-void rotateVector(mjtNum *vector, const mjtNum *rotationMatrix, const mjtNum *inputVector) {
-    for (int i = 0; i < 3; i++) {
-        vector[i] = 0;
-        for (int j = 0; j < 3; j++) {
-            vector[i] += rotationMatrix[i + 3 * j] * inputVector[j];
-        }
-    }
 }

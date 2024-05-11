@@ -18,7 +18,7 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/tasks/H1/utility/reward_computation.h"
+#include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
     class H1_package : public Task {

@@ -142,7 +142,7 @@ add_library(
         task.h
         $<TARGET_OBJECTS:mujoco::platform_ui_adapter>
         tasks/H1/walk/H1_walk.h
-        tasks/H1/utility/reward_computation.cpp
+        utility/dm_control_utils_rewards.cpp
         tasks/H1/balance_simple/balance_simple.h
         tasks/H1/balance_simple/balance_simple.cc
         tasks/H1/package/package.h

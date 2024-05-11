@@ -20,7 +20,7 @@
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
 
-#include "mjpc/tasks/H1/utility/reward_computation.h"
+#include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
     std::string H1_package::XmlPath() const {
