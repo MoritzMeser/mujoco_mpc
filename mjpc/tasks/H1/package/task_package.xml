@@ -17,8 +17,6 @@
         <numeric name="agent_timestep" data="0.01"/>
         <numeric name="sampling_spline_points" data="3"/>
         <numeric name="sampling_exploration" data="0.5"/>
-        <!--        <numeric name="sampling_trajectories" data="60"/>-->
-        <!--        <numeric name="sampling_exploration" data="0.1"/>-->
         <numeric name="gradient_spline_points" data="5"/>
 
         <!-- estimator -->
@@ -29,6 +27,7 @@
         <numeric name="batch_configuration_length" data="3"/>
         <numeric name="batch_scale_prior" data="1.0e-3"/>
     </custom>
+
     <asset>
         <material name="package" texuniform="true" texture="package"/>
         <texture type="2d" name="package" file="./package_plain.png"/>
@@ -55,9 +54,9 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="1 - reward" dim="1" user="5 1 1 1 1"/>
+        <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
-
+        <!-- sensors specific to the package task-->
         <framepos name="package_location" objtype="body" objname="package_a"/>
         <framepos name="package_destination" objtype="site" objname="destination_loc"/>
     </sensor>
