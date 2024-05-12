@@ -18,7 +18,6 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
     class Balance_Simple : public Task {

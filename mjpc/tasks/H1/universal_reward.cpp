@@ -11,6 +11,9 @@ namespace mjpc {
                            double vel_bound,
                            double hand_vel_margin,
                            double hand_vel_bound) {
+        // this reward is by myself and not part of the original task
+        // the main idea is to punish unrealistic movements of the robot
+
         double reward = 1.0;
 
         // ----- hand height ----- //
