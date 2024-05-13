@@ -35,75 +35,34 @@ namespace mjpc {
 
 // -------------------------------------------------------------
     void H1_reach::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
-        // initialize reward
-        double reward = 1.0;
+        double *goal_pos = SensorByName(model, data, "goal_pos");
+        double *left_hand_pos = SensorByName(model, data, "left_hand_position");
+        double hand_dist = std::sqrt(std::pow(goal_pos[0] - left_hand_pos[0], 2) +
+                                     std::pow(goal_pos[1] - left_hand_pos[1], 2) +
+                                     std::pow(goal_pos[2] - left_hand_pos[2], 2));
 
-        // get values from GUI
-        double move_speed = parameters_[0];
-        double stand_height = parameters_[1];
-
-        // ----- standing ----- //
-        double head_height = SensorByName(model, data, "head_height")[2];
-        double standing = tolerance(head_height, {stand_height, INFINITY}, stand_height / 4);
-
-        reward *= standing;
-
-
-        // ----- torso upright ----- //
-        double torso_upright = SensorByName(model, data, "torso_upright")[2];
-        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
-
-        reward *= upright;
-
-
-        // ----- small control ----- //
-        double small_control = 0.0;
+        double healthy_reward = data->xmat[1 * 9 + 8];
+        double motion_penalty = 0.0;
         for (int i = 0; i < model->nu; i++) {
-            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic", 0.0);
+            motion_penalty += data->qvel[i];
         }
-        small_control /= model->nu;  // average over all controls
-        small_control = (4 + small_control) / 5;
+        double reward_close = (hand_dist < 1) ? 5 : 0;
+        double reward_success = (hand_dist < 0.05) ? 10 : 0;
 
-        reward *= small_control;
-
-        // ----- move speed ----- //
-        if (move_speed == 0.0) {
-            double horizontal_velocity_x = SensorByName(model, data, "center_of_mass_velocity")[0];
-            double horizontal_velocity_y = SensorByName(model, data, "center_of_mass_velocity")[1];
-            double dont_move = (tolerance(horizontal_velocity_x, {0.0, 0.0}, 2) +
-                                tolerance(horizontal_velocity_y, {0.0, 0.0}, 2)) / 2;
-            reward *= dont_move;
-        } else {
-            double com_velocity = SensorByName(model, data, "center_of_mass_velocity")[0];
-            double move = tolerance(com_velocity, {move_speed, INFINITY}, std::abs(move_speed), "linear", 0.0);
-            move = (5 * move + 1) / 6;
-            reward *= move;
-        }
-
-        // this is the reward as implemented in the original task in humanoid bench
-        // https://humanoid-bench.github.io
-        double const humanoid_bench_reward = reward;
-
-
+        double const humanoid_bench_reward = healthy_reward - 0.0001 * motion_penalty + reward_close + reward_success;
 
         // ----------------------------------- //
         // ----- additional reward terms ----- //
         // ----------------------------------- //
 
-        double vel_margin = parameters_[2];
-        double vel_bound = parameters_[3];
-        double hand_vel_bound = parameters_[4]; // 1.0
-        double hand_vel_margin = parameters_[5]; // 0.05
-        double additional_reward = calculateReward(model, data, vel_margin, vel_bound, hand_vel_margin, hand_vel_bound);
+//        double vel_margin = parameters_[2];
+//        double vel_bound = parameters_[3];
+//        double hand_vel_bound = parameters_[4]; // 1.0
+//        double hand_vel_margin = parameters_[5]; // 0.05
+//        double additional_reward = calculateReward(model, data, vel_margin, vel_bound, hand_vel_margin, hand_vel_bound);
 
-        // ----- residuals ----- //
-        // idea: use a sum of two terms for the reward. First, the normal reward, second, the normal reward times the vel_reward.
-        // This should give a positive reward even if a slow velocity cannot be achieved
-        // at the same time, just no movement on the floor gives no positive reward
-        double tradeoff = parameters_[6];
-        double total_reward =
-                tradeoff * humanoid_bench_reward + (1 - tradeoff) * humanoid_bench_reward * additional_reward;
-        residual[0] = 1.0 - total_reward;
+        double total_reward = humanoid_bench_reward;
+        residual[0] = 20 - total_reward;  // 20 is the maximum reward --> change this if the reward-computation changes
     }
 
 // -------- Transition for H1 walk task --------

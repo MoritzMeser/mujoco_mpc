@@ -47,10 +47,12 @@ namespace mjpc {
 
     std::vector<std::shared_ptr<Task>> GetTasks() {
         return {
+                //Humanoid Bench Tasks
                 std::make_shared<H1_walk>(),
                 std::make_shared<Balance_Simple>(),
                 std::make_shared<H1_package>(),
                 std::make_shared<H1_reach>(),
+                // other tasks
                 std::make_shared<Acrobot>(),
                 std::make_shared<Allegro>(),
                 std::make_shared<aloha::Handover>(),
