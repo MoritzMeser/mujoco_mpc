@@ -58,17 +58,17 @@ namespace mjpc {
 
         reward *= foot_reward;
 
-//        // ----- Center of mass acceleration ----- //
-// TODO this make it worse
-        // idea: limit the acceleration of the center of mass
-        double *com_acceleration = SensorByName(model, data, "com_acc");
-        double acc_reward = 1.0;
-        for (int i = 0; i < 3; i++) {
-            acc_reward *= tolerance(com_acceleration[i], {-10.0, 10.0}, 0.1, "quadratic",
-                                    0.0); //TODO values are arbitrary
-        }
-
-        reward *= acc_reward;
+////        // ----- Center of mass acceleration ----- //
+//// TODO this make it worse
+//        // idea: limit the acceleration of the center of mass
+//        double *com_acceleration = SensorByName(model, data, "com_acc");
+//        double acc_reward = 1.0;
+//        for (int i = 0; i < 3; i++) {
+//            acc_reward *= tolerance(com_acceleration[i], {-10.0, 10.0}, 0.1, "quadratic",
+//                                    0.0); //TODO values are arbitrary
+//        }
+//
+//        reward *= acc_reward;
 
         return reward;
     }
