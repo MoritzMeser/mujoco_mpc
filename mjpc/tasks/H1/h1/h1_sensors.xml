@@ -42,5 +42,9 @@
         <framezaxis name="pelvis_z_orientation" objtype="body" objname="pelvis"/>
 
         <framepos name="pelvis_position" objtype="body" objname="pelvis"/>
+
+<!--        <accelerometer name="com_acc" site="com"/>-->
+        <framelinacc name="com_acc" objtype="body" objname="torso_link"/>
+
     </sensor>
 </mujoco>
