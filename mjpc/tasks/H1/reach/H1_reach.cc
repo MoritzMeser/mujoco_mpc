@@ -22,7 +22,6 @@
 #include "mjpc/utilities.h"
 
 #include "mjpc/utility/dm_control_utils_rewards.h"
-#include "mjpc/tasks/H1/universal_reward.h"
 
 namespace mjpc {
     std::string H1_reach::XmlPath() const {
@@ -49,20 +48,8 @@ namespace mjpc {
         double reward_close = (hand_dist < 1) ? 5 : 0;
         double reward_success = (hand_dist < 0.05) ? 10 : 0;
 
-        double const humanoid_bench_reward = healthy_reward - 0.0001 * motion_penalty + reward_close + reward_success;
-
-        // ----------------------------------- //
-        // ----- additional reward terms ----- //
-        // ----------------------------------- //
-
-//        double vel_margin = parameters_[2];
-//        double vel_bound = parameters_[3];
-//        double hand_vel_bound = parameters_[4]; // 1.0
-//        double hand_vel_margin = parameters_[5]; // 0.05
-//        double additional_reward = calculateReward(model, data, vel_margin, vel_bound, hand_vel_margin, hand_vel_bound);
-
-        double total_reward = humanoid_bench_reward;
-        residual[0] = 20 - total_reward;  // 20 is the maximum reward --> change this if the reward-computation changes
+        double reward = healthy_reward - 0.0001 * motion_penalty + reward_close + reward_success;
+        residual[0] = 20 - reward;  // 20 is the maximum reward --> change this if the reward-computation changes
     }
 
 // -------- Transition for H1 walk task --------
