@@ -48,5 +48,7 @@
         <touch name="left_foot_touch" site="left_foot"/>-->
         <touch name="right_foot_touch" site="right_foot"/>
 
+        <framepos name="pelvis_pos"  objtype="body" objname="pelvis"/>
+
     </sensor>
 </mujoco>

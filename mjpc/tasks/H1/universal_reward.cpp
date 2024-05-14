@@ -62,7 +62,6 @@ namespace mjpc {
         reward *= foot_reward;
 
         // ----- Center of mass acceleration ----- //
-        // TODO this make it worse
         // idea: limit the acceleration of the center of mass
         double *com_acceleration = SensorByName(model, data, "com_acc");
         double acc_reward = 1.0;
@@ -85,6 +84,15 @@ namespace mjpc {
 //        if (left_foot_touch != 0.0 || right_foot_touch != 0.0) {
 //            printf("left foot touch: %f, right foot touch: %f\n", left_foot_touch, right_foot_touch);
 //        }
+
+//        // reward for standing at origin
+//        // TODO: this makes of course no sense for a walking task, just to try out
+//        double x_pos = SensorByName(model, data, "pelvis_pos")[0];
+//        double y_pos = SensorByName(model, data, "pelvis_pos")[1];
+//
+//        double pos_reward = tolerance(x_pos, {-1, 1}, 0.1) * tolerance(y_pos, {-1, 1}, 0.1);
+//
+//        reward *= std::pow(pos_reward, 0.5);
 
         return reward;
     }
