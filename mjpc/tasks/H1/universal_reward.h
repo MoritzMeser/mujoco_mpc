@@ -16,7 +16,8 @@
 
 namespace mjpc {
     double calculateReward(const mjModel *model, const mjData *data, double vel_margin, double vel_bound,
-                           double hand_vel_margin, double hand_vel_bound);
+                           double hand_vel_margin, double hand_vel_bound, double acc_margin, double acc_bound,
+                           double acc_weight);
 }
 
 #endif //MUJOCO_MPC_UNIVERSAL_REWARD_H

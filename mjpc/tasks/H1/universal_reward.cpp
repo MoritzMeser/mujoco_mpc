@@ -10,7 +10,10 @@ namespace mjpc {
                            double vel_margin,
                            double vel_bound,
                            double hand_vel_margin,
-                           double hand_vel_bound) {
+                           double hand_vel_bound,
+                           double acc_margin,
+                           double acc_bound,
+                           double acc_weight) {
         // this reward is by myself and not part of the original task
         // the main idea is to punish unrealistic movements of the robot
 
@@ -58,17 +61,30 @@ namespace mjpc {
 
         reward *= foot_reward;
 
-////        // ----- Center of mass acceleration ----- //
-//// TODO this make it worse
-//        // idea: limit the acceleration of the center of mass
-//        double *com_acceleration = SensorByName(model, data, "com_acc");
-//        double acc_reward = 1.0;
-//        for (int i = 0; i < 3; i++) {
-//            acc_reward *= tolerance(com_acceleration[i], {-10.0, 10.0}, 0.1, "quadratic",
-//                                    0.0); //TODO values are arbitrary
-//        }
+        // ----- Center of mass acceleration ----- //
+        // TODO this make it worse
+        // idea: limit the acceleration of the center of mass
+        double *com_acceleration = SensorByName(model, data, "com_acc");
+        double acc_reward = 1.0;
+        for (int i = 0; i < 3; i++) {
+            double offset = (i == 2) ? 9.81 : 0.0; // gravity is only in z direction
+            acc_reward *= tolerance(com_acceleration[i] - offset, {-acc_bound, acc_bound}, acc_margin, "quadratic",
+                                    0.0);
+        }
+
+//        printf("com_acceleration x = %f, com_acceleration y = %f, com_acceleration z = %f\n", com_acceleration[0],
+//               com_acceleration[1], com_acceleration[2]);
+
+        if (acc_weight > 0.0) { // if the weight is 0, we don't want to punish the acceleration
+            reward *= std::pow(acc_reward, acc_weight);
+        }
+
+//        double left_foot_touch = SensorByName(model, data, "left_foot_touch")[3];
+//        double right_foot_touch = SensorByName(model, data, "right_foot_touch")[0];
 //
-//        reward *= acc_reward;
+//        if (left_foot_touch != 0.0 || right_foot_touch != 0.0) {
+//            printf("left foot touch: %f, right foot touch: %f\n", left_foot_touch, right_foot_touch);
+//        }
 
         return reward;
     }

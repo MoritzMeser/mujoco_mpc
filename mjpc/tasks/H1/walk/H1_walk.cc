@@ -94,7 +94,13 @@ namespace mjpc {
         double vel_bound = parameters_[3];
         double hand_vel_bound = parameters_[4]; // 1.0
         double hand_vel_margin = parameters_[5]; // 0.05
-        double additional_reward = calculateReward(model, data, vel_margin, vel_bound, hand_vel_margin, hand_vel_bound);
+
+        // acceleration punishment
+        double acc_bound = parameters_[7];
+        double acc_margin = parameters_[8];
+        double acc_weight = parameters_[9];
+        double additional_reward = calculateReward(model, data, vel_margin, vel_bound, hand_vel_margin, hand_vel_bound,
+                                                   acc_margin, acc_bound, acc_weight);
 
         // ----- residuals ----- //
         // idea: use a sum of two terms for the reward. First, the normal reward, second, the normal reward times the vel_reward.
