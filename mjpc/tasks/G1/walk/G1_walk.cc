@@ -42,7 +42,7 @@ namespace mjpc {
         double infinity = std::numeric_limits<double>::infinity();
         std::pair<double, double> bounds = {stand_height, infinity};
 
-        double x = SensorByName(model, data, "head_height")[2];
+        double x = SensorByName(model, data, "pelvis_height")[2];
         double standing = tolerance(x, bounds, stand_height / 4);
 
 
@@ -64,7 +64,7 @@ namespace mjpc {
             small_control += tolerance(x, {0.0, 0.0}, margin, "quadratic", value_at_margin);
         }
         small_control /= model->nu;  // average over all controls
-        small_control = (4 + small_control) / 5;
+//        small_control = (4 + small_control) / 5;
 
         double reward;
         // ----- move speed ----- //

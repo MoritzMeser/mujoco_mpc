@@ -8,7 +8,7 @@
     <custom>
         <!-- Parameters to adjust the reward function in the GUI-->
         <numeric name="residual_Speed Goal" data="0 0 3.0"/>
-        <numeric name="residual_Height Goal" data="1.6 1.0 2.0"/>
+        <numeric name="residual_Height Goal" data="0.6 0.2 1.4"/>
 
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>
@@ -42,7 +42,8 @@
         <framezaxis name="torso_upright" objtype="body" objname="torso_link"/>
 
         <!-- head height -->
-        <framepos name="head_height" objtype="body" objname="left_shoulder_pitch_link"/>
+        <!--        <framepos name="head_height" objtype="body" objname="left_shoulder_pitch_link"/>-->
+        <framepos name="pelvis_height" objtype="body" objname="pelvis"/>
 
         <!--        &lt;!&ndash; left foot height &ndash;&gt;-->
         <!--        <framepos name="left_foot_height" objtype="site" objname="left_foot"/>-->
