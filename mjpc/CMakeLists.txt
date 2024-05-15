@@ -148,12 +148,16 @@ add_library(
         tasks/Humanoid_Bench_H1/package/package.h
         tasks/Humanoid_Bench_H1/package/package.cc
         tasks/Humanoid_Bench_H1/reach/H1_reach.cc
-        tasks/Humanoid_Bench_H1/basic_locomotion/compute_basic_reward.cpp
-        tasks/Humanoid_Bench_H1/basic_locomotion/compute_basic_reward.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/walk_reward.cc
+        tasks/Humanoid_Bench_H1/basic_locomotion/walk_reward.h
         tasks/Humanoid_Bench_H1/basic_locomotion/stand/H1_stand.cc
         tasks/Humanoid_Bench_H1/basic_locomotion/stand/H1_stand.h
         tasks/Humanoid_Bench_H1/basic_locomotion/run/H1_run.cc
         tasks/Humanoid_Bench_H1/basic_locomotion/run/H1_run.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs.cpp
+        tasks/Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/climbing_upwards_reward.cc
+        tasks/Humanoid_Bench_H1/basic_locomotion/climbing_upwards_reward.h
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})

@@ -9,7 +9,7 @@
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
 
-#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/compute_basic_reward.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/walk_reward.h"
 
 
 namespace mjpc {
@@ -26,7 +26,7 @@ namespace mjpc {
         double const walk_speed = 5.0;
         double const stand_height = 1.65;
 
-        double reward = compute_basic_reward(model, data, walk_speed, stand_height);
+        double reward = walk_reward(model, data, walk_speed, stand_height);
         residual[0] = 1 - reward;
 
     }

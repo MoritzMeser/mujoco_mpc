@@ -2,17 +2,18 @@
 // Created by Moritz Meser on 15.05.24.
 //
 
+#include "walk_reward.h"
+
 #include <cmath>
 #include <limits>
 
-#include "compute_basic_reward.h"
 #include "mjpc/utilities.h"
 #include "mjpc/utility/dm_control_utils_rewards.h"
 #include "mujoco/mujoco.h"
 
 namespace mjpc {
     double
-    compute_basic_reward(const mjModel *model, const mjData *data, const double walk_speed, const double stand_height) {
+    walk_reward(const mjModel *model, const mjData *data, const double walk_speed, const double stand_height) {
         // initialize reward
         double reward = 1.0;
 
