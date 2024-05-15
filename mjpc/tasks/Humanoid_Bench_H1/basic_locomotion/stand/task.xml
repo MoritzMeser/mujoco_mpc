@@ -1,5 +1,6 @@
 <mujoco model="H1">
     <include file="../../../common.xml"/>
+    <include file="../../../floor.xml"/>
     <include file="../../h1/h1_pos.xml"/>
 
     <custom>

@@ -5,14 +5,10 @@
 #include "H1_stairs.h"
 
 #include <string>
-#include <limits>
-#include <cmath>
 
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
 
-#include "mjpc/utility/dm_control_utils_rewards.h"
-#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/walk_reward.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/climbing_upwards_reward.h"
 
 
