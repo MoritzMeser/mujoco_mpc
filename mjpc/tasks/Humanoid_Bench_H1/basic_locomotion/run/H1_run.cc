@@ -2,7 +2,7 @@
 // Created by Moritz Meser on 15.05.24.
 //
 
-#include "H1_stand.h"
+#include "H1_run.h"
 
 #include <string>
 
@@ -13,17 +13,17 @@
 
 
 namespace mjpc {
-    std::string H1_stand::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/task.xml");
+    std::string H1_run::XmlPath() const {
+        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/run/task.xml");
     }
 
-    std::string H1_stand::Name() const { return "H1 Stand"; }
+    std::string H1_run::Name() const { return "H1 Run"; }
 
-// ----------------- Residuals for Humanoid_Bench_H1 stand task ----------------
+// ----------------- Residuals for Humanoid_Bench_H1 run task ----------------
 
 // -------------------------------------------------------------
-    void H1_stand::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
-        double const walk_speed = 0.0;
+    void H1_run::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
+        double const walk_speed = 5.0;
         double const stand_height = 1.65;
 
         double reward = compute_basic_reward(model, data, walk_speed, stand_height);

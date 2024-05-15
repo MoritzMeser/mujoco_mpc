@@ -2,15 +2,15 @@
 // Created by Moritz Meser on 15.05.24.
 //
 
-#ifndef MJPC_TASKS_H1_STAND_H_
-#define MJPC_TASKS_H1_STAND_H_
+#ifndef MJPC_TASKS_H1_RUN_H_
+#define MJPC_TASKS_H1_RUN_H_
 
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
 
 namespace mjpc {
-    class H1_stand : public Task {
+    class H1_run : public Task {
     public:
         std::string Name() const override;
 
@@ -18,13 +18,13 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_stand *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_run *task) : mjpc::BaseResidualFn(task) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
         };
 
-        H1_stand() : residual_(this) {}
+        H1_run() : residual_(this) {}
 
 
     protected:
@@ -39,4 +39,4 @@ namespace mjpc {
     };
 }  // namespace mjpc
 
-#endif  // MJPC_TASKS_H1_STAND_H_
+#endif  // MJPC_TASKS_H1_RUN_H_
