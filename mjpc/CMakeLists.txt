@@ -160,6 +160,9 @@ add_library(
         tasks/Humanoid_Bench_H1/basic_locomotion/climbing_upwards_reward.h
         tasks/Humanoid_Bench_H1/basic_locomotion/slide/H1_slide.cc
         tasks/Humanoid_Bench_H1/basic_locomotion/slide/H1_slide.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/crawl/H1_crawl.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/crawl/H1_crawl.cc
+        tasks/Humanoid_Bench_H1/basic_locomotion/crawl/H1_crawl.h
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})

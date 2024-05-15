@@ -46,5 +46,9 @@
 <!--        <accelerometer name="com_acc" site="com"/>-->
         <framelinacc name="com_acc" objtype="body" objname="torso_link"/>
 
+        <framequat name="pelvis_orientation" objtype="body" objname="pelvis"/>
+
+        <framepos name="imu" objtype="site" objname="imu"/>
+
     </sensor>
 </mujoco>
