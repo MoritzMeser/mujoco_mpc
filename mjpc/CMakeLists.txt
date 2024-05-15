@@ -145,6 +145,7 @@ add_library(
         tasks/H1/utility/reward_computation.cpp
         tasks/H1/balance_simple/balance_simple.h
         tasks/H1/balance_simple/balance_simple.cc
+        tasks/G1/walk/G1_walk.cc
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})
