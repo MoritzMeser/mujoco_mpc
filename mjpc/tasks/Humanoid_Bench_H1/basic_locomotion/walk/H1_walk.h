@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MJPC_TASKS_H1_PACKAGE_H_
-#define MJPC_TASKS_H1_PACKAGE_H_
+#ifndef MJPC_TASKS_H1_WALK_H_
+#define MJPC_TASKS_H1_WALK_H_
 
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    class H1_package : public Task {
+    class H1_walk : public Task {
     public:
         std::string Name() const override;
 
@@ -29,15 +28,15 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_package *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_walk *task) : mjpc::BaseResidualFn(task) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
         };
 
-        H1_package() : residual_(this) {}
+        H1_walk() : residual_(this) {}
 
-// -------- Transition for H1 walk task --------
+// -------- Transition for Humanoid_Bench_H1 walk task --------
 //  for a more complex task this might be necessary (like walking to different targets)
 // ---------------------------------------------
         void TransitionLocked(mjModel *model, mjData *data) override;
@@ -54,4 +53,4 @@ namespace mjpc {
     };
 }  // namespace mjpc
 
-#endif  // MJPC_TASKS_H1_PACKAGE_H_
+#endif  // MJPC_TASKS_H1_WALK_H_

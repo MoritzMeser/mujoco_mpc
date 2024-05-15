@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "H1_walk.h"
+#include "balance_simple.h"
 
 #include <string>
-#include <limits>
-#include <cmath>
+# include <limits>
 
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
@@ -24,71 +23,72 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    std::string H1_walk::XmlPath() const {
-        return GetModelPath("H1/walk/task.xml");
+    std::string Balance_Simple::XmlPath() const {
+        return GetModelPath("Humanoid_Bench_H1/balance_simple/task.xml");
     }
 
-    std::string H1_walk::Name() const { return "H1 Walk"; }
+    std::string Balance_Simple::Name() const { return "Balance Simple"; }
 
-// ----------------- Residuals for H1 walk task ----------------
+// ----------------- Residuals for Humanoid_Bench_H1 walk task ----------------
 
 // -------------------------------------------------------------
-    void H1_walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
-        // initialize reward
-        double reward = 1.0;
-
+    void Balance_Simple::ResidualFn::Residual(const mjModel *model, const mjData *data,
+                                       double *residual) const {
         // get values from GUI
-        double move_speed = parameters_[0];
         double stand_height = parameters_[1];
+        double move_speed = parameters_[0];
 
         // ----- standing ----- //
-        double head_height = SensorByName(model, data, "head_height")[2];
-        double standing = tolerance(head_height, {stand_height, INFINITY}, stand_height / 4);
+        double infinity = std::numeric_limits<double>::infinity();
+        std::pair<double, double> bounds = {stand_height, infinity};
 
-        reward *= standing;
+        double x = SensorByName(model, data, "head_height")[2];
+        double standing = tolerance(x, bounds, stand_height / 4);
 
 
         // ----- torso upright ----- //
-        double torso_upright = SensorByName(model, data, "torso_upright")[2];
-        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
+        bounds = {0.9, infinity};
+        x = SensorByName(model, data, "torso_upright")[2];
+        double upright = tolerance(x, bounds, 1.9);
 
-        reward *= upright;
+        // ----- stand_reward ----- //
+        double stand_reward = standing * upright;
 
 
         // ----- small control ----- //
         double small_control = 0.0;
         for (int i = 0; i < model->nu; i++) {
-            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic", 0.0);
+            double margin = 10;
+            double value_at_margin = 0.0;
+            x = data->ctrl[i];
+            small_control += tolerance(x, {0.0, 0.0}, margin, "quadratic", value_at_margin);
         }
         small_control /= model->nu;  // average over all controls
         small_control = (4 + small_control) / 5;
 
-        reward *= small_control;
-
+        double reward;
         // ----- move speed ----- //
         if (move_speed == 0.0) {
             double horizontal_velocity_x = SensorByName(model, data, "center_of_mass_velocity")[0];
             double horizontal_velocity_y = SensorByName(model, data, "center_of_mass_velocity")[1];
             double dont_move = (tolerance(horizontal_velocity_x, {0.0, 0.0}, 2) +
                                 tolerance(horizontal_velocity_y, {0.0, 0.0}, 2)) / 2;
-            reward *= dont_move;
+            reward = small_control * stand_reward * dont_move;
         } else {
             double com_velocity = SensorByName(model, data, "center_of_mass_velocity")[0];
-            double move = tolerance(com_velocity, {move_speed, INFINITY}, std::abs(move_speed), "linear", 0.0);
+            double move = tolerance(com_velocity, {move_speed, infinity}, std::abs(move_speed), "linear", 0.0);
             move = (5 * move + 1) / 6;
-            reward *= move;
+            reward = small_control * stand_reward * move;
         }
 
-        // this is the reward as implemented in the original task in humanoid bench
-        // https://humanoid-bench.github.io
-        residual[0] = 1 - reward;
-
+        // ----- residuals ----- //
+        residual[0] = 1.0 - reward;
     }
 
-// -------- Transition for H1 walk task --------
+// -------- Transition for Humanoid_Bench_H1 walk task --------
 // for a more complex task this might be necessary (like walking to different targets)
 // ---------------------------------------------
-    void H1_walk::TransitionLocked(mjModel *model, mjData *data) {
+    void Balance_Simple::TransitionLocked(mjModel *model, mjData *data) {
         //
     }
 

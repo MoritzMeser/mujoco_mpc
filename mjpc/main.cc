@@ -23,7 +23,7 @@
 #include "mjpc/app.h"
 #include "mjpc/tasks/tasks.h"
 
-ABSL_FLAG(std::string, task, "H1 Walk",
+ABSL_FLAG(std::string, task, "Humanoid_Bench_H1 Walk",
           "Which model to load on startup.");
 
 // machinery for replacing command line error by a macOS dialog box

@@ -76,8 +76,8 @@ add_library(
         tasks/swimmer/swimmer.h
         tasks/walker/walker.cc
         tasks/walker/walker.h
-        tasks/H1/walk/H1_walk.cc
-        tasks/H1/walk/H1_walk.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/walk/H1_walk.cc
+        tasks/Humanoid_Bench_H1/basic_locomotion/walk/H1_walk.h
         planners/planner.cc
         planners/planner.h
         planners/policy.h
@@ -141,13 +141,15 @@ add_library(
         task.cc
         task.h
         $<TARGET_OBJECTS:mujoco::platform_ui_adapter>
-        tasks/H1/walk/H1_walk.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/walk/H1_walk.h
         utility/dm_control_utils_rewards.cpp
-        tasks/H1/balance_simple/balance_simple.h
-        tasks/H1/balance_simple/balance_simple.cc
-        tasks/H1/package/package.h
-        tasks/H1/package/package.cc
-        tasks/H1/reach/H1_reach.cc
+        tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h
+        tasks/Humanoid_Bench_H1/balance_simple/balance_simple.cc
+        tasks/Humanoid_Bench_H1/package/package.h
+        tasks/Humanoid_Bench_H1/package/package.cc
+        tasks/Humanoid_Bench_H1/reach/H1_reach.cc
+        tasks/Humanoid_Bench_H1/basic_locomotion/compute_basic_reward.cpp
+        tasks/Humanoid_Bench_H1/basic_locomotion/compute_basic_reward.h
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})

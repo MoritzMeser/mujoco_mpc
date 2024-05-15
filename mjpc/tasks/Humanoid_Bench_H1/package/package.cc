@@ -26,12 +26,12 @@
 
 namespace mjpc {
     std::string H1_package::XmlPath() const {
-        return GetModelPath("H1/package/task_package.xml");
+        return GetModelPath("Humanoid_Bench_H1/package/task_package.xml");
     }
 
-    std::string H1_package::Name() const { return "H1 Package"; }
+    std::string H1_package::Name() const { return "Humanoid_Bench_H1 Package"; }
 
-// ----------------- Residuals for H1 package task ----------------
+// ----------------- Residuals for Humanoid_Bench_H1 package task ----------------
 
 // -------------------------------------------------------------
     void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
@@ -98,7 +98,7 @@ namespace mjpc {
         residual[0] = std::exp(-humanoid_bench_reward);
     }
 
-// -------- Transition for H1 package task --------
+// -------- Transition for Humanoid_Bench_H1 package task --------
 // for a more complex task this might be necessary (like packageing to different targets)
 // ---------------------------------------------
     void H1_package::TransitionLocked(mjModel *model, mjData *data) {
