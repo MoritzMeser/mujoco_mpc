@@ -38,10 +38,11 @@
 #include "mjpc/tasks/shadow_reorient/hand.h"
 #include "mjpc/tasks/swimmer/swimmer.h"
 #include "mjpc/tasks/walker/walker.h"
-#include "mjpc/tasks/H1/walk/H1_walk.h"
-#include "mjpc/tasks/H1/balance_simple/balance_simple.h"
-#include "mjpc/tasks/H1/package/package.h"
-#include "mjpc/tasks/H1/reach/H1_reach.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/walk/H1_walk.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/stand/H1_stand.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/package/package.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/reach/H1_reach.h"
 
 namespace mjpc {
 
@@ -49,6 +50,7 @@ namespace mjpc {
         return {
                 //Humanoid Bench Tasks
                 std::make_shared<H1_walk>(),
+                std::make_shared<H1_stand>(),
                 std::make_shared<Balance_Simple>(),
                 std::make_shared<H1_package>(),
                 std::make_shared<H1_reach>(),

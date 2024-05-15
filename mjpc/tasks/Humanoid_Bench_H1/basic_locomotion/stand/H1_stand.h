@@ -1,12 +1,12 @@
-#ifndef MJPC_TASKS_H1_WALK_H_
-#define MJPC_TASKS_H1_WALK_H_
+#ifndef MJPC_TASKS_H1_STAND_H_
+#define MJPC_TASKS_H1_STAND_H_
 
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
 
 namespace mjpc {
-    class H1_walk : public Task {
+    class H1_stand : public Task {
     public:
         std::string Name() const override;
 
@@ -14,13 +14,13 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_walk *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_stand *task) : mjpc::BaseResidualFn(task) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
         };
 
-        H1_walk() : residual_(this) {}
+        H1_stand() : residual_(this) {}
 
 
     protected:
@@ -35,4 +35,4 @@ namespace mjpc {
     };
 }  // namespace mjpc
 
-#endif  // MJPC_TASKS_H1_WALK_H_
+#endif  // MJPC_TASKS_H1_STAND_H_
