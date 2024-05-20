@@ -45,6 +45,8 @@
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/slide/H1_slide.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/crawl/H1_crawl.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/hurdle/H1_hurdle.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/maze/H1_maze.h"
 
 #include "mjpc/tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/package/package.h"
@@ -61,6 +63,8 @@ namespace mjpc {
                 std::make_shared<H1_stairs>(),
                 std::make_shared<H1_slide>(),
                 std::make_shared<H1_crawl>(),
+                std::make_shared<H1_hurdle>(),
+                std::make_shared<H1_maze>(),
 
                 std::make_shared<Balance_Simple>(),
                 std::make_shared<H1_package>(),

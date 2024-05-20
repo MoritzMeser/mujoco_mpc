@@ -1,5 +1,9 @@
-#ifndef MJPC_TASKS_H1_PACKAGE_H_
-#define MJPC_TASKS_H1_PACKAGE_H_
+//
+// Created by Moritz Meser on 20.05.24.
+//
+
+#ifndef MUJOCO_MPC_H1_MAZE_H
+#define MUJOCO_MPC_H1_MAZE_H
 
 #include <string>
 #include "mujoco/mujoco.h"
@@ -7,7 +11,7 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    class H1_package : public Task {
+    class H1_maze : public Task {
     public:
         std::string Name() const override;
 
@@ -15,17 +19,16 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_package *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_maze *task) : mjpc::BaseResidualFn(task) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
         };
 
-        H1_package() : residual_(this) {}
+        H1_maze() : residual_(this) {}
 
-// -------- Transition for Humanoid_Bench_H1 walk task --------
-//  for a more complex task this might be necessary (like walking to different targets)
-// ---------------------------------------------
+// -------- Transition for Humanoid_Bench_H1 Maze task -------- //
+// ------------------------------------------------------------ //
         void TransitionLocked(mjModel *model, mjData *data) override;
 
     protected:
@@ -40,4 +43,5 @@ namespace mjpc {
     };
 }  // namespace mjpc
 
-#endif  // MJPC_TASKS_H1_PACKAGE_H_
+
+#endif //MUJOCO_MPC_H1_MAZE_H
