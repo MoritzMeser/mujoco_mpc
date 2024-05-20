@@ -167,6 +167,8 @@ add_library(
         tasks/Humanoid_Bench_H1/basic_locomotion/hurdle/H1_hurdle.h
         tasks/Humanoid_Bench_H1/maze/H1_maze.cc
         tasks/Humanoid_Bench_H1/maze/H1_maze.h
+        tasks/Humanoid_Bench_H1/poles/H1_poles.cc
+        tasks/Humanoid_Bench_H1/poles/H1_poles.h
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})
