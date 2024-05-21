@@ -52,6 +52,8 @@
 #include "mjpc/tasks/Humanoid_Bench_H1/push/H1_push.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/cabinet/H1_cabinet.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/high_bar/H1_highbar_simple.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/door/H1_door.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/truck/H1_truck.h"
 
 
 #include "mjpc/tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h"
@@ -76,33 +78,35 @@ namespace mjpc {
                 std::make_shared<H1_push>(),
                 std::make_shared<H1_cabinet>(),
                 std::make_shared<H1_highbar>(),
+                std::make_shared<H1_door>(),
+                std::make_shared<H1_truck>(),
 
-                std::make_shared<Balance_Simple>(),
-                std::make_shared<H1_package>(),
-                std::make_shared<H1_reach>(),
-                // other tasks
-                std::make_shared<Acrobot>(),
-                std::make_shared<Allegro>(),
-                std::make_shared<aloha::Handover>(),
-                std::make_shared<aloha::Reorient>(),
-                std::make_shared<Cartpole>(),
-                std::make_shared<Fingers>(),
-                std::make_shared<humanoid::Stand>(),
-                std::make_shared<humanoid::Tracking>(),
-                std::make_shared<humanoid::Walk>(),
-                std::make_shared<manipulation::Bring>(),
-                // DEEPMIND INTERNAL TASKS
-                std::make_shared<OP3>(),
-                std::make_shared<Panda>(),
-                std::make_shared<Particle>(),
-                std::make_shared<ParticleFixed>(),
-                std::make_shared<Rubik>(),
-                std::make_shared<ShadowReorient>(),
-                std::make_shared<Quadrotor>(),
-                std::make_shared<QuadrupedFlat>(),
-                std::make_shared<QuadrupedHill>(),
-                std::make_shared<Swimmer>(),
-                std::make_shared<Walker>(),
+//                std::make_shared<Balance_Simple>(),
+//                std::make_shared<H1_package>(),
+//                std::make_shared<H1_reach>(),
+//                // other tasks
+//                std::make_shared<Acrobot>(),
+//                std::make_shared<Allegro>(),
+//                std::make_shared<aloha::Handover>(),
+//                std::make_shared<aloha::Reorient>(),
+//                std::make_shared<Cartpole>(),
+//                std::make_shared<Fingers>(),
+//                std::make_shared<humanoid::Stand>(),
+//                std::make_shared<humanoid::Tracking>(),
+//                std::make_shared<humanoid::Walk>(),
+//                std::make_shared<manipulation::Bring>(),
+//                // DEEPMIND INTERNAL TASKS
+//                std::make_shared<OP3>(),
+//                std::make_shared<Panda>(),
+//                std::make_shared<Particle>(),
+//                std::make_shared<ParticleFixed>(),
+//                std::make_shared<Rubik>(),
+//                std::make_shared<ShadowReorient>(),
+//                std::make_shared<Quadrotor>(),
+//                std::make_shared<QuadrupedFlat>(),
+//                std::make_shared<QuadrupedHill>(),
+//                std::make_shared<Swimmer>(),
+//                std::make_shared<Walker>(),
         };
     }
 }  // namespace mjpc
