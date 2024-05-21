@@ -196,6 +196,10 @@ add_library(
         tasks/Humanoid_Bench_H1/powerlift/H1_powerlift.cc
         tasks/Humanoid_Bench_H1/powerlift/H1_powerlift.cc
         tasks/Humanoid_Bench_H1/powerlift/H1_powerlift.h
+        tasks/Humanoid_Bench_H1/room/H1_room.cc
+        tasks/Humanoid_Bench_H1/room/H1_room.h
+        tasks/Humanoid_Bench_H1/insert/H1_insert.cc
+        tasks/Humanoid_Bench_H1/insert/H1_insert.h
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})

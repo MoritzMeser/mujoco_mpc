@@ -2,8 +2,8 @@
 // Created by Moritz Meser on 21.05.24.
 //
 
-#ifndef MUJOCO_MPC_H1_WINDOW_H
-#define MUJOCO_MPC_H1_WINDOW_H
+#ifndef MUJOCO_MPC_H1_INSERT_H
+#define MUJOCO_MPC_H1_INSERT_H
 
 #include <string>
 #include "mujoco/mujoco.h"
@@ -11,7 +11,7 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    class H1_window : public Task {
+    class H1_insert : public Task {
     public:
         std::string Name() const override;
 
@@ -19,15 +19,15 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_window *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_insert *task) : mjpc::BaseResidualFn(task) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
         };
 
-        H1_window() : residual_(this) {}
+        H1_insert() : residual_(this) {}
 
-// -------- Transition for Humanoid_Bench_H1 window task -------- //
+// -------- Transition for Humanoid_Bench_H1 insert task -------- //
 // ------------------------------------------------------------ //
         void TransitionLocked(mjModel *model, mjData *data) override;
 
@@ -43,4 +43,4 @@ namespace mjpc {
     };
 }  // namespace mjpc
 
-#endif //MUJOCO_MPC_H1_WINDOW_H
+#endif //MUJOCO_MPC_H1_INSERT_H

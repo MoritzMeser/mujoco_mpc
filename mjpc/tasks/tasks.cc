@@ -62,6 +62,8 @@
 #include "mjpc/tasks/Humanoid_Bench_H1/kitchen/H1_kitchen.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/package/package.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/powerlift/H1_powerlift.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/room/H1_room.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/insert/H1_insert.h"
 
 
 #include "mjpc/tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h"
@@ -96,6 +98,8 @@ namespace mjpc {
 //                std::make_shared<H1_kitchen>(), //TODO: Fix H1_kitchen, currently not working
                 std::make_shared<H1_package>(),
                 std::make_shared<H1_powerlift>(),
+                std::make_shared<H1_room>(),
+                std::make_shared<H1_insert>(),
 
 
 //                std::make_shared<Balance_Simple>(),

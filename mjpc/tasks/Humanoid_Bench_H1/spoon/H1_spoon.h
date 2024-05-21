@@ -4,6 +4,7 @@
 
 #ifndef MUJOCO_MPC_H1_SPOON_H
 #define MUJOCO_MPC_H1_SPOON_H
+
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
