@@ -189,6 +189,8 @@ add_library(
         tasks/Humanoid_Bench_H1/basketball/H1_basketball.h
         tasks/Humanoid_Bench_H1/window/H1_window.cc
         tasks/Humanoid_Bench_H1/window/H1_window.h
+        tasks/Humanoid_Bench_H1/spoon/H1_spoon.cc
+        tasks/Humanoid_Bench_H1/spoon/H1_spoon.h
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})
