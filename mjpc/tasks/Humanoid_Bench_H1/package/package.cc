@@ -26,10 +26,10 @@
 
 namespace mjpc {
     std::string H1_package::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/package/task_package.xml");
+        return GetModelPath("Humanoid_Bench_H1/package/task.xml");
     }
 
-    std::string H1_package::Name() const { return "Humanoid_Bench_H1 Package"; }
+    std::string H1_package::Name() const { return "H1 Package"; }
 
 // ----------------- Residuals for Humanoid_Bench_H1 package task ----------------
 
