@@ -27,7 +27,7 @@ namespace mjpc {
         return GetModelPath("Humanoid_Bench_H1/balance_simple/task.xml");
     }
 
-    std::string Balance_Simple::Name() const { return "Balance Simple"; }
+    std::string Balance_Simple::Name() const { return "H1 Balance Simple"; }
 
 // ----------------- Residuals for Humanoid_Bench_H1 walk task ----------------
 
@@ -85,9 +85,8 @@ namespace mjpc {
         residual[0] = 1.0 - reward;
     }
 
-// -------- Transition for Humanoid_Bench_H1 walk task --------
-// for a more complex task this might be necessary (like walking to different targets)
-// ---------------------------------------------
+// -------- Transition for Humanoid_Bench_H1 balance task -------- //
+// --------------------------------------------------------------- //
     void Balance_Simple::TransitionLocked(mjModel *model, mjData *data) {
         //
     }

@@ -28,9 +28,9 @@ namespace mjpc {
         return GetModelPath("Humanoid_Bench_H1/reach/task.xml");
     }
 
-    std::string H1_reach::Name() const { return "Humanoid_Bench_H1 Reach"; }
+    std::string H1_reach::Name() const { return "H1 Reach"; }
 
-// ----------------- Residuals for Humanoid_Bench_H1 walk task ----------------
+// ----------------- Residuals for Humanoid_Bench_H1 reach task ----------------
 
 // -------------------------------------------------------------
     void H1_reach::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
@@ -52,9 +52,8 @@ namespace mjpc {
         residual[0] = 20 - reward;  // 20 is the maximum reward --> change this if the reward-computation changes
     }
 
-// -------- Transition for Humanoid_Bench_H1 walk task --------
-// for a more complex task this might be necessary (like walking to different targets)
-// ---------------------------------------------
+// -------- Transition for Humanoid_Bench_H1 reach task -------- //
+// ------------------------------------------------------------- //
     void H1_reach::TransitionLocked(mjModel *model, mjData *data) {
         //
     }

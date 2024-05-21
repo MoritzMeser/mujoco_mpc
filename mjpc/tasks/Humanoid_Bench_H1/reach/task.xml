@@ -1,8 +1,8 @@
 <mujoco model="H1">
     <include file="../../common.xml"/>
-    <!--   modified from humanoid bench - removed sensors and added a plane as floor-->
+    <include file="../../floor.xml"/>
+    <include file="reach.xml"/>
     <include file="../h1/h1_pos.xml"/>
-    <!--            <include file="../h1/h1_motor.xml"/>-->
 
     <custom>
         <!-- Parameters to adjust the reward function in the GUI-->
@@ -24,13 +24,7 @@
         <numeric name="batch_scale_prior" data="1.0e-3"/>
     </custom>
 
-    <worldbody>
-        <body name="target" mocap="true" pos="2 2 2">
-            <!-- 2, 2, 2 is the position of the target high in humanoid bench-->
-            <geom name="target" type="sphere" size="0.05" material="target"/>
-            <light name="target_light" diffuse=".7 .7 .7" pos="0 0 0.5"/>
-        </body>
-    </worldbody>
+
 
     <sensor>
         <!-- the user sensors specify the dimension of the residuals and how the cost is computed from the residuals-->
@@ -38,6 +32,7 @@
 
         <!-- cost terms -->
         <user name="20 - r" dim="1" user="5 1 0 1 1"/>
+
         <!-- task specific sensors -->
         <framepos name="goal_pos" objtype="body" objname="target"/>
     </sensor>

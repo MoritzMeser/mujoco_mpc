@@ -85,6 +85,8 @@ namespace mjpc {
                 std::make_shared<H1_maze>(),
                 std::make_shared<H1_poles>(),
                 std::make_shared<H1_sit_simple>(),
+                std::make_shared<H1_reach>(),
+                std::make_shared<Balance_Simple>(),
                 std::make_shared<H1_push>(),
                 std::make_shared<H1_cabinet>(),
                 std::make_shared<H1_highbar>(),
@@ -101,10 +103,6 @@ namespace mjpc {
                 std::make_shared<H1_room>(),
                 std::make_shared<H1_insert>(),
 
-
-//                std::make_shared<Balance_Simple>(),
-
-//                std::make_shared<H1_reach>(),
 //                // other tasks
 //                std::make_shared<Acrobot>(),
 //                std::make_shared<Allegro>(),
