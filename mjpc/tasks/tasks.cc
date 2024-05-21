@@ -51,6 +51,7 @@
 #include "mjpc/tasks/Humanoid_Bench_H1/poles/H1_poles.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/push/H1_push.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/cabinet/H1_cabinet.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/high_bar/H1_highbar_simple.h"
 
 
 #include "mjpc/tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h"
@@ -74,6 +75,7 @@ namespace mjpc {
                 std::make_shared<H1_sit_simple>(),
                 std::make_shared<H1_push>(),
                 std::make_shared<H1_cabinet>(),
+                std::make_shared<H1_highbar>(),
 
                 std::make_shared<Balance_Simple>(),
                 std::make_shared<H1_package>(),
