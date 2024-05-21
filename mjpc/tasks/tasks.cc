@@ -54,6 +54,7 @@
 #include "mjpc/tasks/Humanoid_Bench_H1/high_bar/H1_highbar_simple.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/door/H1_door.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/truck/H1_truck.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/cube/H1_cube.h"
 
 
 #include "mjpc/tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h"
@@ -80,6 +81,7 @@ namespace mjpc {
                 std::make_shared<H1_highbar>(),
                 std::make_shared<H1_door>(),
                 std::make_shared<H1_truck>(),
+                std::make_shared<H1_cube>(),
 
 //                std::make_shared<Balance_Simple>(),
 //                std::make_shared<H1_package>(),
