@@ -173,6 +173,8 @@ add_library(
         tasks/Humanoid_Bench_H1/basic_locomotion/sit_simple/H1_sit_simple.h
         tasks/Humanoid_Bench_H1/push/H1_push.cc
         tasks/Humanoid_Bench_H1/push/H1_push.h
+        tasks/Humanoid_Bench_H1/cabinet/H1_cabinet.cc
+        tasks/Humanoid_Bench_H1/cabinet/H1_cabinet.h
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})
