@@ -37,7 +37,10 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="20 - r" dim="1" user="5 1 0 1 1"/>
+        <user name="1 - r" dim="1" user="5 1 0 1 1"/>
+
+        <!-- task specific sensors -->
+        <framepos name="dumbbell_height" objtype="body" objname="dumbbell"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
