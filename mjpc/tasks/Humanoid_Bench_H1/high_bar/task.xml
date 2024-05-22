@@ -1,8 +1,14 @@
 <mujoco model="H1">
     <include file="../../common.xml"/>
     <include file="../../floor.xml"/>
-    <include file="highbar_simple.xml"/>
     <include file="../h1/h1_pos.xml"/>
+    <keyframe>
+        <!-- home is the initial position of the robot at the beginning and after reset-->
+        <key name="home" qpos="0.27 0 1.74 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3.11 0 1.49 0 -3.11 0 1.49"
+             ctrl="0 0 0 0 0 0 0 0 0 0 0 0 3.11 0 1.49 0 -3.11 0 1.49"/>
+    </keyframe>
+    <include file="highbar_simple.xml"/>
+
 
     <custom>
         <!-- Parameters to adjust the reward function in the GUI-->

@@ -1,8 +1,15 @@
 <mujoco model="H1">
+    <include file="../h1/h1_pos.xml"/>
+    <include file="balance_simple.xml"/>
     <include file="../../common.xml"/>
     <include file="../../floor.xml"/>
-    <include file="balance_simple.xml"/>
-    <include file="../h1/h1_pos.xml"/>
+
+    <keyframe>
+        <!-- home is the initial position of the robot at the beginning and after reset-->
+        <key name="home"
+             qpos="-0.1 0 1.32 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0 0 0 0.34 1 0 0 0"/>
+    </keyframe>
+
 
     <custom>
         <!-- Parameters to adjust the reward function in the GUI-->
@@ -25,7 +32,6 @@
         <numeric name="batch_configuration_length" data="3"/>
         <numeric name="batch_scale_prior" data="1.0e-3"/>
     </custom>
-
 
 
     <sensor>
