@@ -13,6 +13,7 @@
 
 #include "mjpc/utility/dm_control_utils_rewards.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/walk_reward.h"
+#include "mjpc/utility/utility_functions.h"
 
 
 namespace mjpc {
@@ -75,15 +76,5 @@ namespace mjpc {
 
         residual[0] = 1 - reward;
     }
-
-    bool H1_hurdle::ResidualFn::CheckAnyCollision(const mjModel *model, const mjData *data, int body_id) const {
-        for (int i = 0; i < data->ncon; i++) {
-            if (data->contact[i].geom1 == body_id || data->contact[i].geom2 == body_id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
 }  // namespace mjpc

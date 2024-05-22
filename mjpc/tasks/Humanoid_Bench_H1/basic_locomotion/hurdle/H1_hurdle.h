@@ -22,8 +22,6 @@ namespace mjpc {
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
-
-            bool CheckAnyCollision(const mjModel *pModel, const mjData *pData, int id) const;
         };
 
         H1_hurdle() : residual_(this) {}
