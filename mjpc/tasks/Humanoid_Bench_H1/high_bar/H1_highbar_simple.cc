@@ -24,12 +24,29 @@ namespace mjpc {
 
 // -------------------------------------------------------------
     void H1_highbar::ResidualFn::Residual(const mjModel *model, const mjData *data,
-                                        double *residual) const {
-        //TODO: implement this
-        double reward = 1.0;
+                                          double *residual) const {
+        // ---- upright reward ---- //
+        double upright_reward = tolerance(-SensorByName(model, data, "torso_upright")[2], {0.9, INFINITY}, 1.9,
+                                          "linear", 0.0);
+
+        // ---- feet reward ---- //
+        double left_foot_height = SensorByName(model, data, "left_foot_height")[2];
+        double right_foot_height = SensorByName(model, data, "right_foot_height")[2];
+        double feet_reward = tolerance((left_foot_height + right_foot_height) / 2, {4.8, INFINITY}, 2.0, "linear", 0.0);
+        feet_reward = (1 + feet_reward) / 2;
+
+        // ---- small control reward ---- //
+        double small_control = 0.0;
+        for (int i = 0; i < model->nu; i++) {
+            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic", 0.0);
+        }
+        small_control /= model->nu;  // average over all controls
+        small_control = (4 + small_control) / 5;
+
+        // ---- reward ---- //
+        double reward = upright_reward * feet_reward * small_control;
 
         // ----- residuals ----- //
-
         residual[0] = std::exp(-reward);
     }
 
