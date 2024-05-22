@@ -30,12 +30,6 @@ namespace mjpc {
         double const stand_height = 1.65;
 
 
-//        std::vector<int> wall_collision_ids = {
-//                model->name_geom_id("left_barrier_collision"),
-//                model->name_geom_id("right_barrier_collision"),
-//                model->name_geom_id("behind_barrier_collision")
-//        };
-
         // ----- standing ----- //
         double head_height = SensorByName(model, data, "head_height")[2];
         double standing = tolerance(head_height, {stand_height, INFINITY}, stand_height / 4);
@@ -65,21 +59,31 @@ namespace mjpc {
         // ---- wall collision discount ---- //
         double wall_collision_discount = 1;
 
-        //TODO: implement this !!!
-//        for (int i = 0; i < data->ncon; i++) {
-//            mjContactGeom *pair = &data->contact[i].geom;
-//            if (std::find(wall_collision_ids.begin(), wall_collision_ids.end(), pair->geom1) !=
-//                wall_collision_ids.end() ||
-//                std::find(wall_collision_ids.begin(), wall_collision_ids.end(), pair->geom2) !=
-//                wall_collision_ids.end()) {
-//                wall_collision_discount = 0.1;
-//                break;
-//            }
-//        }
+        std::vector<std::string> body_names = {"left_barrier_collision", "right_barrier_collision",
+                                               "behind_barrier_collision"};
 
+        for (const auto &body_name: body_names) {
+            int body_id = mj_name2id(model, mjOBJ_GEOM, body_name.c_str());
+
+            if (CheckAnyCollision(model, data, body_id)) {
+                wall_collision_discount = 0.1;
+                break;
+            }
+        }
         // ---- reward computation ---- //
         double reward = small_control * stand_reward * move * wall_collision_discount;
 
         residual[0] = 1 - reward;
     }
+
+    bool H1_hurdle::ResidualFn::CheckAnyCollision(const mjModel *model, const mjData *data, int body_id) const {
+        for (int i = 0; i < data->ncon; i++) {
+            if (data->contact[i].geom1 == body_id || data->contact[i].geom2 == body_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }  // namespace mjpc
