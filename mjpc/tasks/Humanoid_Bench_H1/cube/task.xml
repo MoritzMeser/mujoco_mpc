@@ -43,6 +43,15 @@
         <!-- cost terms -->
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
+        <!-- task specific sensor s-->
+        <framepos name="left_cube_position" objtype="body" objname="left_cube_to_rotate"/>
+        <framequat name="left_cube_quat" objtype="body" objname="left_cube_to_rotate"/>
+
+        <framepos name="right_cube_position" objtype="body" objname="right_cube_to_rotate"/>
+        <framequat name="right_cube_quat" objtype="body" objname="right_cube_to_rotate"/>
+
+        <framepos name="target_cube_position" objtype="body" objname="target_cube"/>
+        <framequat name="target_cube_quat" objtype="body" objname="target_cube"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
