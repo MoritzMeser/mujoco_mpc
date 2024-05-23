@@ -45,6 +45,14 @@
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
         <!-- task specific sensors -->
+        <framepos name="wipe_contact_site_a" objtype="site" objname="wipe_contact_site_a"/>
+        <framepos name="wipe_contact_site_b" objtype="site" objname="wipe_contact_site_b"/>
+        <framepos name="wipe_contact_site_c" objtype="site" objname="wipe_contact_site_c"/>
+        <framepos name="wipe_contact_site_d" objtype="site" objname="wipe_contact_site_d"/>
+        <framepos name="wipe_contact_site_e" objtype="site" objname="wipe_contact_site_e"/>
+
+        <framepos name="window_wiping_tool" objtype="body" objname="window_wiping_tool"/>
+
         <subtreelinvel name="window_wiping_tool_subtreelinvel" body="window_wiping_tool"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
