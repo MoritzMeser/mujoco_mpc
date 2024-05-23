@@ -6,7 +6,8 @@
 
     <keyframe>
         <!-- home is the initial position of the robot at the beginning and after reset-->
-        <key name="home" qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0"/>
+        <key name="home"
+             qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 1.57 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.57 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0 1 1 0 0 0"/>
     </keyframe>
 
 
@@ -35,7 +36,10 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="20 - r" dim="1" user="5 1 0 1 1"/>
+        <user name="exp{-r}" dim="1" user="5 1 0 1 1"/>
+
+        <!-- task specific sensors -->
+        <framepos name="object_pos" objtype="body" objname="object"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
