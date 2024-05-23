@@ -44,6 +44,8 @@
         <!-- cost terms -->
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
+        <!-- task specific sensors-->
+        <framepos name="door_hatch" objtype="body" objname="door_hatch"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
