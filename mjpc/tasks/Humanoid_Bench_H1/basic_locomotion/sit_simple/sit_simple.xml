@@ -1,7 +1,7 @@
 <mujocoinclude>
     <asset>
         <material name="wooden_cover"  texuniform="false"  texture="wooden_cover"/>
-        <texture type="2d" name="wooden_cover" file="light-wood.png"/>
+        <texture type="2d" name="wooden_cover" file="../../assets/light-wood.png"/>
     </asset>
     <worldbody>
         <body name="chair" pos="-0.25 0 0">
