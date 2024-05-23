@@ -57,13 +57,12 @@ namespace mjpc {
         // ----- window contact filter ----- //
         double window_contact_filter = 0;
 
-        int const window_pane_id = mj_name2id(model, mjOBJ_GEOM, "window_pane");
-        int const window_wipe_id = mj_name2id(model, mjOBJ_GEOM, "window_wiping_tool");
+        int const window_pane_id = mj_name2id(model, mjOBJ_GEOM, "window_pane_collision");
+        int const window_wipe_id = mj_name2id(model, mjOBJ_GEOM, "window_wipe_collision");
 
         for (int i = 0; i < data->ncon; i++) {
             if ((data->contact[i].geom1 == window_pane_id && data->contact[i].geom2 == window_wipe_id) ||
                 (data->contact[i].geom1 == window_wipe_id && data->contact[i].geom2 == window_pane_id)) {
-                printf("Contact detected\n");
                 window_contact_filter = 1;
                 break;
             }
@@ -85,13 +84,10 @@ namespace mjpc {
         double hand_tool_proximity_reward = std::min(tolerance(left_hand_tool_distance, {0, 0.2}, 0.5),
                                                      tolerance(right_hand_tool_distance, {0, 0.2}, 0.5));
 
-// ----- moving wipe reward ----- //
+        // ----- moving wipe reward ----- //
         double moving_wipe_reward = tolerance(
                 std::abs(SensorByName(model, data, "window_wiping_tool_subtreelinvel")[2]), {0.5, 0.5}, 0.5);
 
-// ----- head window distance reward ----- //
-//        double head_window_distance_reward = tolerance(std::norm(SensorByName(model, data, "head") - head_pos0),
-//                                                       {0.4, 0.4}, 0.1);
 
         // ----- head window distance reward ----- //
         static double *head_pos0 = nullptr;  // Declare head_pos0 as static
