@@ -92,5 +92,11 @@
             <geom type='box' pos='9.75 0.75 0.6' size='0.75 0.75 0.6' rgba='0.4 0.4 0.4 0.3' class="visual"/>
             <geom type='box' name="block_collision_66" pos='9.75 0.75 0.6' size='0.75 0.75 0.6' class="collision"/>
         </body>
+
+
+        <body name="target" mocap="true" pos="0 0 1">
+            <geom type="sphere" size="0.1" contype="0" conaffinity="0" rgba="0 1 0 .5"/>
+        </body>
+
     </worldbody>
 </mujocoinclude>

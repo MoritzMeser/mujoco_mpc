@@ -31,6 +31,9 @@ namespace mjpc {
 // ------------------------------------------------------------ //
         void TransitionLocked(mjModel *model, mjData *data) override;
 
+        // call base-class Reset, save task-related ids
+        void ResetLocked(const mjModel* model) override;
+
     protected:
         std::unique_ptr<mjpc::ResidualFn> ResidualLocked() const override {
             return std::make_unique<ResidualFn>(this);
@@ -40,6 +43,7 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+        int curr_goal_idx_ = 0;
     };
 }  // namespace mjpc
 

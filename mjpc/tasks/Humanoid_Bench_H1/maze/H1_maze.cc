@@ -12,6 +12,7 @@
 #include "mjpc/utilities.h"
 
 #include "mjpc/utility/dm_control_utils_rewards.h"
+#include "mjpc/utility/utility_functions.h"
 
 namespace mjpc {
     std::string H1_maze::XmlPath() const {
@@ -24,19 +25,161 @@ namespace mjpc {
 
 // -------------------------------------------------------------
     void H1_maze::ResidualFn::Residual(const mjModel *model, const mjData *data,
-                                          double *residual) const {
-        //TODO: implement this
-        double reward = 1.0;
+                                       double *residual) const {
+        // ----- set parameters ----- //
+        double const standHeight = 1.65;
+        double const moveSpeed = 2.0;
+
+
+        // ----- standing ----- //
+        double head_height = SensorByName(model, data, "head_height")[2];
+        double standing = tolerance(head_height, {standHeight, INFINITY}, standHeight / 4);
+
+
+        // ----- torso upright ----- //
+        double torso_upright = SensorByName(model, data, "torso_upright")[2];
+        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
+
+        double standReward = standing * upright;
+
+
+        // ----- small control ----- //
+        double small_control = 0.0;
+        for (int i = 0; i < model->nu; i++) {
+            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic", 0.0);
+        }
+        small_control /= model->nu;  // average over all controls
+        small_control = (4 + small_control) / 5;
+
+        // ----- wall collision ----- //
+        double wall_collision_discount = 1.0;
+        int maze_id = mj_name2id(model, mjOBJ_BODY, "maze");
+
+        // Iterate over all the child bodies of the "maze" body
+        for (int i = 0; i < model->nbody; i++) {
+            if (model->body_parentid[i] == maze_id) {
+                // Get the ID of the child body
+                int child_body_id = i;
+
+                // Iterate over all the geometries
+                for (int j = 0; j < model->ngeom; j++) {
+                    if (model->geom_bodyid[j] == child_body_id) {
+                        // Get the ID of the geometry
+                        int geom_id = j;
+
+                        // Check for collisions
+                        if (CheckAnyCollision(model, data, geom_id)) {
+                            wall_collision_discount = 0.1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // ----- stage convert reward ----- //
+        double stage_convert_reward = 0.0;
+        double *goal_pos = data->mocap_pos;
+        double *pelvis_pos = SensorByName(model, data, "pelvis_position");
+        double dist = std::sqrt(std::pow(goal_pos[0] - pelvis_pos[0], 2) +
+                                std::pow(goal_pos[1] - pelvis_pos[1], 2) +
+                                std::pow(goal_pos[2] - pelvis_pos[2], 2));
+
+        // check if task is done
+        if (dist < 0.1) {
+            stage_convert_reward = 100.0;
+        }
+
+        // ----- move speed ----- //
+        double move_direction[3] = {0, 0, 0};
+        // Get the current mocap_pos values
+        double *mocap_pos = data->mocap_pos;
+
+        // Check each case
+        if (mocap_pos[0] == 0 && mocap_pos[1] == 0 && mocap_pos[2] == 1) {
+            // Handle case for <key mpos="0 0 1"/>
+            move_direction[0] = 1;
+            move_direction[1] = 0;
+            move_direction[2] = 0;
+        } else if (mocap_pos[0] == 3 && mocap_pos[1] == 0 && mocap_pos[2] == 1) {
+            // Handle case for <key mpos="3 0 1"/>
+//            move_direction[0] = 0;
+//            move_direction[1] = 1;
+//            move_direction[2] = 0;
+            move_direction[0] = 1;
+            move_direction[1] = 0;
+            move_direction[2] = 0;
+        } else if (mocap_pos[0] == 3 && mocap_pos[1] == 6 && mocap_pos[2] == 1) {
+            // Handle case for <key mpos="3 6 1"/>
+//            move_direction[0] = 1;
+//            move_direction[1] = 0;
+//            move_direction[2] = 0;
+            move_direction[0] = 0;
+            move_direction[1] = 1;
+            move_direction[2] = 0;
+        } else if (mocap_pos[0] == 6 && mocap_pos[1] == 6 && mocap_pos[2] == 1) {
+            // Handle case for <key mpos="6 6 1"/>
+//            move_direction[0] = 0;
+//            move_direction[1] = 1;
+//            move_direction[2] = 0;
+            move_direction[0] = 1;
+            move_direction[1] = 0;
+            move_direction[2] = 0;
+        } else {
+            // Handle default case
+            move_direction[0] = 0;
+            move_direction[1] = 0;
+            move_direction[2] = 0;
+        }
+
+        // Get the center of mass velocity
+        double *com_velocity = SensorByName(model, data, "center_of_mass_velocity");
+
+        double move;
+        if (mocap_pos[0] == 6 && mocap_pos[1] == 6 && mocap_pos[2] == 1) {
+            // Handle case for <key mpos="6 6 1"/>
+            // last checkpoint
+            move = 0.0;
+        } else {
+            // Calculate the move reward
+            move = tolerance(com_velocity[0] - move_direction[0] * moveSpeed, {0, 0}, 1.0, "linear", 0.0) *
+                   tolerance(com_velocity[1] - move_direction[1] * moveSpeed, {0, 0}, 1.0, "linear", 0.0);
+        }
+        move = (5 * move + 1) / 6;
+        // ----- checkpoint proximity ----- //
+        double checkpoint_proximity = std::sqrt(std::pow(goal_pos[0] - pelvis_pos[0], 2) +
+                                                std::pow(goal_pos[1] - pelvis_pos[1], 2));
+        double checkpoint_proximity_reward = tolerance(checkpoint_proximity, {0, 0.0}, 1.0);
+
+        // ----- reward ----- //
+        double reward = (0.2 * (standReward * small_control)
+                         + 0.4 * move
+                         + 0.4 * checkpoint_proximity_reward
+                        ) * wall_collision_discount + stage_convert_reward;
 
         // ----- residuals ----- //
-
         residual[0] = std::exp(-reward);
     }
 
 // -------- Transition for Humanoid_Bench_H1 maze task -------- //
 // ------------------------------------------------------------ //
     void H1_maze::TransitionLocked(mjModel *model, mjData *data) {
-        //
+        double *goal_pos = model->key_mpos + 3 * (curr_goal_idx_ + 1);  // offset 1 is on purpose
+        double *pelvis_pos = SensorByName(model, data, "pelvis_position");
+        double dist = std::sqrt(std::pow(goal_pos[0] - pelvis_pos[0], 2) +
+                                std::pow(goal_pos[1] - pelvis_pos[1], 2));
+
+
+        // check if task is done
+        if (dist < 0.1) {
+            curr_goal_idx_ = std::min(curr_goal_idx_ + 1, 3);
+        }
+        mju_copy3(data->mocap_pos, model->key_mpos + 3 * (curr_goal_idx_ + 1)); // offset 1 is on purpose
+    }
+
+    void H1_maze::ResetLocked(const mjModel *model) {
+        curr_goal_idx_ = 0;
     }
 
 }  // namespace mjpc
