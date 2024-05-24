@@ -1,17 +1,3 @@
-// Copyright 2022 DeepMind Technologies Limited
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 #include "balance_simple.h"
 
 #include <string>
@@ -27,29 +13,23 @@ namespace mjpc {
         return GetModelPath("Humanoid_Bench_H1/balance_simple/task.xml");
     }
 
-    std::string Balance_Simple::Name() const { return "H1 Balance Simple"; }
+    std::string Balance_Simple::Name() const { return "H1 Balance"; }
 
-// ----------------- Residuals for Humanoid_Bench_H1 walk task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 balance task ---------------- //
+// ------------------------------------------------------------------------------- //
     void Balance_Simple::ResidualFn::Residual(const mjModel *model, const mjData *data,
-                                       double *residual) const {
-        // get values from GUI
-        double stand_height = parameters_[1];
-        double move_speed = parameters_[0];
+                                              double *residual) const {
+        // ----- set parameters ----- //
+        double const standHeight = 1.65;
 
         // ----- standing ----- //
-        double infinity = std::numeric_limits<double>::infinity();
-        std::pair<double, double> bounds = {stand_height, infinity};
-
-        double x = SensorByName(model, data, "head_height")[2];
-        double standing = tolerance(x, bounds, stand_height / 4);
+        double head_height = SensorByName(model, data, "head_height")[2];
+        double standing = tolerance(head_height, {standHeight + 0.35, INFINITY}, standHeight / 4);
 
 
         // ----- torso upright ----- //
-        bounds = {0.9, infinity};
-        x = SensorByName(model, data, "torso_upright")[2];
-        double upright = tolerance(x, bounds, 1.9);
+        double torso_upright = SensorByName(model, data, "torso_upright")[2];
+        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
 
         // ----- stand_reward ----- //
         double stand_reward = standing * upright;
@@ -58,28 +38,19 @@ namespace mjpc {
         // ----- small control ----- //
         double small_control = 0.0;
         for (int i = 0; i < model->nu; i++) {
-            double margin = 10;
-            double value_at_margin = 0.0;
-            x = data->ctrl[i];
-            small_control += tolerance(x, {0.0, 0.0}, margin, "quadratic", value_at_margin);
+            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 1.0, "quadratic", 0.0);
         }
         small_control /= model->nu;  // average over all controls
         small_control = (4 + small_control) / 5;
 
-        double reward;
-        // ----- move speed ----- //
-        if (move_speed == 0.0) {
-            double horizontal_velocity_x = SensorByName(model, data, "center_of_mass_velocity")[0];
-            double horizontal_velocity_y = SensorByName(model, data, "center_of_mass_velocity")[1];
-            double dont_move = (tolerance(horizontal_velocity_x, {0.0, 0.0}, 2) +
-                                tolerance(horizontal_velocity_y, {0.0, 0.0}, 2)) / 2;
-            reward = small_control * stand_reward * dont_move;
-        } else {
-            double com_velocity = SensorByName(model, data, "center_of_mass_velocity")[0];
-            double move = tolerance(com_velocity, {move_speed, infinity}, std::abs(move_speed), "linear", 0.0);
-            move = (5 * move + 1) / 6;
-            reward = small_control * stand_reward * move;
-        }
+        // ----- horizontal velocity ----- //
+        double horizontal_velocity_x = SensorByName(model, data, "center_of_mass_velocity")[0];
+        double horizontal_velocity_y = SensorByName(model, data, "center_of_mass_velocity")[1];
+        double dont_move = (tolerance(horizontal_velocity_x, {0.0, 0.0}, 2.0) +
+                            tolerance(horizontal_velocity_y, {0.0, 0.0}, 2.0)) / 2;
+
+        // ----- reward ----- //
+        double reward = stand_reward * small_control * dont_move;
 
         // ----- residuals ----- //
         residual[0] = 1.0 - reward;
