@@ -1,8 +1,7 @@
 <mujocoinclude>
     <worldbody>
-        <body name="target" mocap="true" pos="2 2 2">
-            <geom name="target" type="sphere" size="0.05" material="target"/>
-            <light name="target_light" diffuse=".7 .7 .7" pos="0 0 0.5"/>
+        <body name="target" mocap="true" pos="1 1 1">
+            <geom type="sphere" size="0.1" contype="0" conaffinity="0" rgba="0 1 0 .5"/>
         </body>
     </worldbody>
 </mujocoinclude>
