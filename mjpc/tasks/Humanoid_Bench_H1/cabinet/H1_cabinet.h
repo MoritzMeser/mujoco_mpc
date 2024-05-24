@@ -19,13 +19,18 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_cabinet *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_cabinet *task) : mjpc::BaseResidualFn(task), task_(
+                    const_cast<H1_cabinet *>(task)) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
+
+        private:
+            H1_cabinet *task_;
         };
 
-        H1_cabinet() : residual_(this) {}
+
+        H1_cabinet() : residual_(this), current_subtask_(0) {}
 
 // -------- Transition for Humanoid_Bench_H1 cabinet task -------- //
 // ------------------------------------------------------------ //
@@ -40,6 +45,7 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+        mutable int current_subtask_;
     };
 }  // namespace mjpc
 

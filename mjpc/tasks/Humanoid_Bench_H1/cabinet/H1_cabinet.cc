@@ -28,6 +28,7 @@ namespace mjpc {
         //TODO: implement this
         double reward = 1.0;
 
+        printf("Residuals, current_subtask = %d", task_->current_subtask_);
         // ----- residuals ----- //
 
         residual[0] = std::exp(-reward);
@@ -37,6 +38,7 @@ namespace mjpc {
 // ------------------------------------------------------------ //
     void H1_cabinet::TransitionLocked(mjModel *model, mjData *data) {
         //
+        printf("TransitionLocked, current_subtask = %d", current_subtask_);
     }
 
 }  // namespace mjpc
