@@ -12,7 +12,6 @@
     </keyframe>
 
 
-
     <custom>
         <!-- Parameters to adjust the reward function in the GUI-->
         <numeric name="residual_Speed Goal" data="0 0 3.0"/>
@@ -44,6 +43,13 @@
         <!-- cost terms -->
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
+        <!-- task specific sensors -->
+        <framepos name="table" objtype="body" objname="table"/>
+        <framepos name="package_a" objtype="body" objname="package_a"/>
+        <framepos name="package_b" objtype="body" objname="package_b"/>
+        <framepos name="package_c" objtype="body" objname="package_c"/>
+        <framepos name="package_d" objtype="body" objname="package_d"/>
+        <framepos name="package_e" objtype="body" objname="package_e"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
