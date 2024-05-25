@@ -4,6 +4,7 @@
 
 #ifndef MUJOCO_MPC_H1_BOOKSHELF_H
 #define MUJOCO_MPC_H1_BOOKSHELF_H
+
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
@@ -18,13 +19,17 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_bookshelf *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_bookshelf *task) : mjpc::BaseResidualFn(task),
+                                                            task_(const_cast<H1_bookshelf *>(task)) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
+
+        private:
+            H1_bookshelf *task_;
         };
 
-        H1_bookshelf() : residual_(this) {}
+        H1_bookshelf() : residual_(this), task_index_(0) {}
 
 // -------- Transition for Humanoid_Bench_H1 bookshelf task -------- //
 // ------------------------------------------------------------ //
@@ -39,6 +44,7 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+        int task_index_;
     };
 }  // namespace mjpc
 
