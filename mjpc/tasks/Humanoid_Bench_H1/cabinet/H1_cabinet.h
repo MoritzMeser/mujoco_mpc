@@ -30,7 +30,7 @@ namespace mjpc {
         };
 
 
-        H1_cabinet() : residual_(this), current_subtask_(0) {}
+        H1_cabinet() : residual_(this), current_subtask_(1) {}
 
 // -------- Transition for Humanoid_Bench_H1 cabinet task -------- //
 // ------------------------------------------------------------ //
