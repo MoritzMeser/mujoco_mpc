@@ -55,13 +55,67 @@ namespace mjpc {
         bool subtaskComplete = false;
 
         if (task_->current_subtask_ == 1) {
-            //TODO: implement subtask 1
+            // subtask 1: open cabinet door
+            double pulling_cabinet_joint_pos = data->qpos[(4 * 7) + 2];
+            double door_openness_reward = std::abs(pulling_cabinet_joint_pos / 0.4);
+            subtaskComplete = door_openness_reward > 0.95;
+            subtaskReward = door_openness_reward;
         } else if (task_->current_subtask_ == 2) {
-            //TODO: implement subtask 2
+            // subtask 2: open drawer
+            double drawer_joint_pos = data->qpos[model->nq - (4 * 7) - 5];
+            double door_openness_reward = abs(drawer_joint_pos / 0.45);
+            subtaskComplete = door_openness_reward > 0.95;
+            subtaskReward = door_openness_reward;
         } else if (task_->current_subtask_ == 3) {
-            //TODO: implement subtask 3
+            // subtask 3: move cube into cabinet
+            double *drawer_cube_pos = SensorByName(model, data, "drawer_cube_pos");
+
+            double normal_cabinet_left_joint_pos = data->qpos[model->nq - (4 * 7) - 4];
+            double normal_cabinet_right_joint_pos = data->qpos[model->nq - (4 * 7) - 3];
+            double left_door_openness_reward = std::min(1.0, std::abs(normal_cabinet_left_joint_pos));
+            double right_door_openness_reward = std::min(1.0, std::abs(normal_cabinet_right_joint_pos));
+            double door_openness_reward = std::max(left_door_openness_reward,
+                                                   right_door_openness_reward); // any open door is sufficient
+
+            double cube_proximity_horizontal = (tolerance(drawer_cube_pos[0], {-0.9, -0.3}, 0.3, "linear") +
+                                                tolerance(drawer_cube_pos[1], {-0.6, 0.6}, 0.3, "linear")) / 2;
+            double cube_proximity_vertical = tolerance(drawer_cube_pos[2] - 0.94, {-0.15, 0.15}, 0.3, "linear");
+
+            bool in_cabinet_x = 0.9 - 0.3 <= drawer_cube_pos[0] && drawer_cube_pos[0] <= 0.9 + 0.3;
+            bool in_cabinet_y = 0 - 0.6 <= drawer_cube_pos[1] && drawer_cube_pos[1] <= 0 + 0.6;
+            bool in_cabinet_z = 0.94 - 0.15 <= drawer_cube_pos[2] && drawer_cube_pos[2] <= 0.94 + 0.15;
+            subtaskComplete = in_cabinet_x && in_cabinet_y && in_cabinet_z;
+
+            double drawer_cube_proximity_reward = 0.3 * cube_proximity_horizontal + 0.7 * cube_proximity_vertical;
+            stabilizationReward = 0.5 * drawer_cube_proximity_reward + 0.5 * door_openness_reward;
         } else if (task_->current_subtask_ == 4) {
-            //TODO: implement subtask 4
+            // subtask 4: close drawer
+            double *pullup_drawer_cube_pos = SensorByName(model, data, "pullup_drawer_cube_pos");
+
+            double pullup_drawer_joint_pos = data->qpos[model->nq - (4 * 7) - 1];
+            double door_openness_reward = std::min(1.0, std::abs(pullup_drawer_joint_pos));
+
+            //
+            // The secondary_door_openness_reward is computed in the reference python implementation, but not used.
+            // I still put it here for completeness.
+            //
+            // double normal_cabinet_left_joint_pos = data->qpos[model->nq - (4 * 7) - 4];
+            // double normal_cabinet_right_joint_pos = data->qpos[model->nq - (4 * 7) - 3];
+            // double left_door_openness_reward = std::min(1.0, std::abs(normal_cabinet_left_joint_pos));
+            //  double right_door_openness_reward = std::min(1.0, std::abs(normal_cabinet_right_joint_pos));
+            //  double secondary_door_openness_reward = std::max(left_door_openness_reward, right_door_openness_reward);
+
+            double cube_proximity_horizontal = (tolerance(pullup_drawer_cube_pos[0] - 0.9, {-0.3, 0.3}, 0.3, "linear") +
+                                                tolerance(pullup_drawer_cube_pos[1], {-0.6, 0.6}, 0.3, "linear")) / 2;
+            double cube_proximity_vertical = tolerance(pullup_drawer_cube_pos[2] - 1.54, {-0.15, 0.15}, 0.3, "linear");
+
+            bool in_cabinet_x = 0.9 - 0.3 <= pullup_drawer_cube_pos[0] && pullup_drawer_cube_pos[0] <= 0.9 + 0.3;
+            bool in_cabinet_y = 0 - 0.6 <= pullup_drawer_cube_pos[1] && pullup_drawer_cube_pos[1] <= 0 + 0.6;
+            bool in_cabinet_z = 1.54 - 0.15 <= pullup_drawer_cube_pos[2] && pullup_drawer_cube_pos[2] <= 1.54 + 0.15;
+            subtaskComplete = in_cabinet_x && in_cabinet_y && in_cabinet_z;
+
+            double drawer_cube_proximity_reward = 0.3 * cube_proximity_horizontal / 2 + 0.7 * cube_proximity_vertical;
+            subtaskReward = 0.5 * drawer_cube_proximity_reward + 0.5 * door_openness_reward;
         } else { // all subtasks are complete
             subtaskReward = 1000.0;
             subtaskComplete = false;
@@ -86,8 +140,46 @@ namespace mjpc {
     // -------- Transition for Humanoid_Bench_H1 cabinet task -------- //
     // ------------------------------------------------------------ //
     void H1_cabinet::TransitionLocked(mjModel *model, mjData *data) {
-        //
-        //TODO: implement transition
+        bool subtaskComplete = false;
+
+        if (current_subtask_ == 1) {
+            // subtask 1: open cabinet door
+            double pulling_cabinet_joint_pos = data->qpos[(4 * 7) + 2];
+            double door_openness_reward = std::abs(pulling_cabinet_joint_pos / 0.4);
+            subtaskComplete = door_openness_reward > 0.95;
+        } else if (current_subtask_ == 2) {
+            // subtask 2: open drawer
+            double drawer_joint_pos = data->qpos[model->nq - (4 * 7) - 5];
+            double door_openness_reward = abs(drawer_joint_pos / 0.45);
+            subtaskComplete = door_openness_reward > 0.95;
+        } else if (current_subtask_ == 3) {
+            // subtask 3: move cube into cabinet
+            double *drawer_cube_pos = SensorByName(model, data, "drawer_cube_pos");
+
+            bool in_cabinet_x = 0.9 - 0.3 <= drawer_cube_pos[0] && drawer_cube_pos[0] <= 0.9 + 0.3;
+            bool in_cabinet_y = 0 - 0.6 <= drawer_cube_pos[1] && drawer_cube_pos[1] <= 0 + 0.6;
+            bool in_cabinet_z = 0.94 - 0.15 <= drawer_cube_pos[2] && drawer_cube_pos[2] <= 0.94 + 0.15;
+
+            subtaskComplete = in_cabinet_x && in_cabinet_y && in_cabinet_z;
+        } else if (current_subtask_ == 4) {
+            // subtask 4: close drawer
+            double *pullup_drawer_cube_pos = SensorByName(model, data, "pullup_drawer_cube_pos");
+
+            bool in_cabinet_x = 0.9 - 0.3 <= pullup_drawer_cube_pos[0] && pullup_drawer_cube_pos[0] <= 0.9 + 0.3;
+            bool in_cabinet_y = 0 - 0.6 <= pullup_drawer_cube_pos[1] && pullup_drawer_cube_pos[1] <= 0 + 0.6;
+            bool in_cabinet_z = 1.54 - 0.15 <= pullup_drawer_cube_pos[2] && pullup_drawer_cube_pos[2] <= 1.54 + 0.15;
+
+            subtaskComplete = in_cabinet_x && in_cabinet_y && in_cabinet_z;
+        } else { // all subtasks are complete
+            subtaskComplete = false;
+        }
+
+        if (subtaskComplete) {
+            current_subtask_++;
+        }
     }
 
+    void H1_cabinet::ResetLocked(const mjModel *model) {
+        current_subtask_ = 1;
+    }
 }  // namespace mjpc

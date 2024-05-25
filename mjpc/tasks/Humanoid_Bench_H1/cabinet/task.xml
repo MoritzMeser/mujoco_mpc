@@ -2,6 +2,8 @@
     <include file="../../common.xml"/>
     <include file="../../floor.xml"/>
     <include file="../h1/h1hand_pos.xml"/>
+    <include file="cabinet.xml"/>
+
     <keyframe>
         <!-- home is the initial position of the robot at the beginning and after reset-->
         <key name="home" qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0
@@ -13,7 +15,6 @@
             0.9 0 1.16 1 0 0 0
             0.9 0 1.45 1 0 0 0"/>
     </keyframe>
-    <include file="cabinet.xml"/>
 
 
     <custom>
@@ -47,6 +48,9 @@
         <!-- cost terms -->
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
+        <!-- task specific sensors -->
+        <framepos name="drawer_cube_pos" objtype="body" objname="drawer_cube"/>
+        <framepos name="pullup_drawer_cube_pos" objtype="body" objname="pullup_drawer_cube"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
