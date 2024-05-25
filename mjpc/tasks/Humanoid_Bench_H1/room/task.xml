@@ -48,6 +48,14 @@
 
         <!-- cost terms -->
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
+
+        <!-- task specific sensors -->
+        <framepos name="chair" objtype="body" objname="chair"/>
+        <framepos name="trophy" objtype="body" objname="trophy"/>
+        <framepos name="headphone" objtype="body" objname="headphone"/>
+        <framepos name="package_a" objtype="body" objname="package_a"/>
+        <framepos name="package_b" objtype="body" objname="package_b"/>
+        <framepos name="snow_globe" objtype="body" objname="snow_globe"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
