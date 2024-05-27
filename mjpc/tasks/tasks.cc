@@ -97,7 +97,7 @@ namespace mjpc {
                 std::make_shared<H1_basketball>(),
                 std::make_shared<H1_window>(),
                 std::make_shared<H1_spoon>(),
-//                std::make_shared<H1_kitchen>(), //TODO: Fix H1_kitchen, currently not working
+                std::make_shared<H1_kitchen>(), //TODO: Fix H1_kitchen, currently not working
                 std::make_shared<H1_package>(),
                 std::make_shared<H1_powerlift>(),
                 std::make_shared<H1_room>(),

@@ -1,5 +1,4 @@
 <mujocoinclude>
-
     <body name="kettleroot" childclass="kettle">
         <geom mesh="kettle"/>
         <geom material="kettle_wood" euler="0 1.57 0" pos="0 0 0.259" size="0.032 0.1" type="capsule"/>
