@@ -19,20 +19,24 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_maze *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_maze *task) : mjpc::BaseResidualFn(task),
+                                                       task_(const_cast<H1_maze *>(task)) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
+
+        private:
+            const H1_maze *task_;
         };
 
-        H1_maze() : residual_(this) {}
+        H1_maze() : residual_(this), curr_goal_idx_(0) {}
 
 // -------- Transition for Humanoid_Bench_H1 Maze task -------- //
 // ------------------------------------------------------------ //
         void TransitionLocked(mjModel *model, mjData *data) override;
 
         // call base-class Reset, save task-related ids
-        void ResetLocked(const mjModel* model) override;
+        void ResetLocked(const mjModel *model) override;
 
     protected:
         std::unique_ptr<mjpc::ResidualFn> ResidualLocked() const override {
@@ -43,7 +47,7 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
-        int curr_goal_idx_ = 0;
+        int curr_goal_idx_;
     };
 }  // namespace mjpc
 

@@ -93,41 +93,30 @@ namespace mjpc {
 
         // ----- move speed ----- //
         double move_direction[3] = {0, 0, 0};
-        // Get the current mocap_pos values
-        double *mocap_pos = data->mocap_pos;
 
         // Check each case
-        if (mocap_pos[0] == 0 && mocap_pos[1] == 0 && mocap_pos[2] == 1) {
-            // Handle case for <key mpos="0 0 1"/>
+        if (task_->curr_goal_idx_ == 0) {
+            // checkpoint is 0,0,1
             move_direction[0] = 1;
             move_direction[1] = 0;
             move_direction[2] = 0;
-        } else if (mocap_pos[0] == 3 && mocap_pos[1] == 0 && mocap_pos[2] == 1) {
-            // Handle case for <key mpos="3 0 1"/>
-//            move_direction[0] = 0;
-//            move_direction[1] = 1;
-//            move_direction[2] = 0;
+        } else if (task_->curr_goal_idx_ == 1) {
+           // checkpoint is 3,0,1
             move_direction[0] = 1;
             move_direction[1] = 0;
             move_direction[2] = 0;
-        } else if (mocap_pos[0] == 3 && mocap_pos[1] == 6 && mocap_pos[2] == 1) {
-            // Handle case for <key mpos="3 6 1"/>
-//            move_direction[0] = 1;
-//            move_direction[1] = 0;
-//            move_direction[2] = 0;
+        } else if (task_->curr_goal_idx_ == 2) {
+            // checkpoint is 3,6,1
             move_direction[0] = 0;
             move_direction[1] = 1;
             move_direction[2] = 0;
-        } else if (mocap_pos[0] == 6 && mocap_pos[1] == 6 && mocap_pos[2] == 1) {
-            // Handle case for <key mpos="6 6 1"/>
-//            move_direction[0] = 0;
-//            move_direction[1] = 1;
-//            move_direction[2] = 0;
+        } else if (task_->curr_goal_idx_ == 3) {
+            // checkpoint is 6,6,1
             move_direction[0] = 1;
             move_direction[1] = 0;
             move_direction[2] = 0;
         } else {
-            // Handle default case
+            // last checkpoint is reached
             move_direction[0] = 0;
             move_direction[1] = 0;
             move_direction[2] = 0;
@@ -137,10 +126,9 @@ namespace mjpc {
         double *com_velocity = SensorByName(model, data, "center_of_mass_velocity");
 
         double move;
-        if (mocap_pos[0] == 6 && mocap_pos[1] == 6 && mocap_pos[2] == 1) {
-            // Handle case for <key mpos="6 6 1"/>
-            // last checkpoint
-            move = 0.0;
+        if (task_->curr_goal_idx_ == 4) {
+            // last checkpoint is reached
+            move = 1.0;
         } else {
             // Calculate the move reward
             move = tolerance(com_velocity[0] - move_direction[0] * moveSpeed, {0, 0}, 1.0, "linear", 0.0) *
@@ -165,6 +153,7 @@ namespace mjpc {
 // -------- Transition for Humanoid_Bench_H1 maze task -------- //
 // ------------------------------------------------------------ //
     void H1_maze::TransitionLocked(mjModel *model, mjData *data) {
+        printf("curr_goal_idx_: %d\n", curr_goal_idx_);
         double *goal_pos = model->key_mpos + 3 * (curr_goal_idx_ + 1);  // offset 1 is on purpose
         double *pelvis_pos = SensorByName(model, data, "pelvis_position");
         double dist = std::sqrt(std::pow(goal_pos[0] - pelvis_pos[0], 2) +
@@ -173,7 +162,7 @@ namespace mjpc {
 
         // check if task is done
         if (dist < 0.1) {
-            curr_goal_idx_ = std::min(curr_goal_idx_ + 1, 3);
+            curr_goal_idx_ = std::min(curr_goal_idx_ + 1, 4);
         }
         mju_copy3(data->mocap_pos, model->key_mpos + 3 * (curr_goal_idx_ + 1)); // offset 1 is on purpose
     }
