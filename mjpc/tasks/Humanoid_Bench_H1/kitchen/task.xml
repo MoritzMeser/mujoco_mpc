@@ -42,6 +42,14 @@
         <!-- cost terms -->
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
+        <!-- task specific sensors-->
+        <framepos name="bottom_burner" objtype="body" objname="bottom_burner"/>
+        <framepos name="top_burner" objtype="body" objname="top_burner"/>
+        <framepos name="light_switch" objtype="body" objname="light_switch"/>
+        <framepos name="slide_cabinet" objtype="body" objname="slide_cabinet"/>
+        <framepos name="hinge_cabinet" objtype="body" objname="hinge_cabinet"/>
+        <framepos name="microwave" objtype="body" objname="microwave"/>
+        <framepos name="kettle" objtype="body" objname="kettle"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
