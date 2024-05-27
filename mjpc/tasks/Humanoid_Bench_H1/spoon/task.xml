@@ -45,7 +45,9 @@
         <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
 
         <!--task specific sensors-->
-        <gyro name="spoon_gyro" site="spoon_plate"/>
+        <framepos name="spoon_handle" objtype="site" objname="spoon_handle"/>
+        <framepos name="spoon_plate" objtype="site" objname="spoon_plate"/>
+        <framepos name="cup" objtype="body" objname="cup"/>
 
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
