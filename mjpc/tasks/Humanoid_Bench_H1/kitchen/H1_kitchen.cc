@@ -27,31 +27,17 @@ namespace mjpc {
                                           double *residual) const {
         // the reward of this task is a count of how many objects are at the target location
 
+        // ----- set parameters ----- //
         double const BONUS_THRESH = 0.3;
         // ----- initialize reward ----- //
         int reward = 0;
 
-        // initialize target positions
-        std::map<std::string, std::pair<double, double>> target_positions = {
-                {"bottom burner", {-0.88, -0.01}},
-                {"top burner",    {-0.92, -0.01}},
-                {"light switch",  {-0.69, -0.05}},
-                {"slide cabinet", {0.37,  0.0}},
-                {"hinge cabinet", {0.0,   1.45}},
-                {"microwave",     {-0.75, 0.0}},
-                {"kettle",        {-0.23, 0.75}}
-        };
 
         bool all_completed_so_far = true;
         // ----- loop over all tasks ----- //
         for (const std::string &task: task_->tasks_to_complete_) {
-            // ----- get the position of the object ----- //
-            double *object_pos = SensorByName(model, data, task);
-            // ----- get the position of the target ----- //
-            std::pair target_location = target_positions[task];
-            // ----- calculate the distance between the object and the target ----- //
-            double distance = std::sqrt(std::pow(object_pos[0] - target_location.first, 2) +
-                                        std::pow(object_pos[1] - target_location.second, 2));
+            double distance = mjpc::H1_kitchen::CalculateDistance(task, data);
+
             // ----- check if the object is at the target location ----- //
             bool completed = distance < BONUS_THRESH;
             if (completed && (all_completed_so_far || !task_->ENFORCE_TASK_ORDER)) {
@@ -72,28 +58,11 @@ namespace mjpc {
         }
         double const BONUS_THRESH = 0.3;
 
-        // initialize target positions
-        std::map<std::string, std::pair<double, double>> target_positions = {
-                {"bottom burner", {-0.88, -0.01}},
-                {"top burner",    {-0.92, -0.01}},
-                {"light switch",  {-0.69, -0.05}},
-                {"slide cabinet", {0.37,  0.0}},
-                {"hinge cabinet", {0.0,   1.45}},
-                {"microwave",     {-0.75, 0.0}},
-                {"kettle",        {-0.23, 0.75}}
-        };
-
         bool all_completed_so_far = true;
         std::vector<std::string> completed_tasks;
         // ----- loop over all tasks ----- //
         for (const std::string &task: tasks_to_complete_) {
-            // ----- get the position of the object ----- //
-            double *object_pos = SensorByName(model, data, task);
-            // ----- get the position of the target ----- //
-            std::pair target_location = target_positions[task];
-            // ----- calculate the distance between the object and the target ----- //
-            double distance = std::sqrt(std::pow(object_pos[0] - target_location.first, 2) +
-                                        std::pow(object_pos[1] - target_location.second, 2));
+            double distance = CalculateDistance(task, data);
             // ----- check if the object is at the target location ----- //
             bool completed = distance < BONUS_THRESH;
             if (completed && (all_completed_so_far || !ENFORCE_TASK_ORDER)) {
@@ -108,6 +77,40 @@ namespace mjpc {
             }
         }
 
+    }
+
+    double H1_kitchen::CalculateDistance(const std::string &task, const mjData *data) {
+        int const robot_dof = 75;
+
+        std::map<std::string, std::vector<double>> obs_element_goals = {
+                {"bottom burner", {-0.88, -0.01}},
+                {"top burner",    {-0.92, -0.01}},
+                {"light switch",  {-0.69, -0.05}},
+                {"slide cabinet", {0.37}},
+                {"hinge cabinet", {0.0,   1.45}},
+                {"microwave",     {-0.75}},
+                {"kettle",        {-0.23, 0.75, 1, 0.99, 0.0, 0.0, -0.06}}
+        };
+        std::map<std::string, std::vector<int>> obs_element_indices = {
+                {"bottom burner", {2,  3}},
+                {"top burner",    {6,  7}},
+                {"light switch",  {8,  9}},
+                {"slide cabinet", {10}},
+                {"hinge cabinet", {11, 12}},
+                {"microwave",     {13}},
+                {"kettle",        {14, 15, 16, 17, 18, 19, 20}}
+        };
+
+        std::vector<int> obs_element_index = obs_element_indices.at(task);
+        double *observation = data->qpos + robot_dof + obs_element_index[0];
+
+        std::vector<double> obs_element_goal = obs_element_goals.at(task);
+
+        double distance = 0;
+        for (int i = 0; i < obs_element_goal.size(); i++) {
+            distance += std::pow(observation[i] - obs_element_goal[i], 2);
+        }
+        return std::sqrt(distance);
     }
 
 }  // namespace mjpc
