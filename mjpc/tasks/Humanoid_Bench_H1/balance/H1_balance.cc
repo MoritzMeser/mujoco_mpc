@@ -1,4 +1,4 @@
-#include "balance_simple.h"
+#include "H1_balance.h"
 
 #include <string>
 # include <limits>
@@ -10,7 +10,7 @@
 
 namespace mjpc {
     std::string Balance_Simple::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/balance_simple/task.xml");
+        return GetModelPath("Humanoid_Bench_H1/balance/task.xml");
     }
 
     std::string Balance_Simple::Name() const { return "H1 Balance"; }

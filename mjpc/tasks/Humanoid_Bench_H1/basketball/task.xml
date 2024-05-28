@@ -1,4 +1,4 @@
-<mujoco model="H1">
+<mujoco model="H1 Basketball">
     <include file="../h1/h1hand_pos.xml"/>
     <include file="basketball.xml"/>
     <include file="../../common.xml"/>

@@ -1,4 +1,4 @@
-<mujoco model="H1">
+<mujoco model="H1 Bookshelf">
     <include file="../h1/h1hand_pos.xml"/>
     <include file="bookshelf.xml"/>
     <include file="../../common.xml"/>

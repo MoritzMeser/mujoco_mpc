@@ -1,4 +1,4 @@
-<mujoco model="H1">
+<mujoco model="H1 Maze">
     <include file="../h1/h1_pos.xml"/>
     <include file="maze.xml"/>
     <include file="../../common.xml"/>

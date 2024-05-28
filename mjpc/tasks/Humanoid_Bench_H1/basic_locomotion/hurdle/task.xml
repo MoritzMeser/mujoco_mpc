@@ -1,4 +1,4 @@
-<mujoco model="H1">
+<mujoco model="H1 Hurdle">
     <include file="../../h1/h1_pos.xml"/>
     <include file="hurdle.xml"/>
     <include file="../../../common.xml"/>

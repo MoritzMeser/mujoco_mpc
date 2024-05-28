@@ -1,6 +1,6 @@
-<mujoco model="H1">
+<mujoco model="H1 Sit">
     <include file="../../h1/h1_pos.xml"/>
-    <include file="sit_simple.xml"/>
+    <include file="sit.xml"/>
     <include file="../../../common.xml"/>
     <include file="../../../floor.xml"/>
 

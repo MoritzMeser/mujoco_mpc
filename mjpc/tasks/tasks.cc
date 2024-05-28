@@ -46,12 +46,12 @@
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/slide/H1_slide.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/crawl/H1_crawl.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/hurdle/H1_hurdle.h"
-#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/sit_simple/H1_sit_simple.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/basic_locomotion/sit/H1_sit.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/maze/H1_maze.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/poles/H1_poles.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/push/H1_push.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/cabinet/H1_cabinet.h"
-#include "mjpc/tasks/Humanoid_Bench_H1/high_bar/H1_highbar_simple.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/high_bar/H1_highbar.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/door/H1_door.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/truck/H1_truck.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/cube/H1_cube.h"
@@ -60,13 +60,13 @@
 #include "mjpc/tasks/Humanoid_Bench_H1/window/H1_window.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/spoon/H1_spoon.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/kitchen/H1_kitchen.h"
-#include "mjpc/tasks/Humanoid_Bench_H1/package/package.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/package/H1_package.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/powerlift/H1_powerlift.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/room/H1_room.h"
 #include "mjpc/tasks/Humanoid_Bench_H1/insert/H1_insert.h"
 
 
-#include "mjpc/tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h"
+#include "mjpc/tasks/Humanoid_Bench_H1/balance/H1_balance.h"
 
 #include "mjpc/tasks/Humanoid_Bench_H1/reach/H1_reach.h"
 
@@ -84,7 +84,7 @@ namespace mjpc {
                 std::make_shared<H1_hurdle>(),
                 std::make_shared<H1_maze>(),
                 std::make_shared<H1_poles>(),
-                std::make_shared<H1_sit_simple>(),
+                std::make_shared<H1_sit>(),
                 std::make_shared<H1_reach>(),
                 std::make_shared<Balance_Simple>(),
                 std::make_shared<H1_push>(),

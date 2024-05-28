@@ -1,6 +1,6 @@
-<mujoco model="H1">
+<mujoco model="H1 Balance">
     <include file="../h1/h1_pos.xml"/>
-    <include file="balance_simple.xml"/>
+    <include file="balance.xml"/>
     <include file="../../common.xml"/>
     <include file="../../floor.xml"/>
 

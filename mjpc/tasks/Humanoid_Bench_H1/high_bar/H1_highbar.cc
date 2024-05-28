@@ -2,7 +2,7 @@
 // Created by Moritz Meser on 21.05.24.
 //
 
-#include "H1_highbar_simple.h"
+#include "H1_highbar.h"
 #include <string>
 # include <limits>
 #include <cmath>

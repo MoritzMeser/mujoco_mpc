@@ -143,10 +143,10 @@ add_library(
         $<TARGET_OBJECTS:mujoco::platform_ui_adapter>
         tasks/Humanoid_Bench_H1/basic_locomotion/walk/H1_walk.h
         utility/dm_control_utils_rewards.cpp
-        tasks/Humanoid_Bench_H1/balance_simple/balance_simple.h
-        tasks/Humanoid_Bench_H1/balance_simple/balance_simple.cc
-        tasks/Humanoid_Bench_H1/package/package.h
-        tasks/Humanoid_Bench_H1/package/package.cc
+        tasks/Humanoid_Bench_H1/balance/H1_balance.h
+        tasks/Humanoid_Bench_H1/balance/H1_balance.cc
+        tasks/Humanoid_Bench_H1/package/H1_package.h
+        tasks/Humanoid_Bench_H1/package/H1_package.cc
         tasks/Humanoid_Bench_H1/reach/H1_reach.cc
         tasks/Humanoid_Bench_H1/basic_locomotion/walk_reward.cc
         tasks/Humanoid_Bench_H1/basic_locomotion/walk_reward.h
@@ -169,14 +169,14 @@ add_library(
         tasks/Humanoid_Bench_H1/maze/H1_maze.h
         tasks/Humanoid_Bench_H1/poles/H1_poles.cc
         tasks/Humanoid_Bench_H1/poles/H1_poles.h
-        tasks/Humanoid_Bench_H1/basic_locomotion/sit_simple/H1_sit_simple.cc
-        tasks/Humanoid_Bench_H1/basic_locomotion/sit_simple/H1_sit_simple.h
+        tasks/Humanoid_Bench_H1/basic_locomotion/sit/H1_sit.cc
+        tasks/Humanoid_Bench_H1/basic_locomotion/sit/H1_sit.h
         tasks/Humanoid_Bench_H1/push/H1_push.cc
         tasks/Humanoid_Bench_H1/push/H1_push.h
         tasks/Humanoid_Bench_H1/cabinet/H1_cabinet.cc
         tasks/Humanoid_Bench_H1/cabinet/H1_cabinet.h
-        tasks/Humanoid_Bench_H1/high_bar/H1_highbar_simple.cc
-        tasks/Humanoid_Bench_H1/high_bar/H1_highbar_simple.h
+        tasks/Humanoid_Bench_H1/high_bar/H1_highbar.cc
+        tasks/Humanoid_Bench_H1/high_bar/H1_highbar.h
         tasks/Humanoid_Bench_H1/door/H1_door.cc
         tasks/Humanoid_Bench_H1/door/H1_door.h
         tasks/Humanoid_Bench_H1/truck/H1_truck.cc

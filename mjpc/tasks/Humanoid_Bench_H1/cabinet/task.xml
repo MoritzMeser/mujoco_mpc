@@ -1,8 +1,8 @@
-<mujoco model="H1">
-    <include file="../../common.xml"/>
-    <include file="../../floor.xml"/>
+<mujoco model="H1 Cabinet">
     <include file="../h1/h1hand_pos.xml"/>
     <include file="cabinet.xml"/>
+    <include file="../../common.xml"/>
+    <include file="../../floor.xml"/>
 
     <keyframe>
         <!-- home is the initial position of the robot at the beginning and after reset-->

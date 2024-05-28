@@ -2,8 +2,8 @@
 // Created by Moritz Meser on 21.05.24.
 //
 
-#ifndef MUJOCO_MPC_H1_HIGHBAR_SIMPLE_H
-#define MUJOCO_MPC_H1_HIGHBAR_SIMPLE_H
+#ifndef MUJOCO_MPC_H1_HIGHBAR_H
+#define MUJOCO_MPC_H1_HIGHBAR_H
 
 #include <string>
 #include "mujoco/mujoco.h"
@@ -44,4 +44,4 @@ namespace mjpc {
 }  // namespace mjpc
 
 
-#endif //MUJOCO_MPC_H1_HIGHBAR_SIMPLE_H
+#endif //MUJOCO_MPC_H1_HIGHBAR_H
