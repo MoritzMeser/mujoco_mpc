@@ -74,7 +74,7 @@ namespace mjpc {
         // ---- reward computation ---- //
         double reward = small_control * stand_reward * move * wall_collision_discount;
 
-        residual[0] = 1 - reward;
+        residual[0] = std::exp(-reward);
     }
 
 }  // namespace mjpc

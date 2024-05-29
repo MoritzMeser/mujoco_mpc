@@ -78,7 +78,7 @@ namespace mjpc {
         double reward = (0.5 * (small_control * stand_reward) + 0.5 * move) * collision_discount;
 
         // ----- residuals ----- //
-        residual[0] = 1.0 - reward;
+        residual[0] = std::exp(-reward);
     }
 
 // -------- Transition for Humanoid_Bench_H1 poles task -------- //

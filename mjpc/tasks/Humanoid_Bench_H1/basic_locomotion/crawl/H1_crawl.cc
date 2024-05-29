@@ -71,6 +71,6 @@ namespace mjpc {
                          + 0.25 * reward_xquat
                  ) * in_tunnel;
 
-        residual[0] = 1 - reward;
+        residual[0] = std::exp(-reward);
     }
 }  // namespace mjpc

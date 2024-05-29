@@ -153,7 +153,6 @@ namespace mjpc {
 // -------- Transition for Humanoid_Bench_H1 maze task -------- //
 // ------------------------------------------------------------ //
     void H1_maze::TransitionLocked(mjModel *model, mjData *data) {
-        printf("curr_goal_idx_: %d\n", curr_goal_idx_);
         double *goal_pos = model->key_mpos + 3 * (curr_goal_idx_ + 1);  // offset 1 is on purpose
         double *pelvis_pos = SensorByName(model, data, "pelvis_position");
         double dist = std::sqrt(std::pow(goal_pos[0] - pelvis_pos[0], 2) +

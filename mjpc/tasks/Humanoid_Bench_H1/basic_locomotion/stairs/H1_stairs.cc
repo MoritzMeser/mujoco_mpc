@@ -26,6 +26,6 @@ namespace mjpc {
         double const walk_speed = 1.0;
 
         double reward = climbing_upwards_reward(model, data, walk_speed);
-        residual[0] = 1 - reward;
+        residual[0] = std::exp(-reward);
     }
 }  // namespace mjpc

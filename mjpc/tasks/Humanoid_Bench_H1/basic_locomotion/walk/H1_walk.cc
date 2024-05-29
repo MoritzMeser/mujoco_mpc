@@ -30,6 +30,6 @@ namespace mjpc {
         double const stand_height = 1.65;
 
         double reward = walk_reward(model, data, walk_speed, stand_height);
-        residual[0] = 1 - reward;
+        residual[0] = std::exp(-reward);
     }
 }  // namespace mjpc

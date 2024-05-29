@@ -34,7 +34,7 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="1 - reward" dim="1" user="5 1 1 1 1"/>
+        <user name="exp(-r)" dim="1" user="5 1 1 1 1"/>
 <!--        task specific sensors-->
         <framepos name="chair" objtype="body" objname="chair"/>
     </sensor>

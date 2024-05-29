@@ -47,7 +47,7 @@ namespace mjpc {
         double reward = upright_reward * feet_reward * small_control;
 
         // ----- residuals ----- //
-        residual[0] = 1.0 - reward;
+        residual[0] = std::exp(-reward);
     }
 
 // -------- Transition for Humanoid_Bench_H1 highbar task -------- //

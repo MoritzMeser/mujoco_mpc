@@ -53,7 +53,7 @@ namespace mjpc {
         double reward = stand_reward * small_control * dont_move;
 
         // ----- residuals ----- //
-        residual[0] = 1.0 - reward;
+        residual[0] = std::exp(-reward);
     }
 
 // -------- Transition for Humanoid_Bench_H1 balance task -------- //

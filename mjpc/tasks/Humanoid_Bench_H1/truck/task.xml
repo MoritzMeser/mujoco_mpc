@@ -13,12 +13,6 @@
 
 
     <custom>
-        <!-- Parameters to adjust the reward function in the GUI-->
-        <numeric name="residual_Speed Goal" data="0 0 3.0"/>
-        <numeric name="residual_Height Goal" data="1.6 1.0 2.0"/>
-        <numeric name="residual_velocity_bounds" data="6 0 10.0"/>
-        <numeric name="residual_velocity_margin" data="2 0 10.0"/>
-
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>
         <numeric name="agent_horizon" data="0.8"/>
@@ -41,7 +35,7 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="exp{-r}" dim="1" user="5 1 1 1 1"/>
+        <user name="exp(-r)" dim="1" user="5 1 1 1 1"/>
 
         <!-- task specific sensors -->
         <framepos name="table" objtype="body" objname="table"/>

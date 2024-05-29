@@ -63,6 +63,6 @@ namespace mjpc {
         double reward = small_control * sit_reward * dont_move;
 
         // ----- residual ----- //
-        residual[0] = 1 - reward;
+        residual[0] = std::exp(-reward);
     }
 }  // namespace mjpc

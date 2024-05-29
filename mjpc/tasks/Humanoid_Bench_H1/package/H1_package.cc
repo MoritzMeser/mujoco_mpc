@@ -36,8 +36,8 @@ namespace mjpc {
 // -------------------------------------------------------------
     void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                           double *residual) const {
-        // get values from GUI
-        double stand_height = parameters_[1];
+        // ----- set parameters ----- //
+        double const stand_height = 1.65;
 
         // ----- standing ----- //
         double head_height = SensorByName(model, data, "head_height")[2];
@@ -83,7 +83,7 @@ namespace mjpc {
         bool reward_success = dist_package_destination < 0.1;
 
         // ----- reward computation ----- //
-        double const humanoid_bench_reward = (
+        double reward = (
                 stand_reward * small_control
                 - 3 * dist_package_destination
                 - (dist_hand_package_left + dist_hand_package_right) * 0.1
@@ -91,11 +91,8 @@ namespace mjpc {
                 + reward_success * 1000
         );
 
-
         // ----- residuals ----- //
-
-        // because the reward in this task is not bound to [0, 1] we need to use the exponential function
-        residual[0] = std::exp(-humanoid_bench_reward);
+        residual[0] = std::exp(-reward);
     }
 
 // -------- Transition for Humanoid_Bench_H1 package task --------

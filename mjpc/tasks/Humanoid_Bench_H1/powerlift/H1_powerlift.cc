@@ -47,7 +47,7 @@ namespace mjpc {
         double reward = 0.2 * (small_control * stand_reward) + 0.8 * reward_dumbbell_lifted;
 
         // ----- residuals ----- //
-        residual[0] = 1.0 - reward;
+        residual[0] = std::exp(-reward);
     }
 
 // -------- Transition for Humanoid_Bench_H1 powerlift task -------- //

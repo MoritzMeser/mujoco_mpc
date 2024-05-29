@@ -12,8 +12,6 @@
 
 
     <custom>
-        <!-- Parameters to adjust the reward function in the GUI-->
-
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>
         <numeric name="agent_horizon" data="0.8"/>
@@ -36,7 +34,7 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="exp{-r}" dim="1" user="5 1 0 1 1"/>
+        <user name="exp(-r)" dim="1" user="5 1 0 1 1"/>
 
         <!-- task specific sensors -->
         <framepos name="object_pos" objtype="body" objname="object"/>
