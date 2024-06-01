@@ -75,7 +75,8 @@ namespace mjpc {
     std::vector<std::shared_ptr<Task>> GetTasks() {
         return {
                 //Humanoid Bench Tasks
-//                std::make_shared<H1_walk>(),
+
+                // Walk Task
                 std::make_shared<H1_walk_position>(),
                 std::make_shared<H1_walk_hand>(),
                 std::make_shared<H1_walk_gripper>(),
@@ -84,10 +85,18 @@ namespace mjpc {
                 std::make_shared<H1_walk_touch>(),
 
 
+                //Slide Task
+                std::make_shared<H1_slide_position>(),
+                std::make_shared<H1_slide_hand>(),
+                std::make_shared<H1_slide_gripper>(),
+                std::make_shared<H1_slide_simple_hand>(),
+                std::make_shared<H1_slide_strong>(),
+                std::make_shared<H1_slide_touch>(),
+
                 std::make_shared<H1_stand>(),
                 std::make_shared<H1_run>(),
                 std::make_shared<H1_stairs>(),
-                std::make_shared<H1_slide>(),
+//                std::make_shared<H1_slide>(),
                 std::make_shared<H1_crawl>(),
                 std::make_shared<H1_hurdle>(),
                 std::make_shared<H1_maze>(),
