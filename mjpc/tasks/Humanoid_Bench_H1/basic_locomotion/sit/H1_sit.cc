@@ -13,11 +13,11 @@
 
 
 namespace mjpc {
-    std::string H1_sit::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/sit/task.xml");
-    }
-
-    std::string H1_sit::Name() const { return "H1 Sit"; }
+//    std::string H1_sit::XmlPath() const {
+//        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/sit/task.xml");
+//    }
+//
+//    std::string H1_sit::Name() const { return "H1 Sit"; }
 
 // ----------------- Residuals for Humanoid_Bench_H1 Sit Simple task ----------------
 

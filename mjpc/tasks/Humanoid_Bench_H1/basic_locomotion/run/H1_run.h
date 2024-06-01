@@ -8,13 +8,14 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_run : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -36,6 +37,72 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+    };
+
+    class H1_run_position : public H1_run {
+    public:
+        std::string Name() const override {
+            return "H1 Run";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/run/H1_run_pos.xml");
+        }
+    };
+
+    class H1_run_hand : public H1_run {
+    public:
+        std::string Name() const override {
+            return "H1 Run Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/run/H1_run_hand.xml");
+        }
+    };
+
+    class H1_run_gripper : public H1_run {
+    public:
+        std::string Name() const override {
+            return "H1 Run Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/run/H1_run_gripper.xml");
+        }
+    };
+
+    class H1_run_simple_hand : public H1_run {
+    public:
+        std::string Name() const override {
+            return "H1 Run Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/run/H1_run_simple_hand.xml");
+        }
+    };
+
+    class H1_run_strong : public H1_run {
+    public:
+        std::string Name() const override {
+            return "H1 Run Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/run/H1_run_strong.xml");
+        }
+    };
+
+    class H1_run_touch : public H1_run {
+    public:
+        std::string Name() const override {
+            return "H1 Run Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/run/H1_run_touch.xml");
+        }
     };
 }  // namespace mjpc
 

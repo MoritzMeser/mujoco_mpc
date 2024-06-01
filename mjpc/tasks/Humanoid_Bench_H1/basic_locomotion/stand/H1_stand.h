@@ -8,13 +8,14 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_stand : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -36,6 +37,72 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+    };
+
+    class H1_stand_position : public H1_stand {
+    public:
+        std::string Name() const override {
+            return "H1 Stand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/H1_stand_pos.xml");
+        }
+    };
+
+    class H1_stand_hand : public H1_stand {
+    public:
+        std::string Name() const override {
+            return "H1 Stand Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/H1_stand_hand.xml");
+        }
+    };
+
+    class H1_stand_gripper : public H1_stand {
+    public:
+        std::string Name() const override {
+            return "H1 Stand Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/H1_stand_gripper.xml");
+        }
+    };
+
+    class H1_stand_simple_hand : public H1_stand {
+    public:
+        std::string Name() const override {
+            return "H1 Stand Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/H1_stand_simple_hand.xml");
+        }
+    };
+
+    class H1_stand_strong : public H1_stand {
+    public:
+        std::string Name() const override {
+            return "H1 Stand Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/H1_stand_strong.xml");
+        }
+    };
+
+    class H1_stand_touch : public H1_stand {
+    public:
+        std::string Name() const override {
+            return "H1 Stand Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/H1_stand_touch.xml");
+        }
     };
 }  // namespace mjpc
 

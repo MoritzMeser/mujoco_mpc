@@ -9,6 +9,7 @@
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
 #include "mjpc/utilities.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_slide : public Task {

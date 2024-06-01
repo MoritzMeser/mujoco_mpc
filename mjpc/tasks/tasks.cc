@@ -93,32 +93,75 @@ namespace mjpc {
                 std::make_shared<H1_slide_strong>(),
                 std::make_shared<H1_slide_touch>(),
 
-                std::make_shared<H1_stand>(),
-                std::make_shared<H1_run>(),
-                std::make_shared<H1_stairs>(),
-//                std::make_shared<H1_slide>(),
-                std::make_shared<H1_crawl>(),
-                std::make_shared<H1_hurdle>(),
-                std::make_shared<H1_maze>(),
-                std::make_shared<H1_poles>(),
-                std::make_shared<H1_sit>(),
-                std::make_shared<H1_reach>(),
-                std::make_shared<Balance_Simple>(),
-                std::make_shared<H1_push>(),
-                std::make_shared<H1_cabinet>(),
-                std::make_shared<H1_highbar>(),
-                std::make_shared<H1_door>(),
-                std::make_shared<H1_truck>(),
-                std::make_shared<H1_cube>(),
-                std::make_shared<H1_bookshelf>(),
-                std::make_shared<H1_basketball>(),
-                std::make_shared<H1_window>(),
-                std::make_shared<H1_spoon>(),
-                std::make_shared<H1_kitchen>(), //TODO: Fix H1_kitchen, currently not working
-                std::make_shared<H1_package>(),
-                std::make_shared<H1_powerlift>(),
-                std::make_shared<H1_room>(),
-                std::make_shared<H1_insert>(),
+                //Stand Task
+                std::make_shared<H1_stand_position>(),
+                std::make_shared<H1_stand_hand>(),
+                std::make_shared<H1_stand_gripper>(),
+                std::make_shared<H1_stand_simple_hand>(),
+                std::make_shared<H1_stand_strong>(),
+                std::make_shared<H1_stand_touch>(),
+
+                //Run Task
+                std::make_shared<H1_run_position>(),
+                std::make_shared<H1_run_hand>(),
+                std::make_shared<H1_run_gripper>(),
+                std::make_shared<H1_run_simple_hand>(),
+                std::make_shared<H1_run_strong>(),
+                std::make_shared<H1_run_touch>(),
+
+                //Stairs Task
+                std::make_shared<H1_stairs_position>(),
+                std::make_shared<H1_stairs_hand>(),
+                std::make_shared<H1_stairs_gripper>(),
+                std::make_shared<H1_stairs_simple_hand>(),
+                std::make_shared<H1_stairs_strong>(),
+                std::make_shared<H1_stairs_touch>(),
+
+                //Crawl Task
+                std::make_shared<H1_crawl_position>(),
+                std::make_shared<H1_crawl_hand>(),
+                std::make_shared<H1_crawl_gripper>(),
+                std::make_shared<H1_crawl_simple_hand>(),
+                std::make_shared<H1_crawl_strong>(),
+                std::make_shared<H1_crawl_touch>(),
+
+                //Sit Task
+                std::make_shared<H1_sit_position>(),
+                std::make_shared<H1_sit_hand>(),
+                std::make_shared<H1_sit_gripper>(),
+                std::make_shared<H1_sit_simple_hand>(),
+                std::make_shared<H1_sit_strong>(),
+                std::make_shared<H1_sit_touch>(),
+
+                //Hurdle Task
+                std::make_shared<H1_hurdle_position>(),
+                std::make_shared<H1_hurdle_hand>(),
+                std::make_shared<H1_hurdle_gripper>(),
+                std::make_shared<H1_hurdle_simple_hand>(),
+                std::make_shared<H1_hurdle_strong>(),
+                std::make_shared<H1_hurdle_touch>(),
+
+
+//                std::make_shared<H1_maze>(),
+//                std::make_shared<H1_poles>(),
+//
+//                std::make_shared<H1_reach>(),
+//                std::make_shared<Balance_Simple>(),
+//                std::make_shared<H1_push>(),
+//                std::make_shared<H1_cabinet>(),
+//                std::make_shared<H1_highbar>(),
+//                std::make_shared<H1_door>(),
+//                std::make_shared<H1_truck>(),
+//                std::make_shared<H1_cube>(),
+//                std::make_shared<H1_bookshelf>(),
+//                std::make_shared<H1_basketball>(),
+//                std::make_shared<H1_window>(),
+//                std::make_shared<H1_spoon>(),
+//                std::make_shared<H1_kitchen>(), //TODO: Fix H1_kitchen, currently not working
+//                std::make_shared<H1_package>(),
+//                std::make_shared<H1_powerlift>(),
+//                std::make_shared<H1_room>(),
+//                std::make_shared<H1_insert>(),
 
 //                // other tasks
 //                std::make_shared<Acrobot>(),

@@ -8,13 +8,14 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_stairs : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -36,6 +37,72 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+    };
+
+    class H1_stairs_position : public H1_stairs {
+    public:
+        std::string Name() const override {
+            return "H1 Stairs";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs_pos.xml");
+        }
+    };
+
+    class H1_stairs_hand : public H1_stairs {
+    public:
+        std::string Name() const override {
+            return "H1 Stairs Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs_hand.xml");
+        }
+    };
+
+    class H1_stairs_gripper : public H1_stairs {
+    public:
+        std::string Name() const override {
+            return "H1 Stairs Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs_gripper.xml");
+        }
+    };
+
+    class H1_stairs_simple_hand : public H1_stairs {
+    public:
+        std::string Name() const override {
+            return "H1 Stairs Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs_simple_hand.xml");
+        }
+    };
+
+    class H1_stairs_strong : public H1_stairs {
+    public:
+        std::string Name() const override {
+            return "H1 Stairs Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs_strong.xml");
+        }
+    };
+
+    class H1_stairs_touch : public H1_stairs {
+    public:
+        std::string Name() const override {
+            return "H1 Stairs Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stairs/H1_stairs_touch.xml");
+        }
     };
 }  // namespace mjpc
 
