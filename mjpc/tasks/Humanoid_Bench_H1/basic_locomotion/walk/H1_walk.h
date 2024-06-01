@@ -62,6 +62,50 @@ namespace mjpc {
         }
 
     };
+
+    class H1_walk_gripper : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/H1_walk_gripper.xml");
+        }
+    };
+
+    class H1_walk_simple_hand : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/H1_walk_simple_hand.xml");
+        }
+    };
+
+    class H1_walk_strong : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/H1_walk_strong.xml");
+        }
+    };
+
+    class H1_walk_touch : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/H1_walk_touch.xml");
+        }
+    };
 }  // namespace mjpc
 
 #endif  // MJPC_TASKS_H1_WALK_H_

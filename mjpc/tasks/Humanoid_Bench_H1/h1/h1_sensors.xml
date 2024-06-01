@@ -26,13 +26,13 @@
         <framezaxis name="torso_vertical_orientation" objtype="body" objname="torso_link"/>
 
         <!-- left hand position -->
-        <framepos name="left_hand_position" objtype="site" objname="left_hand"/>
+        <framepos name="left_hand_position" objtype="body" objname="left_hand"/>
 
         <!-- left hand velocity -->
         <subtreelinvel name="left_hand_velocity" body="left_hand"/>
 
         <!-- right hand position -->
-        <framepos name="right_hand_position" objtype="site" objname="right_hand"/>
+        <framepos name="right_hand_position" objtype="body" objname="right_hand"/>
 
         <!-- right hand velocity -->
         <subtreelinvel name="right_hand_velocity" body="right_hand"/>

@@ -78,6 +78,10 @@ namespace mjpc {
 //                std::make_shared<H1_walk>(),
                 std::make_shared<H1_walk_position>(),
                 std::make_shared<H1_walk_hand>(),
+                std::make_shared<H1_walk_gripper>(),
+                std::make_shared<H1_walk_simple_hand>(),
+                std::make_shared<H1_walk_strong>(),
+                std::make_shared<H1_walk_touch>(),
 
 
                 std::make_shared<H1_stand>(),
