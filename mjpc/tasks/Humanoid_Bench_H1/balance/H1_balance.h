@@ -1,16 +1,17 @@
-#ifndef MJPC_TASKS_H1_Balance_Simple_H_
-#define MJPC_TASKS_H1_Balance_Simple_H_
+#ifndef MJPC_TASKS_H1_BALANCE_SIMPLE_H_
+#define MJPC_TASKS_H1_BALANCE_SIMPLE_H_
 
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class Balance_Simple : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -22,9 +23,6 @@ namespace mjpc {
 
         Balance_Simple() : residual_(this) {}
 
-// -------- Transition for Humanoid_Bench_H1 walk task --------
-//  for a more complex task this might be necessary (like walking to different targets)
-// ---------------------------------------------
         void TransitionLocked(mjModel *model, mjData *data) override;
 
     protected:
@@ -37,6 +35,72 @@ namespace mjpc {
     private:
         ResidualFn residual_;
     };
+
+    class Balance_Simple_position : public Balance_Simple {
+    public:
+        std::string Name() const override {
+            return "Balance Simple Position";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/balance/H1_balance_pos.xml");
+        }
+    };
+
+    class Balance_Simple_hand : public Balance_Simple {
+    public:
+        std::string Name() const override {
+            return "Balance Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/balance/H1_balance_hand.xml");
+        }
+    };
+
+    class Balance_Simple_gripper : public Balance_Simple {
+    public:
+        std::string Name() const override {
+            return "Balance Simple Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/balance/H1_balance_gripper.xml");
+        }
+    };
+
+    class Balance_Simple_simple_hand : public Balance_Simple {
+    public:
+        std::string Name() const override {
+            return "Balance Simple Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/balance/H1_balance_simple_hand.xml");
+        }
+    };
+
+    class Balance_Simple_strong : public Balance_Simple {
+    public:
+        std::string Name() const override {
+            return "Balance Simple Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/balance/H1_balance_strong.xml");
+        }
+    };
+
+    class Balance_Simple_touch : public Balance_Simple {
+    public:
+        std::string Name() const override {
+            return "Balance Simple Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/balance/H1_balance_touch.xml");
+        }
+    };
 }  // namespace mjpc
 
-#endif  // MJPC_TASKS_H1_Balance_Simple_H_
+#endif  // MJPC_TASKS_H1_BALANCE_SIMPLE_H_

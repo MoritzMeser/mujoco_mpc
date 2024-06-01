@@ -76,6 +76,15 @@ namespace mjpc {
         return {
                 //Humanoid Bench Tasks
 
+                //Balance Task
+                std::make_shared<Balance_Simple_position>(),
+                std::make_shared<Balance_Simple_hand>(),
+                std::make_shared<Balance_Simple_gripper>(),
+                std::make_shared<Balance_Simple_simple_hand>(),
+                std::make_shared<Balance_Simple_strong>(),
+                std::make_shared<Balance_Simple_touch>(),
+
+
                 // Walk Task
                 std::make_shared<H1_walk_position>(),
                 std::make_shared<H1_walk_hand>(),
@@ -140,6 +149,14 @@ namespace mjpc {
                 std::make_shared<H1_hurdle_simple_hand>(),
                 std::make_shared<H1_hurdle_strong>(),
                 std::make_shared<H1_hurdle_touch>(),
+
+                //Basketball Task
+                std::make_shared<H1_basketball_position>(),
+                std::make_shared<H1_basketball_hand>(),
+                std::make_shared<H1_basketball_gripper>(),
+                std::make_shared<H1_basketball_simple_hand>(),
+                std::make_shared<H1_basketball_strong>(),
+                std::make_shared<H1_basketball_touch>(),
 
 
 //                std::make_shared<H1_maze>(),

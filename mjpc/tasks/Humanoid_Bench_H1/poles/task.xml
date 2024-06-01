@@ -1,16 +1,4 @@
-<mujoco model="H1 Poles">
-    <include file="../h1/h1_pos.xml"/>
-    <include file="poles.xml"/>
-    <include file="../../common.xml"/>
-    <include file="../../floor.xml"/>
-
-    <keyframe>
-        <!-- home is the initial position of the robot at the beginning and after reset-->
-        <key name="home" qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0"/>
-    </keyframe>
-
-
-
+<mujocoinlcude>
     <custom>
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>
@@ -40,4 +28,4 @@
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../h1/h1_sensors.xml"/>
 
-</mujoco>
+</mujocoinlcude>
