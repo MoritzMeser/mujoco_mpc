@@ -1,21 +1,17 @@
-//
-// Created by Moritz Meser on 20.05.24.
-//
-
 #ifndef MUJOCO_MPC_H1_POLES_H
 #define MUJOCO_MPC_H1_POLES_H
 
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/utility/dm_control_utils_rewards.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_poles : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -27,8 +23,6 @@ namespace mjpc {
 
         H1_poles() : residual_(this) {}
 
-// -------- Transition for Humanoid_Bench_H1 poles task -------- //
-// ------------------------------------------------------------ //
         void TransitionLocked(mjModel *model, mjData *data) override;
 
     protected:
@@ -41,7 +35,72 @@ namespace mjpc {
     private:
         ResidualFn residual_;
     };
-}  // namespace mjpc
 
+    class H1_poles_position : public H1_poles {
+    public:
+        std::string Name() const override {
+            return "H1 Poles Position";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/poles/H1_poles_pos.xml");
+        }
+    };
+
+    class H1_poles_hand : public H1_poles {
+    public:
+        std::string Name() const override {
+            return "H1 Poles Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/poles/H1_poles_hand.xml");
+        }
+    };
+
+    class H1_poles_gripper : public H1_poles {
+    public:
+        std::string Name() const override {
+            return "H1 Poles Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/poles/H1_poles_gripper.xml");
+        }
+    };
+
+    class H1_poles_simple_hand : public H1_poles {
+    public:
+        std::string Name() const override {
+            return "H1 Poles Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/poles/H1_poles_simple_hand.xml");
+        }
+    };
+
+    class H1_poles_strong : public H1_poles {
+    public:
+        std::string Name() const override {
+            return "H1 Poles Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/poles/H1_poles_strong.xml");
+        }
+    };
+
+    class H1_poles_touch : public H1_poles {
+    public:
+        std::string Name() const override {
+            return "H1 Poles Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/poles/H1_poles_touch.xml");
+        }
+    };
+}  // namespace mjpc
 
 #endif //MUJOCO_MPC_H1_POLES_H

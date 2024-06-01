@@ -4,13 +4,14 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_reach : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -22,9 +23,6 @@ namespace mjpc {
 
         H1_reach() : residual_(this) {}
 
-// -------- Transition for Humanoid_Bench_H1 walk task --------
-//  for a more complex task this might be necessary (like walking to different targets)
-// ---------------------------------------------
         void TransitionLocked(mjModel *model, mjData *data) override;
 
     protected:
@@ -36,6 +34,72 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+    };
+
+    class H1_reach_position : public H1_reach {
+    public:
+        std::string Name() const override {
+            return "H1 Reach Position";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/reach/H1_reach_pos.xml");
+        }
+    };
+
+    class H1_reach_hand : public H1_reach {
+    public:
+        std::string Name() const override {
+            return "H1 Reach Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/reach/H1_reach_hand.xml");
+        }
+    };
+
+    class H1_reach_gripper : public H1_reach {
+    public:
+        std::string Name() const override {
+            return "H1 Reach Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/reach/H1_reach_gripper.xml");
+        }
+    };
+
+    class H1_reach_simple_hand : public H1_reach {
+    public:
+        std::string Name() const override {
+            return "H1 Reach Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/reach/H1_reach_simple_hand.xml");
+        }
+    };
+
+    class H1_reach_strong : public H1_reach {
+    public:
+        std::string Name() const override {
+            return "H1 Reach Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/reach/H1_reach_strong.xml");
+        }
+    };
+
+    class H1_reach_touch : public H1_reach {
+    public:
+        std::string Name() const override {
+            return "H1 Reach Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/reach/H1_reach_touch.xml");
+        }
     };
 }  // namespace mjpc
 

@@ -204,7 +204,34 @@ namespace mjpc {
         int my_task_id = 0;
         int my_robot_id = 0;
 
-        char my_task_names[1024] = "Balance Simple\nWalk\nSlide\nStand\nRun\nStairs\nCrawl\nSit\nHurdle\nBasketball\n";
+        char my_task_names[1024] =
+                "Balance\n"
+                "Walk\n"
+                "Slide\n"
+                "Stand\n"
+                "Run\n"
+                "Stairs\n"
+                "Crawl\n"
+                "Sit\n"
+                "Hurdle\n"
+                "Basketball\n"
+                "Bookshelf\n"
+                "Cabinet\n"
+                "Cube\n"
+                "Door\n"
+                "High Bar\n"
+                "Insert\n"
+                "Kitchen\n"
+                "Maze\n"
+                "Package\n"
+                "Poles\n"
+                "Powerlift\n"
+                "Push\n"
+                "Reach\n"
+                "Room\n"
+                "Spoon\n"
+                "Truck\n"
+                "Window\n";
         char my_robot_names[1024] = "Position\nHand\nGripper\nSimple Hand\nStrong\nTouch\n";
 
         // state

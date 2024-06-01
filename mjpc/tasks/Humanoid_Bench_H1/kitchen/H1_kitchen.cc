@@ -14,11 +14,11 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    std::string H1_kitchen::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/kitchen/task.xml");
-    }
-
-    std::string H1_kitchen::Name() const { return "H1 Kitchen"; }
+//    std::string H1_kitchen::XmlPath() const {
+//        return GetModelPath("Humanoid_Bench_H1/kitchen/task.xml");
+//    }
+//
+//    std::string H1_kitchen::Name() const { return "H1 Kitchen"; }
 
 // ----------------- Residuals for Humanoid_Bench_H1 kitchen task ----------------
 

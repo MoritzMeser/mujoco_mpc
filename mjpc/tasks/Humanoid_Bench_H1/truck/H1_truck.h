@@ -8,7 +8,7 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/utility/dm_control_utils_rewards.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_truck : public Task {
@@ -55,7 +55,71 @@ namespace mjpc {
         std::vector<std::string> packages_picked_up_;
         std::vector<std::string> packages_upon_table_;
     };
-}  // namespace mjpc
+    class H1_truck_position : public H1_truck {
+    public:
+        std::string Name() const override {
+            return "H1 Truck Position";
+        }
 
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/truck/H1_truck_pos.xml");
+        }
+    };
+
+    class H1_truck_hand : public H1_truck {
+    public:
+        std::string Name() const override {
+            return "H1 Truck Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/truck/H1_truck_hand.xml");
+        }
+    };
+
+    class H1_truck_gripper : public H1_truck {
+    public:
+        std::string Name() const override {
+            return "H1 Truck Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/truck/H1_truck_gripper.xml");
+        }
+    };
+
+    class H1_truck_simple_hand : public H1_truck {
+    public:
+        std::string Name() const override {
+            return "H1 Truck Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/truck/H1_truck_simple_hand.xml");
+        }
+    };
+
+    class H1_truck_strong : public H1_truck {
+    public:
+        std::string Name() const override {
+            return "H1 Truck Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/truck/H1_truck_strong.xml");
+        }
+    };
+
+    class H1_truck_touch : public H1_truck {
+    public:
+        std::string Name() const override {
+            return "H1 Truck Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/truck/H1_truck_touch.xml");
+        }
+    };
+}  // namespace mjpc
 
 #endif //MUJOCO_MPC_H1_TRUCK_H

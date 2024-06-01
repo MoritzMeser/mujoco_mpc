@@ -8,14 +8,14 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/utility/dm_control_utils_rewards.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_cabinet : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -50,7 +50,72 @@ namespace mjpc {
         ResidualFn residual_;
         mutable int current_subtask_;
     };
-}  // namespace mjpc
 
+    class H1_cabinet_position : public H1_cabinet {
+    public:
+        std::string Name() const override {
+            return "H1 Cabinet Position";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/cabinet/H1_cabinet_pos.xml");
+        }
+    };
+
+    class H1_cabinet_hand : public H1_cabinet {
+    public:
+        std::string Name() const override {
+            return "H1 Cabinet Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/cabinet/H1_cabinet_hand.xml");
+        }
+    };
+
+    class H1_cabinet_gripper : public H1_cabinet {
+    public:
+        std::string Name() const override {
+            return "H1 Cabinet Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/cabinet/H1_cabinet_gripper.xml");
+        }
+    };
+
+    class H1_cabinet_simple_hand : public H1_cabinet {
+    public:
+        std::string Name() const override {
+            return "H1 Cabinet Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/cabinet/H1_cabinet_simple_hand.xml");
+        }
+    };
+
+    class H1_cabinet_strong : public H1_cabinet {
+    public:
+        std::string Name() const override {
+            return "H1 Cabinet Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/cabinet/H1_cabinet_strong.xml");
+        }
+    };
+
+    class H1_cabinet_touch : public H1_cabinet {
+    public:
+        std::string Name() const override {
+            return "H1 Cabinet Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/cabinet/H1_cabinet_touch.xml");
+        }
+    };
+}  // namespace mjpc
 
 #endif //MUJOCO_MPC_H1_CABINET_H

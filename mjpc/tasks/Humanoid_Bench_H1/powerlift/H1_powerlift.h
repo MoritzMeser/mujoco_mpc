@@ -1,20 +1,16 @@
-//
-// Created by Moritz Meser on 21.05.24.
-//
-
 #ifndef MUJOCO_MPC_H1_POWERLIFT_H
 #define MUJOCO_MPC_H1_POWERLIFT_H
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/utility/dm_control_utils_rewards.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_powerlift : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -26,8 +22,6 @@ namespace mjpc {
 
         H1_powerlift() : residual_(this) {}
 
-// -------- Transition for Humanoid_Bench_H1 powerlift task -------- //
-// ------------------------------------------------------------ //
         void TransitionLocked(mjModel *model, mjData *data) override;
 
     protected:
@@ -39,6 +33,72 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+    };
+
+    class H1_powerlift_position : public H1_powerlift {
+    public:
+        std::string Name() const override {
+            return "H1 Powerlift Position";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/powerlift/H1_powerlift_pos.xml");
+        }
+    };
+
+    class H1_powerlift_hand : public H1_powerlift {
+    public:
+        std::string Name() const override {
+            return "H1 Powerlift Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/powerlift/H1_powerlift_hand.xml");
+        }
+    };
+
+    class H1_powerlift_gripper : public H1_powerlift {
+    public:
+        std::string Name() const override {
+            return "H1 Powerlift Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/powerlift/H1_powerlift_gripper.xml");
+        }
+    };
+
+    class H1_powerlift_simple_hand : public H1_powerlift {
+    public:
+        std::string Name() const override {
+            return "H1 Powerlift Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/powerlift/H1_powerlift_simple_hand.xml");
+        }
+    };
+
+    class H1_powerlift_strong : public H1_powerlift {
+    public:
+        std::string Name() const override {
+            return "H1 Powerlift Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/powerlift/H1_powerlift_strong.xml");
+        }
+    };
+
+    class H1_powerlift_touch : public H1_powerlift {
+    public:
+        std::string Name() const override {
+            return "H1 Powerlift Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/powerlift/H1_powerlift_touch.xml");
+        }
     };
 }  // namespace mjpc
 

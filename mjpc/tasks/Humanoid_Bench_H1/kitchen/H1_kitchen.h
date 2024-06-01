@@ -8,14 +8,14 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
-#include "mjpc/utility/dm_control_utils_rewards.h"
+#include "mjpc/utilities.h"
 
 namespace mjpc {
     class H1_kitchen : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         static double CalculateDistance(const std::string &task, const mjData *data) ;
 
@@ -33,7 +33,7 @@ namespace mjpc {
 
         H1_kitchen() : residual_(this),
                        REMOVE_TASKS_WHEN_COMPLETE(true),
-                       TERMINATE_ON_TASK_COMPLETE(true),
+//                       TERMINATE_ON_TASK_COMPLETE(true),
                        ENFORCE_TASK_ORDER(true),
                        tasks_to_complete_({"microwave", "kettle", "bottom burner", "light switch"}) {}
 
@@ -51,11 +51,75 @@ namespace mjpc {
     private:
         ResidualFn residual_;
         bool REMOVE_TASKS_WHEN_COMPLETE;
-        bool TERMINATE_ON_TASK_COMPLETE;
+//        bool TERMINATE_ON_TASK_COMPLETE;
         bool ENFORCE_TASK_ORDER;
         std::vector<std::string> tasks_to_complete_;
     };
-}  // namespace mjpc
+    class H1_kitchen_position : public H1_kitchen {
+    public:
+        std::string Name() const override {
+            return "H1 Kitchen Position";
+        }
 
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/kitchen/H1_kitchen_pos.xml");
+        }
+    };
+
+    class H1_kitchen_hand : public H1_kitchen {
+    public:
+        std::string Name() const override {
+            return "H1 Kitchen Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/kitchen/H1_kitchen_hand.xml");
+        }
+    };
+
+    class H1_kitchen_gripper : public H1_kitchen {
+    public:
+        std::string Name() const override {
+            return "H1 Kitchen Gripper";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/kitchen/H1_kitchen_gripper.xml");
+        }
+    };
+
+    class H1_kitchen_simple_hand : public H1_kitchen {
+    public:
+        std::string Name() const override {
+            return "H1 Kitchen Simple Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/kitchen/H1_kitchen_simple_hand.xml");
+        }
+    };
+
+    class H1_kitchen_strong : public H1_kitchen {
+    public:
+        std::string Name() const override {
+            return "H1 Kitchen Strong";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/kitchen/H1_kitchen_strong.xml");
+        }
+    };
+
+    class H1_kitchen_touch : public H1_kitchen {
+    public:
+        std::string Name() const override {
+            return "H1 Kitchen Touch";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/kitchen/H1_kitchen_touch.xml");
+        }
+    };
+}  // namespace mjpc
 
 #endif //MUJOCO_MPC_H1_KITCHEN_H
