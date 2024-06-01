@@ -1,8 +1,8 @@
 <mujoco model="H1 Room">
     <include file="../h1/h1hand_pos.xml"/>
     <include file="room.xml"/>
-    <include file="../../common.xml"/>
-    <include file="../../floor.xml"/>
+    <include file="../common.xml"/>
+    <include file="../floor.xml"/>
 
 
     <keyframe>
