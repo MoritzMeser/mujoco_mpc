@@ -16,11 +16,11 @@
 
 
 namespace mjpc {
-    std::string H1_walk::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/task.xml");
-    }
+//    std::string H1_walk::XmlPath() const {
+//        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/task.xml");
+//    }
 
-    std::string H1_walk::Name() const { return "H1 Walk"; }
+//    std::string H1_walk::Name() const { return "H1 Walk"; }
 
 // ----------------- Residuals for Humanoid_Bench_H1 walk task ----------------
 

@@ -8,13 +8,15 @@
 #include <string>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
+#include "mjpc/utilities.h"
+
 
 namespace mjpc {
     class H1_walk : public Task {
     public:
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
@@ -36,6 +38,29 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+    };
+
+    class H1_walk_position : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/H1_walk_position.xml");
+        }
+    };
+
+    class H1_walk_hand : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk Hand";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("Humanoid_Bench_H1/basic_locomotion/walk/H1_walk_hand.xml");
+        }
+
     };
 }  // namespace mjpc
 
