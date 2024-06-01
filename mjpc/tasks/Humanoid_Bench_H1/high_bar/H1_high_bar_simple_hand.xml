@@ -1,6 +1,7 @@
 <mujoco model="H1 High_bar Simple_hand">
-    <include file="../h1/h1simple_hand_pos.xml"/>    
-<include file="../../common.xml"/>
+    <include file="../h1/h1simple_hand_pos.xml"/>
+    <include file="highbar.xml"/>
+    <include file="../../common.xml"/>
     <include file="../../floor.xml"/>
 
     <keyframe>

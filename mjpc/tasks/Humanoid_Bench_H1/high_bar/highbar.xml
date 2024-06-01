@@ -1,5 +1,4 @@
 <mujocoinclude>
-
     <asset>
         <material name="steel_cover"  texuniform="false"  texture="steel_cover"/>
         <texture type="2d" name="steel_cover" file="../assets/steel-scratched.png"/>
@@ -27,5 +26,4 @@
         <exclude body1='athletic_high_bar' body2='left_elbow_link' />
         <exclude body1='athletic_high_bar' body2='right_elbow_link' />
     </contact>
-
 </mujocoinclude>
