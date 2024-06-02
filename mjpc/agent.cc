@@ -527,8 +527,8 @@ namespace mjpc {
                 {mjITEM_CHECKINT,  "Reset",     2, &ActiveTask()->reset,     " #459"},
                 {mjITEM_CHECKINT,  "Visualize", 2, &ActiveTask()->visualize, ""},
 //                {mjITEM_SELECT,    "Model",     1, &gui_task_id,             ""},
-                {mjITEM_SELECT,    "my Task",   1, &my_task_id,              ""},
-                {mjITEM_SELECT,    "my Robot",  1, &my_robot_id,             ""},
+                {mjITEM_SELECT,    "my Task",   1, &task_id,                 ""},
+                {mjITEM_SELECT,    "my Robot",  1, &robot_id,                ""},
                 {mjITEM_SLIDERNUM, "Risk",      1, &ActiveTask()->risk,      "-1 1"},
                 {mjITEM_SEPARATOR, "Weights",   1},
                 {mjITEM_END}};
@@ -537,8 +537,8 @@ namespace mjpc {
 //        mju::strcpy_arr(defTask[3].other, task_names_);
 
         // my task names
-        mju::strcpy_arr(defTask[3].other, my_task_names);
-        mju::strcpy_arr(defTask[4].other, my_robot_names);
+        mju::strcpy_arr(defTask[3].other, task_names);
+        mju::strcpy_arr(defTask[4].other, robot_names);
 
 
         mjui_add(&ui, defTask);
@@ -698,17 +698,14 @@ namespace mjpc {
 // task-based GUI event
     void Agent::TaskEvent(mjuiItem *it, mjData *data,
                           std::atomic<int> &uiloadrequest, int &run) {
-        printf("TaskEvent\n");
-        printf("my task id: %d\n", my_task_id);
-        printf("my robot id: %d\n", my_robot_id);
-        gui_task_id = 6 * my_task_id + my_robot_id;
-        printf("item id: %d\n", it->itemid);
+        gui_task_id = 6 * task_id + robot_id;  // update gui_task_id, this only works because there are 6 robots
+
         switch (it->itemid) {
             case 0:  // task reset
                 ActiveTask()->Reset(model_);
                 ActiveTask()->reset = 0;
                 break;
-            case 2:
+            case 2:  // switch task if tak_id or robot_id changed
             case 3:  // task switch
                 printf("task switch\n");
                 // the GUI changed the value of gui_task_id, but it's unsafe to switch

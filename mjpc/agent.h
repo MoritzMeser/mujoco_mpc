@@ -201,10 +201,10 @@ namespace mjpc {
         int gui_task_id = 0;
 
         // modifications to select task and robot separately
-        int my_task_id = 0;
-        int my_robot_id = 0;
+        int task_id = 0;
+        int robot_id = 0;
 
-        char my_task_names[1024] =
+        char task_names[1024] =
                 "Balance\n"
                 "Walk\n"
                 "Slide\n"
@@ -232,7 +232,7 @@ namespace mjpc {
                 "Spoon\n"
                 "Truck\n"
                 "Window\n";
-        char my_robot_names[1024] = "Position\nHand\nGripper\nSimple Hand\nStrong\nTouch\n";
+        char robot_names[1024] = "Position\nHand\nGripper\nSimple Hand\nStrong\nTouch\n";
 
         // state
         mjpc::State state;
