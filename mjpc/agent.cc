@@ -527,8 +527,8 @@ namespace mjpc {
                 {mjITEM_CHECKINT,  "Reset",     2, &ActiveTask()->reset,     " #459"},
                 {mjITEM_CHECKINT,  "Visualize", 2, &ActiveTask()->visualize, ""},
 //                {mjITEM_SELECT,    "Model",     1, &gui_task_id,             ""},
-                {mjITEM_SELECT,    "my Task",   1, &task_id,                 ""},
-                {mjITEM_SELECT,    "my Robot",  1, &robot_id,                ""},
+                {mjITEM_SELECT,    "Task",   1, &task_id,                 ""},
+                {mjITEM_SELECT,    "Robot",  1, &robot_id,                ""},
                 {mjITEM_SLIDERNUM, "Risk",      1, &ActiveTask()->risk,      "-1 1"},
                 {mjITEM_SEPARATOR, "Weights",   1},
                 {mjITEM_END}};
