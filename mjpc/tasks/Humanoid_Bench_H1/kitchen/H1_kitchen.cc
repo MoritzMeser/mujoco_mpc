@@ -36,7 +36,7 @@ namespace mjpc {
         bool all_completed_so_far = true;
         // ----- loop over all tasks ----- //
         for (const std::string &task: task_->tasks_to_complete_) {
-            double distance = mjpc::H1_kitchen::CalculateDistance(task, data);
+            double distance = mjpc::H1_kitchen::CalculateDistance(task, data, model->nq - 22);
 
             // ----- check if the object is at the target location ----- //
             bool completed = distance < BONUS_THRESH;
@@ -62,26 +62,25 @@ namespace mjpc {
         std::vector<std::string> completed_tasks;
         // ----- loop over all tasks ----- //
         for (const std::string &task: tasks_to_complete_) {
-            double distance = CalculateDistance(task, data);
+            double distance = CalculateDistance(task, data, model->nq - 22);
             // ----- check if the object is at the target location ----- //
             bool completed = distance < BONUS_THRESH;
             if (completed && (all_completed_so_far || !ENFORCE_TASK_ORDER)) {
                 completed_tasks.push_back(task);
                 all_completed_so_far = all_completed_so_far && completed;
             }
-            // remove all completed tasks
-            for (const std::string &completedTask: completed_tasks) {
-                tasks_to_complete_.erase(
-                        std::remove(tasks_to_complete_.begin(), tasks_to_complete_.end(), completedTask),
-                        tasks_to_complete_.end());
-            }
+        }
+        // remove all completed tasks
+        for (const std::string &completedTask: completed_tasks) {
+            tasks_to_complete_.erase(
+                    std::remove(tasks_to_complete_.begin(), tasks_to_complete_.end(), completedTask),
+                    tasks_to_complete_.end());
+            printf("Completed task: %s\n", completedTask.c_str());
         }
 
     }
 
-    double H1_kitchen::CalculateDistance(const std::string &task, const mjData *data) {
-        int const robot_dof = 75;
-
+    double H1_kitchen::CalculateDistance(const std::string &task, const mjData *data, int robot_dof) {
         std::map<std::string, std::vector<double>> obs_element_goals = {
                 {"bottom burner", {-0.88, -0.01}},
                 {"top burner",    {-0.92, -0.01}},

@@ -17,7 +17,7 @@ namespace mjpc {
 
         std::string XmlPath() const override = 0;
 
-        static double CalculateDistance(const std::string &task, const mjData *data) ;
+        static double CalculateDistance(const std::string &task, const mjData *data, int robot_dof) ;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
