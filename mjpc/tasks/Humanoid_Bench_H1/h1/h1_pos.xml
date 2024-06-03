@@ -13,25 +13,25 @@
             </default>
             <site size="0.001" rgba="0.5 0.5 0.5 0.3" group="4"/>
             <default class="hip">
-                <position forcerange="-200 200" kp="100" kv="5"/>
+                <position forcerange="-200 200" kp="200" kv="5"/>
             </default>
             <default class="knee">
-                <position forcerange="-300 300" kp="150" kv="6"/>
+                <position forcerange="-300 300" kp="300" kv="6"/>
             </default>
             <default class="ankle">
-                <position forcerange="-40 40" kp="20" kv="2"/>
+                <position forcerange="-40 40" kp="40" kv="2"/>
             </default>
             <default class="torso">
-                <position forcerange="-200 200" kp="150" kv="6"/>
+                <position forcerange="-200 200" kp="300" kv="6"/>
             </default>
             <default class="shoulder1">
-                <position forcerange="-40 40" kp="25" kv="2"/>
+                <position forcerange="-40 40" kp="100" kv="2"/>
             </default>
             <default class="shoulder2">
-                <position forcerange="-18 18" kp="25" kv="2"/>
+                <position forcerange="-18 18" kp="100" kv="2"/>
             </default>
             <default class="elbow">
-                <position forcerange="-18 18" kp="25" kv="2"/>
+                <position forcerange="-18 18" kp="100" kv="2"/>
             </default>
         </default>
     </default>
