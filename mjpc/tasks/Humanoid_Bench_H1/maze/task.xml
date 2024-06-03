@@ -1,4 +1,13 @@
 <mujocoinlcude>
+    <keyframe>
+        <!-- checkpoints -->
+        <key mpos="0 0 1"/>
+        <key mpos="3 0 1"/>
+        <key mpos="3 6 1"/>
+        <key mpos="6 6 1"/>
+        <key mpos="6 6 1"/> <!-- this is the goal position, it is on purpose to have it twice here-->
+    </keyframe>
+
     <custom>
         <!-- agent -->
         <numeric name="agent_planner" data="0"/>
