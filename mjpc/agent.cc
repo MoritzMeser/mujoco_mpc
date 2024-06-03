@@ -527,10 +527,12 @@ namespace mjpc {
                 {mjITEM_CHECKINT,  "Reset",     2, &ActiveTask()->reset,     " #459"},
                 {mjITEM_CHECKINT,  "Visualize", 2, &ActiveTask()->visualize, ""},
 //                {mjITEM_SELECT,    "Model",     1, &gui_task_id,             ""},
-                {mjITEM_SELECT,    "Task",   1, &task_id,                 ""},
-                {mjITEM_SELECT,    "Robot",  1, &robot_id,                ""},
+                {mjITEM_SELECT,    "Task",      1, &task_id,                 ""},
+                {mjITEM_SELECT,    "Robot",     1, &robot_id,                ""},
                 {mjITEM_SLIDERNUM, "Risk",      1, &ActiveTask()->risk,      "-1 1"},
                 {mjITEM_SEPARATOR, "Weights",   1},
+                {mjITEM_SLIDERNUM, "kp",        1, &kp_value,                "0 400"},
+                {mjITEM_SLIDERNUM, "kv",        1, &kv_value,                "0 40"},
                 {mjITEM_END}};
 
         // task names
@@ -719,6 +721,23 @@ namespace mjpc {
                 allocate_enabled = true;
                 // request model loading
                 uiloadrequest.fetch_add(1);
+                break;
+            case 6: // kp value changed
+            case 7: // kv value changed
+                printf("changing kp and kv values\n");
+                // modify kp and kv values in PID controller
+                auto *dynprm = new double[10]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                auto *gainprm = new double[10]{kp_value, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                auto *biasprm = new double[10]{0, -kp_value, -kv_value, 0, 0, 0, 0, 0, 0, 0};
+                for (int i = 0; i < model_->nu; i++) {
+                    mju_copy3(model_->actuator_dynprm + 10 * i, dynprm);
+                    mju_copy3(model_->actuator_gainprm + 10 * i, gainprm);
+                    mju_copy3(model_->actuator_biasprm + 10 * i, biasprm);
+                }
+                // clean up
+                delete[] dynprm;
+                delete[] gainprm;
+                delete[] biasprm;
                 break;
         }
     }

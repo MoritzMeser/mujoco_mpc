@@ -234,6 +234,10 @@ namespace mjpc {
                 "Window\n";
         char robot_names[1024] = "Position\nHand\nGripper\nSimple Hand\nStrong\nTouch\n";
 
+        // PD control
+        double kp_value = 0.0;
+        double kv_value = 0.0;
+
         // state
         mjpc::State state;
 
