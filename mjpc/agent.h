@@ -232,11 +232,7 @@ namespace mjpc {
                 "Spoon\n"
                 "Truck\n"
                 "Window\n";
-        char robot_names[1024] = "Position\nHand\nGripper\nSimple Hand\nStrong\nTouch\n";
-
-        // PD control
-        double kp_value = 0.0;
-        double kv_value = 0.0;
+        char robot_names[1024] = "without Hand\nHand\nGripper\nSimple Hand\nStrong\nTouch\n";
 
         // state
         mjpc::State state;
