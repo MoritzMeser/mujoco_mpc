@@ -12,15 +12,8 @@
 #include <random>
 
 namespace mjpc {
-    std::string H1_reach::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/reach/task.xml");
-    }
-
-    std::string H1_reach::Name() const { return "H1 Reach"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 reach task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 reach task ---------------- //
+// ----------------------------------------------------------------------------- //
     void H1_reach::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double *goal_pos = SensorByName(model, data, "goal_pos");
         double *left_hand_pos = SensorByName(model, data, "left_hand_position");

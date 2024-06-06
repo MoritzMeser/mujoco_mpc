@@ -14,15 +14,8 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-//    std::string H1_kitchen::XmlPath() const {
-//        return GetModelPath("Humanoid_Bench_H1/kitchen/task.xml");
-//    }
-//
-//    std::string H1_kitchen::Name() const { return "H1 Kitchen"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 kitchen task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 kitchen task ---------------- //
+// ------------------------------------------------------------------------------- //
     void H1_kitchen::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                           double *residual) const {
         // the reward of this task is a count of how many objects are at the target location

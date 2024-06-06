@@ -13,15 +13,8 @@
 
 
 namespace mjpc {
-//    std::string H1_stairs::XmlPath() const {
-//        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stairs/task.xml");
-//    }
-//
-//    std::string H1_stairs::Name() const { return "H1 Stairs"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 walk task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 walk task ---------------- //
+// ---------------------------------------------------------------------------- //
     void H1_stairs::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const walk_speed = 1.0;
 

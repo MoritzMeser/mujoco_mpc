@@ -1424,7 +1424,7 @@ void UiEvent(mjuiState* state) {
       mjui_update(SECT_RENDERING, -1, &sim->ui0, &sim->uistate, &sim->platform_ui->mjr_context());
       break;
 
-    case '7':                   // slow down (was '-')
+    case '-':                   // slow down
       {
         int numclicks = sizeof(sim->percentRealTime) / sizeof(sim->percentRealTime[0]);
         if (sim->real_time_index < numclicks-1 && !state->shift) {
@@ -1434,7 +1434,7 @@ void UiEvent(mjuiState* state) {
       }
       break;
 
-    case '8':                   // speed up (was '=')
+    case '=':                   // speed up
       if (sim->real_time_index > 0 && !state->shift) {
         sim->real_time_index--;
         sim->speed_changed = true;

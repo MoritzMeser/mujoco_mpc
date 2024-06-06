@@ -15,15 +15,8 @@
 #include "mjpc/utility/utility_functions.h"
 
 namespace mjpc {
-    std::string H1_maze::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/maze/task.xml");
-    }
-
-    std::string H1_maze::Name() const { return "H1 Maze"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 maze task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 maze task ---------------- //
+// ---------------------------------------------------------------------------- //
     void H1_maze::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                        double *residual) const {
         // ----- set parameters ----- //

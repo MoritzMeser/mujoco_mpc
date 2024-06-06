@@ -14,15 +14,8 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    std::string H1_highbar::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/high_bar/task.xml");
-    }
-
-    std::string H1_highbar::Name() const { return "H1 Highbar"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 highbar task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 highbar task ---------------- //
+// ------------------------------------------------------------------------------- //
     void H1_highbar::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                           double *residual) const {
         // ---- upright reward ---- //

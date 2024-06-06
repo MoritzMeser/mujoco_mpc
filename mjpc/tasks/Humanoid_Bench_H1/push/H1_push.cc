@@ -14,14 +14,7 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    std::string H1_push::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/push/task.xml");
-    }
-
-    std::string H1_push::Name() const { return "H1 Push"; }
-
 // ----------------- Residuals for Humanoid_Bench_H1 push task ---------------- //
-
 // ---------------------------------------------------------------------------- //
     void H1_push::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                        double *residual) const {

@@ -13,15 +13,8 @@
 
 
 namespace mjpc {
-//    std::string H1_sit::XmlPath() const {
-//        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/sit/task.xml");
-//    }
-//
-//    std::string H1_sit::Name() const { return "H1 Sit"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 Sit Simple task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 Sit Simple task ---------------- //
+// ---------------------------------------------------------------------------------- //
     void H1_sit::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         // ----- sitting ----- //
         double sitting = tolerance(data->qpos[2], {0.68, 0.72}, 0.2);

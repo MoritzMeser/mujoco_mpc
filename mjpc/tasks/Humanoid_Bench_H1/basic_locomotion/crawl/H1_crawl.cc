@@ -14,15 +14,8 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-//    std::string H1_crawl::XmlPath() const {
-//        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/crawl/task.xml");
-//    }
-//
-//    std::string H1_crawl::Name() const { return "H1 Crawl"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 crawl task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 crawl task ---------------- //
+// ----------------------------------------------------------------------------- //
     void H1_crawl::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const crawl_height = 0.8;
         double const crawl_speed = 1.0;

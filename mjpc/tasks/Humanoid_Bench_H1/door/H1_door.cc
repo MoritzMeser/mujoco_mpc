@@ -14,15 +14,8 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    std::string H1_door::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/door/task.xml");
-    }
-
-    std::string H1_door::Name() const { return "H1 Door"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 door task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 door task ---------------- //
+// ---------------------------------------------------------------------------- //
     void H1_door::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                        double *residual) const {
         // ----- set parameters ----- //

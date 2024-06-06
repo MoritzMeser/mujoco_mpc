@@ -9,12 +9,6 @@
 #include "mjpc/utility/dm_control_utils_rewards.h"
 
 namespace mjpc {
-    std::string Balance_Simple::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/balance/task.xml");
-    }
-
-    std::string Balance_Simple::Name() const { return "H1 Balance"; }
-
 // ----------------- Residuals for Humanoid_Bench_H1 balance task ---------------- //
 // ------------------------------------------------------------------------------- //
     void Balance_Simple::ResidualFn::Residual(const mjModel *model, const mjData *data,

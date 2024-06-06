@@ -15,9 +15,9 @@ namespace mjpc {
     public:
         bool IsPackageUponTable(const mjModel *model, const mjData *data, const std::string &package) const;
 
-        std::string Name() const override;
+        std::string Name() const override = 0;
 
-        std::string XmlPath() const override;
+        std::string XmlPath() const override = 0;
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:

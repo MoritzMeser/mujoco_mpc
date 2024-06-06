@@ -15,15 +15,8 @@
 #include "mjpc/utility/utility_functions.h"
 
 namespace mjpc {
-    std::string H1_poles::XmlPath() const {
-        return GetModelPath("Humanoid_Bench_H1/poles/task.xml");
-    }
-
-    std::string H1_poles::Name() const { return "H1 Poles"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 poles task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 poles task ---------------- //
+// ----------------------------------------------------------------------------- //
     void H1_poles::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                         double *residual) const {
         double const standHeight = 1.65;

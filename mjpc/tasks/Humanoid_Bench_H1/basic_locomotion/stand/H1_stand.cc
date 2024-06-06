@@ -13,15 +13,8 @@
 
 
 namespace mjpc {
-//    std::string H1_stand::XmlPath() const {
-//        return GetModelPath("Humanoid_Bench_H1/basic_locomotion/stand/task.xml");
-//    }
-//
-//    std::string H1_stand::Name() const { return "H1 Stand"; }
-
-// ----------------- Residuals for Humanoid_Bench_H1 stand task ----------------
-
-// -------------------------------------------------------------
+// ----------------- Residuals for Humanoid_Bench_H1 stand task ---------------- //
+// ----------------------------------------------------------------------------- //
     void H1_stand::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const walk_speed = 0.0;
         double const stand_height = 1.65;
