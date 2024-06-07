@@ -6,6 +6,7 @@
         <numeric name="agent_timestep" data="0.01"/>
         <numeric name="sampling_spline_points" data="3"/>
         <numeric name="sampling_exploration" data="0.5"/>
+        <numeric name="residual_Speed" data="0.0 -3.0 3.0" />
 
 
         <!-- estimator -->
@@ -27,18 +28,14 @@
         <!--humanoid_bench_cost_terms-->
         <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>
 
-        <!-- individual_cost_terms -->
-        <user name="standing" dim="1" user="5 1 0 1 1"/>
-        <user name="torso upright" dim="1" user="5 1 0 1 1"/>
-<!--        <user name="small control" dim="1" user="5 0 0 1 1"/>-->
-<!--        <user name="average force" dim="1" user="5 0 0 0.01 1"/>-->
-<!--        <user name="average acceleration" dim="1" user="5 0 0 0.01 1"/>-->
-        <user name="move speed" dim="1" user="5 1 0 1 1"/>
-        <user name="Joint Vel." dim="19" user="0 0.0001 0.0 0.001" />
-<!--        <user name="Control" dim="19" user="3 0.025 0.0 0.1 0.3" />-->
-        <user name="Effort" dim="19" user="0 0.003 0.0 0.01" />
-        <user name="Posture" dim="19" user="0 0.025 0 1.0" />
+        <!--other cost terms-->
+        <user name="Height" dim="1" user="6 100.0 0.0 100.0 0.1" />
+        <user name="Balance" dim="1" user="6 50.0 0.0 100.0 0.1" />
         <user name="CoM Vel." dim="2" user="0 10.0 0.0 100.0" />
+        <user name="Joint Vel." dim="19" user="0 0.01 0.0 0.1" />
+        <user name="Control" dim="19" user="3 0.025 0.0 0.1 0.3" />
+
+        <user name="torso upright" dim="1" user="6 100.0 0.0 100.0 0.1" />
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../../h1/h1_sensors.xml"/>
