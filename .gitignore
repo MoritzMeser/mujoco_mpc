@@ -33,3 +33,10 @@ MJDATA.TXT
 MJMODEL.TXT
 # Python
 python/dist/
+
+# IDE files
+.idea/
+
+# CMake build directory
+cmake-build-release/
+cmake-build-debug/
