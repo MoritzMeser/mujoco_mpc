@@ -531,12 +531,14 @@ namespace mjpc {
                 {mjITEM_SELECT,    "Robot",     1, &robot_id,                ""},
                 {mjITEM_SLIDERNUM, "Risk",      1, &ActiveTask()->risk,      "-1 1"},
                 {mjITEM_SEPARATOR, "Weights",   1},
+                {mjITEM_SLIDERNUM, "kp",        1, &kp_value,                "0 400"},
+                {mjITEM_SLIDERNUM, "kv",        1, &kv_value,                "0 40"},
                 {mjITEM_END}};
 
         // task names
 //        mju::strcpy_arr(defTask[3].other, task_names_);
 
-        // task names and robot names
+        // my task names
         mju::strcpy_arr(defTask[3].other, task_names);
         mju::strcpy_arr(defTask[4].other, robot_names);
 
@@ -698,7 +700,7 @@ namespace mjpc {
 // task-based GUI event
     void Agent::TaskEvent(mjuiItem *it, mjData *data,
                           std::atomic<int> &uiloadrequest, int &run) {
-        gui_task_id = 6 * task_id + robot_id;  // there are 6 robots for each task exactly
+        gui_task_id = 6 * task_id + robot_id;  // update gui_task_id, this only works because there are 6 robots
 
         switch (it->itemid) {
             case 0:  // task reset
@@ -707,6 +709,7 @@ namespace mjpc {
                 break;
             case 2:  // switch task if tak_id or robot_id changed
             case 3:  // task switch
+                printf("task switch\n");
                 // the GUI changed the value of gui_task_id, but it's unsafe to switch
                 // tasks now.
                 // turn off agent and traces
@@ -718,6 +721,23 @@ namespace mjpc {
                 allocate_enabled = true;
                 // request model loading
                 uiloadrequest.fetch_add(1);
+                break;
+            case 6: // kp value changed
+            case 7: // kv value changed
+                printf("changing kp and kv values\n");
+                // modify kp and kv values in PID controller
+                auto *dynprm = new double[10]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                auto *gainprm = new double[10]{kp_value, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                auto *biasprm = new double[10]{0, -kp_value, -kv_value, 0, 0, 0, 0, 0, 0, 0};
+                for (int i = 0; i < model_->nu; i++) {
+                    mju_copy3(model_->actuator_dynprm + 10 * i, dynprm);
+                    mju_copy3(model_->actuator_gainprm + 10 * i, gainprm);
+                    mju_copy3(model_->actuator_biasprm + 10 * i, biasprm);
+                }
+                // clean up
+                delete[] dynprm;
+                delete[] gainprm;
+                delete[] biasprm;
                 break;
         }
     }
