@@ -37,7 +37,7 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="exp(-r)" dim="1" user="5 0 1 1 1"/>
+        <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>
 
         <!--        new cost terms-->
         <user name="Height" dim="1" user="7 5.0 0 25.0 0.1 4.0"/>
