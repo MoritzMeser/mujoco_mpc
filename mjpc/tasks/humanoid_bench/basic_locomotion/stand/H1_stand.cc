@@ -17,14 +17,14 @@ namespace mjpc {
 // ----------------- Residuals for humanoid_bench stand task ---------------- //
 // ----------------------------------------------------------------------------- //
     void H1_stand::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
-        double const walk_speed = 0.0;
-        double const stand_height = 1.65;
+//        double const walk_speed = 0.0;
+//        double const stand_height = 1.65;
+//
+//        // ----- original humanoid bench reward ----- //
+//        double reward = walk_reward(model, data, walk_speed, stand_height);
+//        residual[0] = std::exp(-reward);  // 1.
 
-        // ----- original humanoid bench reward ----- //
-        double reward = walk_reward(model, data, walk_speed, stand_height);
-        residual[0] = std::exp(-reward);  // 1.
-
-        int counter = 1;  // initialize with 1, because 0 is the reward from humanoid bench
+        int counter = 0; // initialize with 1, because 0 is the reward from humanoid bench
 
         // ----- Height: head feet vertical error ----- //
 
@@ -33,44 +33,45 @@ namespace mjpc {
 //        double* f2_position = SensorByName(model, data, "sp1");
 //        double* f3_position = SensorByName(model, data, "sp2");
 //        double* f4_position = SensorByName(model, data, "sp3");
-        double *f1_position = SensorByName(model, data, "left_foot_height");
-        double *f2_position = SensorByName(model, data, "left_foot_height");
-        double *f3_position = SensorByName(model, data, "right_foot_height");
-        double *f4_position = SensorByName(model, data, "right_foot_height");
 
 
-        double *head_position = SensorByName(model, data, "head_height");
-        double head_feet_error =
-                head_position[2] - 0.25 * (f1_position[2] + f2_position[2] +
-                                           f3_position[2] + f4_position[2]);
-        residual[counter++] = head_feet_error - stand_height;
+        double *left_foot_position = SensorByName(model, data, "left_foot_position");
+        double *right_foot_position = SensorByName(model, data, "right_foot_position");
+        double *head_position = SensorByName(model, data, "head_position");
+//        double head_feet_error =
+//                head_position[2] - 0.25 * (f1_position[2] + f2_position[2] +
+//                                           f3_position[2] + f4_position[2]);
+        double head_feet_error = head_position[2] - 0.5 * (left_foot_position[2] + right_foot_position[2]);
+        residual[counter++] = head_feet_error - parameters_[0];
 
         // ----- Balance: CoM-feet xy error ----- //
 
         // capture point
-        double *com_position = SensorByName(model, data, "center_of_mass_position");
-        double *com_velocity = SensorByName(model, data, "center_of_mass_velocity");
+        double *com_position = SensorByName(model, data, "torso_subtreecom");
+        double *com_velocity = SensorByName(model, data, "torso_subtreelinvel");
         double kFallTime = 0.2;
         double capture_point[3] = {com_position[0], com_position[1], com_position[2]};
         mju_addToScl3(capture_point, com_velocity, kFallTime);
 
         // average feet xy position
         double fxy_avg[2] = {0.0};
-        mju_addTo(fxy_avg, f1_position, 2);
-        mju_addTo(fxy_avg, f2_position, 2);
-        mju_addTo(fxy_avg, f3_position, 2);
-        mju_addTo(fxy_avg, f4_position, 2);
-        mju_scl(fxy_avg, fxy_avg, 0.25, 2);
+//        mju_addTo(fxy_avg, f1_position, 2);
+//        mju_addTo(fxy_avg, f2_position, 2);
+//        mju_addTo(fxy_avg, f3_position, 2);
+//        mju_addTo(fxy_avg, f4_position, 2);
+//        mju_scl(fxy_avg, fxy_avg, 0.25, 2);
+        mju_addTo(fxy_avg, left_foot_position, 2);
+        mju_addTo(fxy_avg, right_foot_position, 2);
+        mju_scl(fxy_avg, fxy_avg, 0.5, 2);
 
         mju_subFrom(fxy_avg, capture_point, 2);
         double com_feet_distance = mju_norm(fxy_avg, 2);
         residual[counter++] = com_feet_distance;
 
         // ----- COM xy velocity should be 0 ----- //
-//        mju_copy(&residual[counter], com_velocity, 2);
-//        counter += 2;
-        residual[counter++] = com_velocity[0] - parameters_[0];
-        residual[counter++] = com_velocity[1];
+        // ----- COM xy velocity should be 0 ----- //
+        mju_copy(&residual[counter], com_velocity, 2);
+        counter += 2;
 
         // ----- joint velocity ----- //
         mju_copy(residual + counter, data->qvel + 6, model->nv - 6);
@@ -82,8 +83,15 @@ namespace mjpc {
 
         // ----- torso upright ----- //
         double torso_upright = SensorByName(model, data, "torso_upright")[2];
-        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
-        residual[counter++] = 1.0 - upright;
+//        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
+//        residual[counter++] = 1.0 - upright;
+        residual[counter++] = torso_upright - 1.0;
+
+
+        // ----- posture ----- //
+        mju_copy(&residual[counter], data->qpos + 7, model->nq - 7);
+        counter += model->nq - 7;
+
 
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function

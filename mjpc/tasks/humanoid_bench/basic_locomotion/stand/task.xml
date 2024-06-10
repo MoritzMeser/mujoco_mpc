@@ -1,21 +1,28 @@
 <mujocoinclude>
     <custom>
         <!-- agent -->
-        <numeric name="agent_planner" data="0"/>
-        <numeric name="agent_horizon" data="0.8"/>
-        <numeric name="agent_timestep" data="0.01"/>
-        <numeric name="sampling_spline_points" data="3"/>
-        <numeric name="sampling_exploration" data="0.5"/>
-        <numeric name="residual_Speed" data="0.0 -3.0 3.0" />
+        <!--        <numeric name="agent_planner" data="0"/>-->
+        <!--        <numeric name="agent_horizon" data="0.8"/>-->
+        <!--        <numeric name="agent_timestep" data="0.01"/>-->
+        <!--        <numeric name="sampling_spline_points" data="3"/>-->
+        <!--        <numeric name="sampling_exploration" data="0.5"/>-->
+        <!--        <numeric name="residual_Speed" data="0.0 -3.0 3.0" />-->
 
+        <numeric name="agent_planner" data="0"/>
+        <numeric name="agent_horizon" data="0.35"/>
+        <numeric name="agent_timestep" data="0.015"/>
+        <numeric name="sampling_spline_points" data="3"/>
+        <numeric name="sampling_exploration" data="0.05"/>
+        <numeric name="gradient_spline_points" data="5"/>
+        <numeric name="residual_Height Goal" data="1.65 0.0 1.7"/>
 
         <!-- estimator -->
-        <numeric name="estimator" data="0"/>
-        <numeric name="estimator_sensor_start" data="4"/>
-        <numeric name="estimator_number_sensor" data="9"/>
-        <numeric name="estimator_timestep" data="0.005"/>
-        <numeric name="batch_configuration_length" data="3"/>
-        <numeric name="batch_scale_prior" data="1.0e-3"/>
+        <!--        <numeric name="estimator" data="0"/>-->
+        <!--        <numeric name="estimator_sensor_start" data="4"/>-->
+        <!--        <numeric name="estimator_number_sensor" data="9"/>-->
+        <!--        <numeric name="estimator_timestep" data="0.005"/>-->
+        <!--        <numeric name="batch_configuration_length" data="3"/>-->
+        <!--        <numeric name="batch_scale_prior" data="1.0e-3"/>-->
     </custom>
 
 
@@ -26,18 +33,44 @@
         <!-- cost terms -->
 
         <!--humanoid_bench_cost_terms-->
-        <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>
+        <!--        <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>-->
 
-        <!--other cost terms-->
-        <user name="Height" dim="1" user="6 100.0 0.0 100.0 0.1" />
-        <user name="Balance" dim="1" user="6 50.0 0.0 100.0 0.1" />
-        <user name="CoM Vel." dim="2" user="0 10.0 0.0 100.0" />
-        <user name="Joint Vel." dim="19" user="0 0.01 0.0 0.1" />
-        <user name="Control" dim="19" user="3 0.025 0.0 0.1 0.3" />
+        <!--MJPC cost terms-->
+        <user name="Height" dim="1" user="6 100.0 0.0 100.0 0.1"/>
+        <user name="Balance" dim="1" user="6 50.0 0.0 100.0 0.1"/>
+        <user name="CoM Vel." dim="2" user="0 10.0 0.0 100.0"/>
+        <user name="Joint Vel." dim="19" user="0 0.01 0.0 0.1"/>
+        <user name="Control" dim="19" user="3 0.025 0.0 0.1 0.3"/>
 
-        <user name="torso upright" dim="1" user="6 100.0 0.0 100.0 0.1" />
+        <!--        additonal cost terms-->
+        <user name="torso upright" dim="1" user="6 100.0 0.0 100.0 0.1"/>
+
+        <user name="Posture" dim="19" user="0 0.025 0 1.0" />
+
+        <!--        trace -->
+        <framepos name="trace0" objtype="body" objname="torso_link"/>
+
+        <!--        body sensors-->
+        <!--        <framepos name="torso_position" objtype="body" objname="torso"/>-->
+        <framepos name="head_position" objtype="site" objname="head"/>
+        <!--        <framequat name="head_orientation" objtype="body" objname="head"/>-->
+        <!--        <framezaxis name="torso_zaxis" objtype="body" objname="torso"/>-->
+        <subtreelinvel name="torso_subtreelinvel" body="torso_link"/>
+        <subtreecom name="torso_subtreecom" body="torso_link"/>
+        <framexaxis name="torso_forward" objtype="body" objname="torso_link"/>
+        <!--        <framepos name="sp0" objtype="site" objname="sp0"/>-->
+        <!--        <framepos name="sp1" objtype="site" objname="sp1"/>-->
+        <!--        <framepos name="sp2" objtype="site" objname="sp2"/>-->
+        <!--        <framepos name="sp3" objtype="site" objname="sp3"/>-->
+        <!--        <subtreelinvel name="foot_right_vel" body="foot_right"/>-->
+        <!--        <subtreelinvel name="foot_left_vel" body="foot_left"/>-->
+        <framepos name="left_foot_position" objtype="site" objname="left_foot"/>
+        <framepos name="right_foot_position" objtype="site" objname="right_foot"/>
+
+        <!--        addition sensors-->
+        <framezaxis name="torso_upright" objtype="body" objname="torso_link"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
-    <include file="../../h1/h1_sensors.xml"/>
+    <!--    <include file="../../h1/h1_sensors.xml"/>-->
 
 </mujocoinclude>
