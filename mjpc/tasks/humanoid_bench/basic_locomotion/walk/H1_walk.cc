@@ -19,25 +19,25 @@ namespace mjpc {
 // ----------------- Residuals for humanoid_bench walk task ---------------- //
 // ---------------------------------------------------------------------------- //
     void H1_walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
-        double const walk_speed = 1.0;
-        double const stand_height = 1.65;
-
-        double reward = walk_reward(model, data, walk_speed, stand_height);
-        residual[0] = std::exp(-reward);
+//        double const walk_speed = 1.0;
+//        double const stand_height = 1.65;
+//
+//        double reward = walk_reward(model, data, walk_speed, stand_height);
+//        residual[0] = std::exp(-reward);
 
         // --------- down below is the reward from humanoid in MJPC ------------ //
-        int counter = 1;
+        int counter = 0;
 
         // ----- torso height ----- //
-        double torso_height = SensorByName(model, data, "torso_position")[2];
-        residual[counter++] = torso_height - parameters_[0];
+        double head_height = SensorByName(model, data, "head_height")[2];
+        residual[counter++] = head_height - parameters_[0];
 
         // ----- pelvis / feet ----- //
         double* foot_right = SensorByName(model, data, "foot_right");
         double* foot_left = SensorByName(model, data, "foot_left");
         double pelvis_height = SensorByName(model, data, "pelvis_position")[2];
         residual[counter++] =
-                0.5 * (foot_left[2] + foot_right[2]) - pelvis_height - 0.2;
+                0.5 * (foot_left[2] + foot_right[2]) - pelvis_height - parameters_[2];
 
         // ----- balance ----- //
         // capture point
@@ -71,6 +71,7 @@ namespace mjpc {
         pcp[2] = 1.0e-3;
 
         // is standing
+        double torso_height = SensorByName(model, data, "torso_position")[2];
         double standing =
                 torso_height / mju_sqrt(torso_height * torso_height + 0.45 * 0.45) - 0.4;
 

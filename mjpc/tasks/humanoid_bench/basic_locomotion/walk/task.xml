@@ -14,6 +14,7 @@
         <numeric name="gradient_spline_points" data="5"/>
         <numeric name="residual_Torso" data="1.65 1.0 1.7"/>
         <numeric name="residual_Speed" data="0.0 -3.0 3.0"/>
+        <numeric name="residual_foot_pelvis_distancel" data="0.2 0.2 1.2"/>
 
 
         <!-- estimator -->
@@ -37,7 +38,7 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>
+<!--        <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>-->
 
         <!--        new cost terms-->
         <user name="Height" dim="1" user="7 5.0 0 25.0 0.1 4.0"/>
@@ -83,12 +84,13 @@
         <framepos name="trace0" objtype="body" objname="torso_link"/>
 
         <!-- residual -->
+        <framepos name="head_height" objtype="site" objname="head"/>
         <framepos name="torso_position" objtype="body" objname="torso_link"/>
         <subtreecom name="torso_subcom" body="torso_link"/>
         <subtreelinvel name="torso_subcomvel" body="torso_link"/>
         <framepos name="foot_right" objtype="body" objname="right_ankle_link"/>
         <framepos name="foot_left" objtype="body" objname="left_ankle_link"/>
-<!--        <framepos name="pelvis_position" objtype="body" objname="pelvis"/>--> <!-- is already in "normal" sensor -->
+        <framepos name="pelvis_position" objtype="body" objname="pelvis"/>  is already in "normal" sensor
         <framezaxis name="torso_up" objtype="xbody" objname="torso_link"/>
         <framezaxis name="pelvis_up" objtype="xbody" objname="pelvis"/>
         <framezaxis name="foot_right_up" objtype="xbody" objname="right_ankle_link"/>
@@ -103,5 +105,5 @@
         <framelinvel name="foot_left_velocity" objtype="body" objname="left_ankle_link"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
-    <include file="../../h1/h1_sensors.xml"/>
+<!--    <include file="../../h1/h1_sensors.xml"/>-->
 </mujocoinclude>
