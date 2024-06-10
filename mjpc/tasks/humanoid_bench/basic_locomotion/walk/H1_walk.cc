@@ -29,7 +29,7 @@ namespace mjpc {
         int counter = 0;
 
         // ----- torso height ----- //
-        double head_height = SensorByName(model, data, "head_height")[2];
+        double head_height = SensorByName(model, data, "torso_position")[2];
         residual[counter++] = head_height - parameters_[0];
 
         // ----- pelvis / feet ----- //
