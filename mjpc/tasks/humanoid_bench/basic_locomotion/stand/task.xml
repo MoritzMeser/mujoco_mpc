@@ -23,7 +23,12 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-        <user name="exp(-r)" dim="1" user="5 1 1 1 1"/>
+<!--        <user name="exp(-r)" dim="1" user="5 1 1 1 1"/>-->
+        <user name="standing" dim="1" user="5 1 0 1 1"/>
+        <user name="upright" dim="1" user="5 1 0 1 1"/>
+        <user name="small control" dim="1" user="5 1 0 1 1"/>
+        <user name="dont move" dim="1" user="5 1 0 1 1"/>
+
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
     <include file="../../h1/h1_sensors.xml"/>
