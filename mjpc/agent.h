@@ -201,7 +201,7 @@ namespace mjpc {
         int gui_task_id = 0;
 
         // modifications to select task and robot separately
-        int task_id = 3;  // initialize to Stand Task
+        int task_id = 1;  // initialize to Stand Task
         int robot_id = 0;
 
         char task_names[1024] =
