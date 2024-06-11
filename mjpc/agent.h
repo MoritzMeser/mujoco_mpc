@@ -291,7 +291,7 @@ namespace mjpc {
         std::atomic_int count_;
 
         // names
-        char task_names_[1024];
+        char task_names_[1024*4];
         char planner_names_[1024];
         char estimator_names_[1024];
 

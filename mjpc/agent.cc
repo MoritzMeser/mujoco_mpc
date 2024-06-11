@@ -526,19 +526,19 @@ namespace mjpc {
                 {mjITEM_SECTION,   "Task",      1, nullptr,                  "AP"},
                 {mjITEM_CHECKINT,  "Reset",     2, &ActiveTask()->reset,     " #459"},
                 {mjITEM_CHECKINT,  "Visualize", 2, &ActiveTask()->visualize, ""},
-//                {mjITEM_SELECT,    "Model",     1, &gui_task_id,             ""},
-                {mjITEM_SELECT,    "Task",      1, &task_id,                 ""},
-                {mjITEM_SELECT,    "Robot",     1, &robot_id,                ""},
+                {mjITEM_SELECT,    "Model",     1, &gui_task_id,             ""},
+//                {mjITEM_SELECT,    "Task",      1, &task_id,                 ""},
+//                {mjITEM_SELECT,    "Robot",     1, &robot_id,                ""},
                 {mjITEM_SLIDERNUM, "Risk",      1, &ActiveTask()->risk,      "-1 1"},
                 {mjITEM_SEPARATOR, "Weights",   1},
                 {mjITEM_END}};
 
         // task names
-//        mju::strcpy_arr(defTask[3].other, task_names_);
+        mju::strcpy_arr(defTask[3].other, task_names_);
 
-        // task names and robot names
-        mju::strcpy_arr(defTask[3].other, task_names);
-        mju::strcpy_arr(defTask[4].other, robot_names);
+//        // task names and robot names
+//        mju::strcpy_arr(defTask[3].other, task_names);
+//        mju::strcpy_arr(defTask[4].other, robot_names);
 
 
         mjui_add(&ui, defTask);
@@ -698,7 +698,7 @@ namespace mjpc {
 // task-based GUI event
     void Agent::TaskEvent(mjuiItem *it, mjData *data,
                           std::atomic<int> &uiloadrequest, int &run) {
-        gui_task_id = 6 * task_id + robot_id;  // there are 6 robots for each task exactly
+//        gui_task_id = 6 * task_id + robot_id;  // there are 6 robots for each task exactly
 
         switch (it->itemid) {
             case 0:  // task reset
