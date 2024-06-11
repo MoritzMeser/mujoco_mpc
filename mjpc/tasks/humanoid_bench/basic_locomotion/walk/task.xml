@@ -1,4 +1,9 @@
 <mujocoinclude>
+    <worldbody>
+        <body name="target" mocap="true" pos="0 0 1">
+            <geom type="sphere" size="0.1" contype="0" conaffinity="0" rgba="0 1 0 .5"/>
+        </body>
+    </worldbody>
     <custom>
         <!-- agent -->
         <!--        <numeric name="agent_planner" data="0"/>-->
@@ -15,6 +20,8 @@
         <numeric name="residual_Torso" data="1.65 1.0 1.7"/>
         <numeric name="residual_Speed" data="0.0 -3.0 3.0"/>
         <numeric name="residual_foot_pelvis_distancel" data="0.2 0.2 1.2"/>
+        <numeric name="residual_target_x" data="0 -10 10"/>
+        <numeric name="residual_target_y" data="0 -10 10"/>
 
 
         <!-- estimator -->
@@ -38,7 +45,7 @@
         <!-- see https://github.com/google-deepmind/mujoco_mpc/blob/main/docs/OVERVIEW.md for reverence -->
 
         <!-- cost terms -->
-<!--        <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>-->
+        <!--        <user name="exp(-r)" dim="1" user="5 0 0 1 1"/>-->
 
         <!--        new cost terms-->
         <user name="Height" dim="1" user="7 5.0 0 25.0 0.1 4.0"/>
@@ -49,35 +56,36 @@
         <user name="Walk" dim="1" user="7 1.0 0.0 25.0 0.5 3.0"/>
         <user name="Velocity" dim="2" user="7 0.625 0 25.0 0.2 4.0"/>
         <user name="Control" dim="19" user="3 0.1 0 1.0 0.3"/>
+        <user name="goal dist" dim="2" user="7 5.0 0 25.0 0.1 4.0"/>
 
 
         <!--        new estimator measurements-->
-<!--        <framepos name="pelvis" objtype="site" objname="tracking[pelvis]"/>-->
-<!--        <framepos name="right_foot" objtype="site" objname="foot_right"/>-->
-<!--        <framepos name="left_foot" objtype="site" objname="foot_left"/>-->
-<!--        <framepos name="right_hand" objtype="site" objname="tracking[rhand]"/>-->
-<!--        <framepos name="left_hand" objtype="site" objname="tracking[lhand]"/>-->
-<!--        <jointpos name="abdomen_z" joint="abdomen_z"/>-->
-<!--        <jointpos name="abdomen_y" joint="abdomen_y"/>-->
-<!--        <jointpos name="abdomen_x" joint="abdomen_x"/>-->
-<!--        <jointpos name="hip_x_right" joint="hip_x_right"/>-->
-<!--        <jointpos name="hip_z_right" joint="hip_z_right"/>-->
-<!--        <jointpos name="hip_y_right" joint="hip_y_right"/>-->
-<!--        <jointpos name="knee_right" joint="knee_right"/>-->
-<!--        <jointpos name="ankle_y_right" joint="ankle_y_right"/>-->
-<!--        <jointpos name="ankle_x_right" joint="ankle_x_right"/>-->
-<!--        <jointpos name="hip_x_left" joint="hip_x_left"/>-->
-<!--        <jointpos name="hip_z_left" joint="hip_z_left"/>-->
-<!--        <jointpos name="hip_y_left" joint="hip_y_left"/>-->
-<!--        <jointpos name="knee_left" joint="knee_left"/>-->
-<!--        <jointpos name="ankle_y_left" joint="ankle_y_left"/>-->
-<!--        <jointpos name="ankle_x_left" joint="ankle_x_left"/>-->
-<!--        <jointpos name="shoulder1_right" joint="shoulder1_right"/>-->
-<!--        <jointpos name="shoulder2_right" joint="shoulder2_right"/>-->
-<!--        <jointpos name="elbow_right" joint="elbow_right"/>-->
-<!--        <jointpos name="shoulder1_left" joint="shoulder1_left"/>-->
-<!--        <jointpos name="shoulder2_left" joint="shoulder2_left"/>-->
-<!--        <jointpos name="elbow_left" joint="elbow_left"/>-->
+        <!--        <framepos name="pelvis" objtype="site" objname="tracking[pelvis]"/>-->
+        <!--        <framepos name="right_foot" objtype="site" objname="foot_right"/>-->
+        <!--        <framepos name="left_foot" objtype="site" objname="foot_left"/>-->
+        <!--        <framepos name="right_hand" objtype="site" objname="tracking[rhand]"/>-->
+        <!--        <framepos name="left_hand" objtype="site" objname="tracking[lhand]"/>-->
+        <!--        <jointpos name="abdomen_z" joint="abdomen_z"/>-->
+        <!--        <jointpos name="abdomen_y" joint="abdomen_y"/>-->
+        <!--        <jointpos name="abdomen_x" joint="abdomen_x"/>-->
+        <!--        <jointpos name="hip_x_right" joint="hip_x_right"/>-->
+        <!--        <jointpos name="hip_z_right" joint="hip_z_right"/>-->
+        <!--        <jointpos name="hip_y_right" joint="hip_y_right"/>-->
+        <!--        <jointpos name="knee_right" joint="knee_right"/>-->
+        <!--        <jointpos name="ankle_y_right" joint="ankle_y_right"/>-->
+        <!--        <jointpos name="ankle_x_right" joint="ankle_x_right"/>-->
+        <!--        <jointpos name="hip_x_left" joint="hip_x_left"/>-->
+        <!--        <jointpos name="hip_z_left" joint="hip_z_left"/>-->
+        <!--        <jointpos name="hip_y_left" joint="hip_y_left"/>-->
+        <!--        <jointpos name="knee_left" joint="knee_left"/>-->
+        <!--        <jointpos name="ankle_y_left" joint="ankle_y_left"/>-->
+        <!--        <jointpos name="ankle_x_left" joint="ankle_x_left"/>-->
+        <!--        <jointpos name="shoulder1_right" joint="shoulder1_right"/>-->
+        <!--        <jointpos name="shoulder2_right" joint="shoulder2_right"/>-->
+        <!--        <jointpos name="elbow_right" joint="elbow_right"/>-->
+        <!--        <jointpos name="shoulder1_left" joint="shoulder1_left"/>-->
+        <!--        <jointpos name="shoulder2_left" joint="shoulder2_left"/>-->
+        <!--        <jointpos name="elbow_left" joint="elbow_left"/>-->
 
 
         <!-- trace -->
@@ -105,5 +113,5 @@
         <framelinvel name="foot_left_velocity" objtype="body" objname="left_ankle_link"/>
     </sensor>
     <!-- the sensors have to be defined AFTER THE DEFINITION of the user sensors, therefore they are in a separate file-->
-<!--    <include file="../../h1/h1_sensors.xml"/>-->
+    <!--    <include file="../../h1/h1_sensors.xml"/>-->
 </mujocoinclude>

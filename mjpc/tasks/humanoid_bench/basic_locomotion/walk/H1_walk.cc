@@ -147,6 +147,14 @@ namespace mjpc {
         mju_copy(&residual[counter], data->ctrl, model->nu);
         counter += model->nu;
 
+        //----- target distance -----//
+        double target_x = parameters_[3];
+        double target_y = parameters_[4];
+
+        double * pelvis_pos = SensorByName(model, data, "pelvis_position");
+        residual[counter++] = pelvis_pos[0] - target_x;
+        residual[counter++] = pelvis_pos[1] - target_y;
+
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function
         int user_sensor_dim = 0;
@@ -161,5 +169,10 @@ namespace mjpc {
                     "and actual length of residual %d",
                     counter);
         }
+    }
+    void H1_walk::TransitionLocked(mjModel *model, mjData *data) {
+       double target_pos[] = {parameters[3], parameters[4], 1.0};
+
+        mju_copy3(data->mocap_pos, target_pos); // set target position
     }
 }  // namespace mjpc

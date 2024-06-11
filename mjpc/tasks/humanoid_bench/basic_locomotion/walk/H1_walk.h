@@ -28,6 +28,10 @@ namespace mjpc {
 
         H1_walk() : residual_(this) {}
 
+        // -------- Transition for humanoid_bench Walk task -------- //
+        // ------------------------------------------------------------ //
+        void TransitionLocked(mjModel *model, mjData *data) override;
+
 
     protected:
         std::unique_ptr<mjpc::ResidualFn> ResidualLocked() const override {
