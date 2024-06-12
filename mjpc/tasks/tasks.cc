@@ -93,6 +93,7 @@ namespace mjpc {
 //                std::make_shared<H1_walk_strong>(),
 //                std::make_shared<H1_walk_touch>(),
                 std::make_shared<H1_walk_G1>(),
+                std::make_shared<H1_walk_torque>(),
 //
 //
 //                //Slide Task
@@ -112,7 +113,7 @@ namespace mjpc {
 //                std::make_shared<H1_stand_touch>(),
 //
 //                //Run Task
-                std::make_shared<H1_run_position>(),
+//                std::make_shared<H1_run_position>(),
 //                std::make_shared<H1_run_hand>(),
 //                std::make_shared<H1_run_gripper>(),
 //                std::make_shared<H1_run_simple_hand>(),

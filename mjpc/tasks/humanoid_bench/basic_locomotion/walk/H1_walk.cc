@@ -148,9 +148,21 @@ namespace mjpc {
         mju_scl(&residual[counter], &residual[counter], standing, 2);
         counter += 2;
 
-//        // ----- control ----- //
-//        mju_copy(&residual[counter], data->ctrl, model->nu);
-//        counter += model->nu;
+        // ----- control ----- //
+        mju_copy(&residual[counter], data->ctrl, model->nu);
+        counter += model->nu;
+        bool any_ctrl = false;
+        for(int i = 0; i<model->nu; i++){
+            if(data->ctrl[i] > 1.0 || data->ctrl[i] < -1.0){
+                printf("ctrl[%d]: %f\n", i, data->ctrl[i]);
+                any_ctrl = true;
+            }
+
+        }
+        if(any_ctrl){
+            printf("-----------------\n");
+        }
+
 
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function

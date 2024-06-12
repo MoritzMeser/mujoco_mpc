@@ -116,7 +116,17 @@ namespace mjpc {
         std::string XmlPath() const override {
             return GetModelPath("humanoid_bench/basic_locomotion/walk/H1_walk_G1.xml");
         }
+    };
 
+    class H1_walk_torque : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk Torque Control";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("humanoid_bench/basic_locomotion/walk/H1_walk_torque.xml");
+        }
     };
 }  // namespace mjpc
 
