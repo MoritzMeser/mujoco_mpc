@@ -106,6 +106,18 @@ namespace mjpc {
             return GetModelPath("humanoid_bench/basic_locomotion/walk/H1_walk_touch.xml");
         }
     };
+
+    class H1_walk_G1 : public H1_walk {
+    public:
+        std::string Name() const override {
+            return "H1 Walk G1";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("humanoid_bench/basic_locomotion/walk/H1_walk_G1.xml");
+        }
+
+    };
 }  // namespace mjpc
 
 #endif  // MJPC_TASKS_H1_WALK_H_
