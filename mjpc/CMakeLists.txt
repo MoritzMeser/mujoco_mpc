@@ -143,8 +143,8 @@ add_library(
         tasks/humanoid_bench/utility/dm_control_utils_rewards.cpp
         tasks/humanoid_bench/balance/H1_balance.h
         tasks/humanoid_bench/balance/H1_balance.cc
-        tasks/humanoid_bench/basic_locomotion/walk/H1_walk.cc
-        tasks/humanoid_bench/basic_locomotion/walk/H1_walk.h
+        tasks/humanoid_bench/basic_locomotion/walk/walk.cc
+        tasks/humanoid_bench/basic_locomotion/walk/walk.h
         tasks/humanoid_bench/package/H1_package.h
         tasks/humanoid_bench/package/H1_package.cc
         tasks/humanoid_bench/reach/H1_reach.cc

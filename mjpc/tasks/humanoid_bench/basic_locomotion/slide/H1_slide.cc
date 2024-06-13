@@ -13,7 +13,7 @@
 
 
 namespace mjpc {
-// ----------------- Residuals for humanoid_bench walk task ---------------- //
+// ----------------- Residuals for humanoid_bench Walk task ---------------- //
 // ---------------------------------------------------------------------------- //
     void H1_slide::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const walk_speed = 1.0;

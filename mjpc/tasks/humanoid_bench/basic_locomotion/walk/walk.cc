@@ -2,7 +2,7 @@
 // Created by Moritz Meser on 15.05.24.
 //
 
-#include "H1_walk.h"
+#include "walk.h"
 
 #include <string>
 #include <limits>
@@ -16,21 +16,21 @@
 
 
 namespace mjpc {
-// ----------------- Residuals for humanoid_bench walk task ---------------- //
+// ----------------- Residuals for humanoid_bench Walk task ---------------- //
 //   Number of residuals:
 //     Residual (0): torso height
 //     Residual (1): pelvis-feet aligment
 //     Residual (2): balance
 //     Residual (3): upright
 //     Residual (4): posture
-//     Residual (5): walk
+//     Residual (5): Walk
 //     Residual (6): move feet
 //     Residual (7): control
 //   Number of parameters:
 //     Parameter (0): torso height goal
 //     Parameter (1): speed goal
 // ------------------------------------------------------------------------- //
-    void H1_walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
+    void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
 
         int counter = 0;
 
@@ -111,7 +111,7 @@ namespace mjpc {
         mju_copy(&residual[counter], data->qpos + 7, model->nq - 7);
         counter += model->nq - 7;
 
-        // ----- walk ----- //
+        // ----- Walk ----- //
         double *torso_forward = SensorByName(model, data, "torso_forward");
         double *pelvis_forward = SensorByName(model, data, "pelvis_forward");
         double *foot_right_forward = SensorByName(model, data, "foot_right_forward");
@@ -132,7 +132,7 @@ namespace mjpc {
         mju_add(com_vel, waist_lower_subcomvel, torso_velocity, 2);
         mju_scl(com_vel, com_vel, 0.5, 2);
 
-        // walk forward
+        // Walk forward
         residual[counter++] =
                 standing * (mju_dot(com_vel, forward, 2) - parameters_[1]);
 
@@ -151,18 +151,6 @@ namespace mjpc {
         // ----- control ----- //
         mju_copy(&residual[counter], data->ctrl, model->nu);
         counter += model->nu;
-        bool any_ctrl = false;
-        for(int i = 0; i<model->nu; i++){
-            if(data->ctrl[i] > 1.0 || data->ctrl[i] < -1.0){
-                printf("ctrl[%d]: %f\n", i, data->ctrl[i]);
-                any_ctrl = true;
-            }
-
-        }
-        if(any_ctrl){
-            printf("-----------------\n");
-        }
-
 
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function
