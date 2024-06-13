@@ -39,68 +39,68 @@ namespace mjpc {
     class H1_reach_position : public H1_reach {
     public:
         std::string Name() const override {
-            return "H1 Reach Position";
+            return "Reach H1";
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/reach/H1_reach_pos.xml");
+            return GetModelPath("humanoid_bench/reach/Reach_H1.xml");
         }
     };
 
-    class H1_reach_hand : public H1_reach {
-    public:
-        std::string Name() const override {
-            return "H1 Reach Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/reach/H1_reach_hand.xml");
-        }
-    };
-
-    class H1_reach_gripper : public H1_reach {
-    public:
-        std::string Name() const override {
-            return "H1 Reach Gripper";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/reach/H1_reach_gripper.xml");
-        }
-    };
-
-    class H1_reach_simple_hand : public H1_reach {
-    public:
-        std::string Name() const override {
-            return "H1 Reach Simple Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/reach/H1_reach_simple_hand.xml");
-        }
-    };
-
-    class H1_reach_strong : public H1_reach {
-    public:
-        std::string Name() const override {
-            return "H1 Reach Strong";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/reach/H1_reach_strong.xml");
-        }
-    };
-
-    class H1_reach_touch : public H1_reach {
-    public:
-        std::string Name() const override {
-            return "H1 Reach Touch";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/reach/H1_reach_touch.xml");
-        }
-    };
+//    class H1_reach_hand : public H1_reach {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Reach Hand";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/reach/H1_reach_hand.xml");
+//        }
+//    };
+//
+//    class H1_reach_gripper : public H1_reach {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Reach Gripper";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/reach/H1_reach_gripper.xml");
+//        }
+//    };
+//
+//    class H1_reach_simple_hand : public H1_reach {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Reach Simple Hand";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/reach/H1_reach_simple_hand.xml");
+//        }
+//    };
+//
+//    class H1_reach_strong : public H1_reach {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Reach Strong";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/reach/H1_reach_strong.xml");
+//        }
+//    };
+//
+//    class H1_reach_touch : public H1_reach {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Reach Touch";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/reach/H1_reach_touch.xml");
+//        }
+//    };
 }  // namespace mjpc
 
 #endif  // MJPC_TASKS_H1_REACH_H_
