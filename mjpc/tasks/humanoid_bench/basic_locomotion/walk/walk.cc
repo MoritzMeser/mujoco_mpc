@@ -85,6 +85,7 @@ namespace mjpc {
 
         counter += 2;
 
+
         // ----- upright ----- //
         double *torso_up = SensorByName(model, data, "torso_up");
         double *pelvis_up = SensorByName(model, data, "pelvis_up");
@@ -107,8 +108,13 @@ namespace mjpc {
         mju_scl3(&residual[counter], &residual[counter], 0.1 * standing);
         counter += 3;
 
-        // ----- posture ----- //
-        mju_copy(&residual[counter], data->qpos + 7, model->nq - 7);
+//        // ----- posture ----- //
+//        mju_copy(&residual[counter], data->qpos + 7, model->nq - 7);
+//        counter += model->nq - 7;
+
+        std::array<double, 27> qpos_initial = {0, 0, 0.98, 1, 0, 0, 0, 0, 0, -0.4, 0.8, -0.4, 0, 0, -0.4, 0.8, -0.4, 0,
+                                               0, 0, 0, 0, 0, 0, 0, 0, 0};
+        mju_sub(&residual[counter], data->qpos + 7, qpos_initial.data() + 7, model->nq - 7);
         counter += model->nq - 7;
 
         // ----- Walk ----- //
@@ -123,6 +129,15 @@ namespace mjpc {
         mju_addTo(forward, foot_right_forward, 2);
         mju_addTo(forward, foot_left_forward, 2);
         mju_normalize(forward, 2);
+
+        // Face in right-direction
+        double goal_direction = parameters_[2];
+        // from degree to radian
+        goal_direction = goal_direction * M_PI / 180;
+        double face_x[2] = {cos(goal_direction), sin(goal_direction)};
+        mju_sub(&residual[counter], forward, face_x, 2);
+        mju_scl(&residual[counter], &residual[counter], standing, 2);
+        counter += 2;
 
         // com vel
         double *waist_lower_subcomvel =
@@ -149,7 +164,8 @@ namespace mjpc {
         counter += 2;
 
         // ----- control ----- //
-        mju_copy(&residual[counter], data->ctrl, model->nu);
+//        mju_copy(&residual[counter], data->ctrl, model->nu);
+        mju_sub(&residual[counter], data->ctrl, qpos_initial.data() + 7, model->nq - 7); // because of pos control
         counter += model->nu;
 
         // sensor dim sanity check

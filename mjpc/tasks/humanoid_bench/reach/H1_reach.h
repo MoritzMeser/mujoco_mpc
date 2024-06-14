@@ -15,13 +15,17 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_reach *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_reach *task) : mjpc::BaseResidualFn(task),
+                                                        task_(const_cast<H1_reach *>(task)) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
+
+        private:
+            H1_reach *task_;
         };
 
-        H1_reach() : residual_(this), target_position_({1000.0, 1.0, 1.0}) {}
+        H1_reach() : residual_(this), target_position_({0.4, 0.1, 1.0}), use_left_hand_(true) {}
 
         void TransitionLocked(mjModel *model, mjData *data) override;
 
@@ -35,6 +39,7 @@ namespace mjpc {
     private:
         ResidualFn residual_;
         std::array<double, 3> target_position_;
+        bool use_left_hand_;
     };
 
     class H1_reach_position : public H1_reach {
