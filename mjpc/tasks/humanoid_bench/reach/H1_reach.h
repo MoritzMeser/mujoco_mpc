@@ -21,7 +21,7 @@ namespace mjpc {
                           double *residual) const override;
         };
 
-        H1_reach() : residual_(this) {}
+        H1_reach() : residual_(this), target_position_({1000.0, 1.0, 1.0}) {}
 
         void TransitionLocked(mjModel *model, mjData *data) override;
 
@@ -34,6 +34,7 @@ namespace mjpc {
 
     private:
         ResidualFn residual_;
+        std::array<double, 3> target_position_;
     };
 
     class H1_reach_position : public H1_reach {

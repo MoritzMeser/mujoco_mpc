@@ -18,6 +18,33 @@ namespace mjpc {
         double const height_goal = parameters_[0];
         double const walk_speed = parameters_[1];
 
+
+        //
+        //
+        //
+
+        // print initial position of pelvis
+//        double *pelvis_position = SensorByName(model, data, "pelvis_position");
+//        printf("pelvis_position: %f %f %f\n", pelvis_position[0], pelvis_position[1], pelvis_position[2]);
+//
+//        // print initial quaternion of pelvis
+//        double *pelvis_orientation = SensorByName(model, data, "pelvis_orientation");
+//        printf("pelvis_orientation: %f %f %f %f\n", pelvis_orientation[0], pelvis_orientation[1], pelvis_orientation[2], pelvis_orientation[3]);
+//        pelvis_position: -0.000163 0.000612 0.992704
+//        pelvis_orientation: 0.483195 0.485925 -0.512847 0.517095
+        //qpos="0 0 0.98 1 0 0 0 0
+        //
+        //
+        //
+
+//        data->qpos[0] = 0;
+//        data->qpos[1] = 0;
+//        data->qpos[2] = 0.98;
+//        data->qpos[3] = 1;
+//        data->qpos[4] = 0;
+//        data->qpos[5] = 0;
+//        data->qpos[6] = 0;
+//
         int counter = 0;
 
         // ----- Height: head feet vertical error ----- //
@@ -222,18 +249,20 @@ namespace mjpc {
 // -------- Transition for humanoid_bench reach task -------- //
 // ------------------------------------------------------------- //
     void H1_reach::TransitionLocked(mjModel *model, mjData *data) {
-        double *goal_pos = SensorByName(model, data, "goal_pos");
+
+//        double *goal_pos = SensorByName(model, data, "goal_pos");
         double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
-        double hand_dist = std::sqrt(std::pow(goal_pos[0] - left_hand_pos[0], 2) +
-                                     std::pow(goal_pos[1] - left_hand_pos[1], 2) +
-                                     std::pow(goal_pos[2] - left_hand_pos[2], 2));
+        double hand_dist = std::sqrt(std::pow(target_position_[0] - left_hand_pos[0], 2) +
+                                     std::pow(target_position_[1] - left_hand_pos[1], 2) +
+                                     std::pow(target_position_[2] - left_hand_pos[2], 2));
         // check if task is done
-        if (hand_dist < 0.01) {
+        if ((hand_dist < 0.1 || hand_dist > 100) && data->time > 0.1) {
+//        if (true) {
             printf("hand pos %f %f %f\n", left_hand_pos[0], left_hand_pos[1], left_hand_pos[2]);
-            printf("goal pos %f %f %f\n", goal_pos[0], goal_pos[1], goal_pos[2]);
+            printf("goal pos %f %f %f\n", target_position_[0], target_position_[1], target_position_[2]);
             // generate new random target
-            std::array<double, 3> target_low = {0, 0.2, 1.0};
-            std::array<double, 3> target_high = {1, 0.4, 1.6};
+            std::array<double, 3> target_low = {0, -0.15, -0.15};
+            std::array<double, 3> target_high = {0.15, 0.15, 0.15};
             std::random_device rd;
             std::mt19937 gen(rd());
             std::array<double, 3> new_target = {0, 0, 0};
@@ -241,9 +270,43 @@ namespace mjpc {
                 std::uniform_real_distribution<> dis(target_low[i], target_high[i]);
                 new_target[i] = dis(gen);
             }
-            // copy new target to mocap_pos
-            mju_copy3(data->mocap_pos, new_target.data());
+            printf("random target %f %f %f\n", new_target[0], new_target[1], new_target[2]);
+
+            double left_hand_offset[3] = {0.3, 0.2, -0.1};
+            mju_add3(new_target.data(), new_target.data(), left_hand_offset);
+
+            // move new target to front of robot
+            double *pelvis_position = SensorByName(model, data, "torso_position");
+            double *pelvis_orientation = SensorByName(model, data, "torso_orientation");
+
+            // Compute the relative target position in the local coordinate system of the pelvis
+            double relative_target_pos[3] = {new_target[0], new_target[1], new_target[2]};
+
+// Convert the pelvis's orientation quaternion to a rotation matrix
+            double pelvis_rotmat[9];
+            mju_quat2Mat(pelvis_rotmat, pelvis_orientation);
+
+// Multiply the relative target position by the rotation matrix to rotate it according to the pelvis's orientation
+            double rotated_relative_target_pos[3];
+            mju_mulMatVec(rotated_relative_target_pos, pelvis_rotmat, relative_target_pos, 3, 3);
+
+// Add the rotated relative target position to the pelvis's position to get the target position in the global coordinate system
+            double global_target_pos[3];
+            mju_add(global_target_pos, pelvis_position, rotated_relative_target_pos, 3);
+
+// Copy the global target position to mocap_pos
+            target_position_[0] = global_target_pos[0];
+            target_position_[1] = global_target_pos[1];
+            target_position_[2] = global_target_pos[2];
+
+            printf("new target %f %f %f\n", target_position_[0], target_position_[1], target_position_[2]);
+
+//            // copy new target to mocap_pos
+//            mju_copy3(data->mocap_pos, new_target.data());
         }
+        mju_copy3(data->mocap_pos, target_position_.data());
+        mju_copy3(data->mocap_pos + 3, left_hand_pos);
     }
+
 
 }  // namespace mjpc

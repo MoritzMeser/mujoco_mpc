@@ -200,6 +200,7 @@
                                 <geom class="visual" mesh="left_elbow_link"/>
                                 <geom class="collision" mesh="left_elbow_link"/>
                                 <site name="left_hand" pos="0.31 0 -0.01" rgba="0 1 0 1" size="0.01"/>
+<!--                                <site name="left_hand" pos="0.31 0 -0.01" rgba="0 1 0 1" size="0.01"/>-->
                                 <body name="left_hand" pos="0.31 0 -0.01"/>
                             </body>
                         </body>
