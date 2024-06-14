@@ -225,7 +225,16 @@ namespace mjpc {
 //         ----- reach task ----- //
         double *goal_pos = SensorByName(model, data, "goal_pos");
         double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
-        mju_sub3(&residual[counter], goal_pos, left_hand_pos);
+        double *right_hand_pos = SensorByName(model, data, "right_hand_pos");
+//        printf(task_->use_left_hand_ ? "left hand in residual\n" : "right hand in residual\n");
+
+
+        if (task_->use_left_hand_) {
+            mju_sub3(&residual[counter], goal_pos, left_hand_pos);
+        } else {
+            mju_sub3(&residual[counter], goal_pos, right_hand_pos);
+        }
+
         mju_scl(&residual[counter], &residual[counter], standing, 3);
         counter += 3;
 
@@ -250,19 +259,26 @@ namespace mjpc {
 // ------------------------------------------------------------- //
     void H1_reach::TransitionLocked(mjModel *model, mjData *data) {
 
+
+//        printf(use_left_hand_ ? "left hand in trans\n" : "right hand in trans\n");
 //        double *goal_pos = SensorByName(model, data, "goal_pos");
-        double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
-        double hand_dist = std::sqrt(std::pow(target_position_[0] - left_hand_pos[0], 2) +
-                                     std::pow(target_position_[1] - left_hand_pos[1], 2) +
-                                     std::pow(target_position_[2] - left_hand_pos[2], 2));
+        double *hand_pos;
+        if (use_left_hand_) {
+            hand_pos = SensorByName(model, data, "left_hand_pos");
+        } else {
+            hand_pos = SensorByName(model, data, "right_hand_pos");
+        }
+        double hand_dist = std::sqrt(std::pow(target_position_[0] - hand_pos[0], 2) +
+                                     std::pow(target_position_[1] - hand_pos[1], 2) +
+                                     std::pow(target_position_[2] - hand_pos[2], 2));
         // check if task is done
-        if ((hand_dist < 0.1 || hand_dist > 100) && data->time > 0.1) {
+        if ((hand_dist < 0.05 || hand_dist > 100) && data->time > 0.1) {
 //        if (true) {
-            printf("hand pos %f %f %f\n", left_hand_pos[0], left_hand_pos[1], left_hand_pos[2]);
-            printf("goal pos %f %f %f\n", target_position_[0], target_position_[1], target_position_[2]);
+//            printf("hand pos %f %f %f\n", left_hand_pos[0], left_hand_pos[1], left_hand_pos[2]);
+//            printf("goal pos %f %f %f\n", target_position_[0], target_position_[1], target_position_[2]);
             // generate new random target
-            std::array<double, 3> target_low = {0, -0.15, -0.15};
-            std::array<double, 3> target_high = {0.15, 0.15, 0.15};
+            std::array<double, 3> target_low = {0, -0.20, -0.30};
+            std::array<double, 3> target_high = {0.20, 0.20, 0.30};
             std::random_device rd;
             std::mt19937 gen(rd());
             std::array<double, 3> new_target = {0, 0, 0};
@@ -272,8 +288,14 @@ namespace mjpc {
             }
             printf("random target %f %f %f\n", new_target[0], new_target[1], new_target[2]);
 
-            double left_hand_offset[3] = {0.3, 0.2, -0.1};
-            mju_add3(new_target.data(), new_target.data(), left_hand_offset);
+            double left_hand_offset[3] = {0.3, -0.2, -0.1};
+            double right_hand_offset[3] = {0.3, 0.2, -0.1};
+            if (use_left_hand_) {
+                mju_add3(new_target.data(), new_target.data(), left_hand_offset);
+            } else {
+                mju_add3(new_target.data(), new_target.data(), right_hand_offset);
+            }
+
 
             // move new target to front of robot
             double *pelvis_position = SensorByName(model, data, "torso_position");
@@ -300,12 +322,13 @@ namespace mjpc {
             target_position_[2] = global_target_pos[2];
 
             printf("new target %f %f %f\n", target_position_[0], target_position_[1], target_position_[2]);
+            use_left_hand_ = !use_left_hand_;
 
 //            // copy new target to mocap_pos
 //            mju_copy3(data->mocap_pos, new_target.data());
         }
         mju_copy3(data->mocap_pos, target_position_.data());
-        mju_copy3(data->mocap_pos + 3, left_hand_pos);
+        mju_copy3(data->mocap_pos + 3, hand_pos);
     }
 
 

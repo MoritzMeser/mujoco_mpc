@@ -72,6 +72,7 @@
         <!--        sensor for the reach task-->
         <framepos name="goal_pos" objtype="body" objname="target"/>
         <framepos name="left_hand_pos" objtype="site" objname="left_hand"/>
+        <framepos name="right_hand_pos" objtype="site" objname="right_hand"/>
 
         <framequat name="pelvis_orientation" objtype="body" objname="pelvis"/>
         <framequat name="torso_orientation" objtype="body" objname="torso_link"/>
