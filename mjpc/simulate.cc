@@ -2063,7 +2063,7 @@ namespace mujoco {
         // run event loop
 //  while (!this->platform_ui->ShouldCloseWindow() && !this->exitrequest.load()) {
 
-        cv::VideoWriter video("/Users/moritzmeser/Desktop/video.mp4", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 10,
+        cv::VideoWriter video("/Users/moritzmeser/Desktop/video_2.mp4", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 10,
                               cv::Size(3412, 1920));
         for (int i = 0; i < 100; i++) {
             {
