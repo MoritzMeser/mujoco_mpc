@@ -94,6 +94,7 @@ namespace mjpc {
         double *pelvis_up = SensorByName(model, data, "pelvis_up");
         double *foot_right_up = SensorByName(model, data, "foot_right_up");
         double *foot_left_up = SensorByName(model, data, "foot_left_up");
+
         double z_ref[3] = {0.0, 0.0, 1.0};
 
         // torso

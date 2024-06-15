@@ -93,7 +93,7 @@ namespace mjpc {
 //                std::make_shared<H1_walk_strong>(),
 //                std::make_shared<H1_walk_touch>(),
                 std::make_shared<Walk_G1>(),
-                std::make_shared<Walk_H1_Torque>(),
+//                std::make_shared<Walk_H1_Torque>(),
 //
 //
 //                //Slide Task
@@ -122,7 +122,7 @@ namespace mjpc {
 //                std::make_shared<H1_run_touch>(),
 //
 //                //Stairs Task
-                std::make_shared<H1_stairs_position>(),
+//                std::make_shared<H1_stairs_position>(),
 //                std::make_shared<H1_stairs_hand>(),
 //                std::make_shared<H1_stairs_gripper>(),
 //                std::make_shared<H1_stairs_simple_hand>(),
@@ -130,7 +130,7 @@ namespace mjpc {
 //                std::make_shared<H1_stairs_touch>(),
 //
 //                //Crawl Task
-                std::make_shared<H1_crawl_position>(),
+//                std::make_shared<H1_crawl_position>(),
 //                std::make_shared<H1_crawl_hand>(),
 //                std::make_shared<H1_crawl_gripper>(),
 //                std::make_shared<H1_crawl_simple_hand>(),
@@ -138,7 +138,7 @@ namespace mjpc {
 //                std::make_shared<H1_crawl_touch>(),
 //
 //                //Sit Task
-                std::make_shared<H1_sit_position>(),
+//                std::make_shared<H1_sit_position>(),
 //                std::make_shared<H1_sit_hand>(),
 //                std::make_shared<H1_sit_gripper>(),
 //                std::make_shared<H1_sit_simple_hand>(),
@@ -146,7 +146,7 @@ namespace mjpc {
 //                std::make_shared<H1_sit_touch>(),
 //
 //                //Hurdle Task
-                std::make_shared<H1_hurdle_position>(),
+//                std::make_shared<H1_hurdle_position>(),
 //                std::make_shared<H1_hurdle_hand>(),
 //                std::make_shared<H1_hurdle_gripper>(),
 //                std::make_shared<H1_hurdle_simple_hand>(),
@@ -194,7 +194,7 @@ namespace mjpc {
 //                std::make_shared<H1_door_touch>(),
 //
 //                //High Bar Task
-                std::make_shared<H1_highbar_position>(),
+//                std::make_shared<H1_highbar_position>(),
 //                std::make_shared<H1_highbar_hand>(),
 //                std::make_shared<H1_highbar_gripper>(),
 //                std::make_shared<H1_highbar_simple_hand>(),
@@ -226,15 +226,15 @@ namespace mjpc {
 //                std::make_shared<H1_maze_touch>(),
 //
 //                //Package Task
-                std::make_shared<H1_package_position>(),
-                std::make_shared<H1_package_hand>(),
+//                std::make_shared<H1_package_position>(),
+//                std::make_shared<H1_package_hand>(),
 //                std::make_shared<H1_package_gripper>(),
 //                std::make_shared<H1_package_simple_hand>(),
 //                std::make_shared<H1_package_strong>(),
 //                std::make_shared<H1_package_touch>(),
 //
 //                //Poles Task
-                std::make_shared<H1_poles_position>(),
+//                std::make_shared<H1_poles_position>(),
 //                std::make_shared<H1_poles_hand>(),
 //                std::make_shared<H1_poles_gripper>(),
 //                std::make_shared<H1_poles_simple_hand>(),
