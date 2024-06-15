@@ -40,7 +40,7 @@
 #include "mjpc/tasks/walker/walker.h"
 // Humanoid Bench Tasks
 #include "mjpc/tasks/humanoid_bench/basic_locomotion/walk/walk.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/stand/H1_stand.h"
+#include "mjpc/tasks/humanoid_bench/basic_locomotion/stand/stand.h"
 #include "mjpc/tasks/humanoid_bench/basic_locomotion/run/H1_run.h"
 #include "mjpc/tasks/humanoid_bench/basic_locomotion/stairs/H1_stairs.h"
 #include "mjpc/tasks/humanoid_bench/basic_locomotion/slide/H1_slide.h"
@@ -105,12 +105,13 @@ namespace mjpc {
 //                std::make_shared<H1_slide_touch>(),
 //
 //                //Stand Task
-                std::make_shared<H1_stand_position>(),
+                std::make_shared<Stand_H1>(),
 //                std::make_shared<H1_stand_hand>(),
 //                std::make_shared<H1_stand_gripper>(),
 //                std::make_shared<H1_stand_simple_hand>(),
 //                std::make_shared<H1_stand_strong>(),
 //                std::make_shared<H1_stand_touch>(),
+                std::make_shared<Stand_G1>(),
 //
 //                //Run Task
 //                std::make_shared<H1_run_position>(),

@@ -150,8 +150,8 @@ add_library(
         tasks/humanoid_bench/reach/H1_reach.cc
         tasks/humanoid_bench/basic_locomotion/walk_reward.cc
         tasks/humanoid_bench/basic_locomotion/walk_reward.h
-        tasks/humanoid_bench/basic_locomotion/stand/H1_stand.cc
-        tasks/humanoid_bench/basic_locomotion/stand/H1_stand.h
+        tasks/humanoid_bench/basic_locomotion/stand/stand.cc
+        tasks/humanoid_bench/basic_locomotion/stand/stand.h
         tasks/humanoid_bench/basic_locomotion/run/H1_run.cc
         tasks/humanoid_bench/basic_locomotion/run/H1_run.h
         tasks/humanoid_bench/basic_locomotion/stairs/H1_stairs.cc
