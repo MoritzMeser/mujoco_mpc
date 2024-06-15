@@ -432,19 +432,19 @@
         <motor name="right_shoulder_yaw_joint" joint="right_shoulder_yaw_joint" ctrllimited="true" ctrlrange="-20 20"/>
         <motor name="right_elbow_pitch_joint" joint="right_elbow_pitch_joint" ctrllimited="true" ctrlrange="-20 20"/>
         <motor name="right_elbow_roll_joint" joint="right_elbow_roll_joint" ctrllimited="true" ctrlrange="-20 20"/>
-<!--        <motor name="left_zero_joint" joint="left_zero_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="left_one_joint" joint="left_one_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="left_two_joint" joint="left_two_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="left_three_joint" joint="left_three_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="left_four_joint" joint="left_four_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="left_five_joint" joint="left_five_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="left_six_joint" joint="left_six_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="right_zero_joint" joint="right_zero_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="right_one_joint" joint="right_one_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="right_two_joint" joint="right_two_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="right_three_joint" joint="right_three_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="right_four_joint" joint="right_four_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="right_five_joint" joint="right_five_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
-<!--        <motor name="right_six_joint" joint="right_six_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>-->
+        <motor name="left_zero_joint" joint="left_zero_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="left_one_joint" joint="left_one_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="left_two_joint" joint="left_two_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="left_three_joint" joint="left_three_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="left_four_joint" joint="left_four_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="left_five_joint" joint="left_five_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="left_six_joint" joint="left_six_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="right_zero_joint" joint="right_zero_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="right_one_joint" joint="right_one_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="right_two_joint" joint="right_two_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="right_three_joint" joint="right_three_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="right_four_joint" joint="right_four_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="right_five_joint" joint="right_five_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
+        <motor name="right_six_joint" joint="right_six_joint" ctrllimited="true" ctrlrange="-0.7 0.7"/>
     </actuator>
 </mujoco>

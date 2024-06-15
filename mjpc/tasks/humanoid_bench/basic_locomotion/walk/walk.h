@@ -43,7 +43,7 @@ namespace mjpc {
     class Walk_H1 : public Walk {
     public:
         std::string Name() const override {
-            return "Walk H1 no Hands";
+            return "Walk H1";
         }
 
         std::string XmlPath() const override {

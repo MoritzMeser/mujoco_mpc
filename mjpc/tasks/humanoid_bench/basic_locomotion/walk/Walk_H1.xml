@@ -1,4 +1,4 @@
-<mujoco model="Walk H1 no Hands">
+<mujoco model="Walk H1">
     <include file="../../h1/h1_pos.xml"/>
     <include file="../../../common.xml"/>
     <include file="../../../floor.xml"/>
