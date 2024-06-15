@@ -74,7 +74,7 @@ class MJSIMULATEAPI Simulate {
   void PrepareScene();
 
   // render the ui to the window
-  void Render();
+  std::optional<unsigned char *> Render();
 
   // one-off preparation before starting to render (e.g., memory allocation)
   void InitializeRenderLoop();

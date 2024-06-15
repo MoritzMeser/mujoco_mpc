@@ -294,3 +294,9 @@ endif ()
 if (MJPC_BUILD_GRPC_SERVICE)
     add_subdirectory(grpc)
 endif ()
+
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(mjpc ${OpenCV_LIBS})
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-anon-enum-enum-conversion")
