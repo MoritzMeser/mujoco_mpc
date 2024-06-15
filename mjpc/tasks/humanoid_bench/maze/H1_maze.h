@@ -53,11 +53,11 @@ namespace mjpc {
     class H1_maze_position : public H1_maze {
     public:
         std::string Name() const override {
-            return "H1 Maze Position";
+            return "Maze H1";
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/maze/H1_maze_pos.xml");
+            return GetModelPath("humanoid_bench/maze/Maze_H1.xml");
         }
     };
 
