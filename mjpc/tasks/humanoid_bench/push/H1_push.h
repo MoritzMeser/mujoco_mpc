@@ -36,71 +36,71 @@ namespace mjpc {
         ResidualFn residual_;
     };
 
-    class H1_push_position : public H1_push {
+    class Push_H1 : public H1_push {
     public:
         std::string Name() const override {
-            return "H1 Push Position";
+            return "Push H1";
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/push/H1_push_pos.xml");
+            return GetModelPath("humanoid_bench/push/Push_H1.xml");
         }
     };
 
-    class H1_push_hand : public H1_push {
-    public:
-        std::string Name() const override {
-            return "H1 Push Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/push/H1_push_hand.xml");
-        }
-    };
-
-    class H1_push_gripper : public H1_push {
-    public:
-        std::string Name() const override {
-            return "H1 Push Gripper";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/push/H1_push_gripper.xml");
-        }
-    };
-
-    class H1_push_simple_hand : public H1_push {
-    public:
-        std::string Name() const override {
-            return "H1 Push Simple Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/push/H1_push_simple_hand.xml");
-        }
-    };
-
-    class H1_push_strong : public H1_push {
-    public:
-        std::string Name() const override {
-            return "H1 Push Strong";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/push/H1_push_strong.xml");
-        }
-    };
-
-    class H1_push_touch : public H1_push {
-    public:
-        std::string Name() const override {
-            return "H1 Push Touch";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/push/H1_push_touch.xml");
-        }
-    };
+//    class H1_push_hand : public H1_push {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Push Hand";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/push/H1_push_hand.xml");
+//        }
+//    };
+//
+//    class H1_push_gripper : public H1_push {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Push Gripper";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/push/H1_push_gripper.xml");
+//        }
+//    };
+//
+//    class H1_push_simple_hand : public H1_push {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Push Simple Hand";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/push/H1_push_simple_hand.xml");
+//        }
+//    };
+//
+//    class H1_push_strong : public H1_push {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Push Strong";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/push/H1_push_strong.xml");
+//        }
+//    };
+//
+//    class H1_push_touch : public H1_push {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Push Touch";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/push/H1_push_touch.xml");
+//        }
+//    };
 }  // namespace mjpc
 
 #endif //MUJOCO_MPC_H1_PUSH_H
