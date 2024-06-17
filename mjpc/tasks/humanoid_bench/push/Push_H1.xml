@@ -19,6 +19,8 @@
         <numeric name="gradient_spline_points" data="5"/>
         <numeric name="residual_Height Goal" data="1.65 0.0 1.5"/>
         <numeric name="residual_Speed" data="0.0 0.0 5.0"/>
+        <numeric name="residual_target_x" data="0.7 0.5 1"/>
+        <numeric name="residual_target_y" data="0 -1 1"/>
     </custom>
 
     <sensor>
@@ -35,6 +37,8 @@
 
         <!--        task specific cost terms-->
         <user name="goal dist" dim="3" user="6 0.0 0.0 100.0 0.1"/>
+        <user name="left_hand_dist" dim="3" user="6 0.0 0.0 100.0 0.1"/>
+        <user name="right_hand_dist" dim="3" user="6 0.0 0.0 100.0 0.1"/>
 
 
         <!--        traces-->

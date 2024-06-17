@@ -193,10 +193,24 @@ namespace mjpc {
         counter += model->nu;
 
         // ------ object position ------ //
-        double const goal_pos[] = {1.0, 0.0, 1.0};
-        double const * object_pos = SensorByName(model, data, "object_pos");
+        double const *goal_pos = task_->target_position_.data();
+        double const *object_pos = SensorByName(model, data, "object_pos");
 
         mju_sub3(&residual[counter], object_pos, goal_pos);
+        mju_scl3(&residual[counter], &residual[counter], standing);
+        counter += 3;
+
+        // ----- left hand distance ----- //
+        double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
+        mju_sub3(&residual[counter], left_hand_pos, object_pos);
+        residual[counter + 1] -= 0.1;
+        mju_scl3(&residual[counter], &residual[counter], standing);
+        counter += 3;
+
+        // ----- right hand distance ----- //
+        double *right_hand_pos = SensorByName(model, data, "right_hand_pos");
+        mju_sub3(&residual[counter], right_hand_pos, object_pos);
+        residual[counter + 1] += 0.1;
         mju_scl3(&residual[counter], &residual[counter], standing);
         counter += 3;
 
@@ -220,7 +234,8 @@ namespace mjpc {
 // -------- Transition for humanoid_bench push task -------- //
 // ------------------------------------------------------------ //
     void H1_push::TransitionLocked(mjModel *model, mjData *data) {
-        //
+        target_position_ = {parameters[2], parameters[3], 1.0};
+        mju_copy3(data->mocap_pos, target_position_.data());
     }
 
 }  // namespace mjpc

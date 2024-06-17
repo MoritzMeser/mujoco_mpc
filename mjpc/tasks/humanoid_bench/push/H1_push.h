@@ -15,25 +15,39 @@ namespace mjpc {
 
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
-            explicit ResidualFn(const H1_push *task) : mjpc::BaseResidualFn(task) {}
+            explicit ResidualFn(const H1_push *task) : mjpc::BaseResidualFn(task),
+                                                       task_(const_cast<H1_push *>(task)) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
+
+        private:
+            H1_push *task_;
+
         };
 
-        H1_push() : residual_(this) {}
+        H1_push() : residual_(this), target_position_({0.4, 0.0, 1.0}) {}
 
         void TransitionLocked(mjModel *model, mjData *data) override;
 
     protected:
-        std::unique_ptr<mjpc::ResidualFn> ResidualLocked() const override {
+
+        std::unique_ptr<mjpc::ResidualFn> ResidualLocked() const
+
+        override {
             return std::make_unique<ResidualFn>(this);
         }
 
-        ResidualFn *InternalResidual() override { return &residual_; }
+        ResidualFn *InternalResidual()
+
+        override {
+            return &
+                    residual_;
+        }
 
     private:
         ResidualFn residual_;
+        std::array<double, 3> target_position_;
     };
 
     class Push_H1 : public H1_push {

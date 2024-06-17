@@ -33,5 +33,9 @@
             <geom name="object" type="box" size=".1 .1 .1" rgba="0.67 0.73 0.78 1" class="visual"/>
             <geom name="object_collision" type="box" size=".1 .1 .1" class="collision"/>
         </body>
+
+        <body name="target" mocap="true" pos="1.0 0.0 1.0">
+            <geom type="sphere" size="0.1" contype="0" conaffinity="0" rgba="0 1 0 .5"/>
+        </body>
     </worldbody>
 </mujocoinclude>
