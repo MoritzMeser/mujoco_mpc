@@ -1,4 +1,4 @@
-// Copyright 2023 DeepMind Technologies Limited
+ // Copyright 2023 DeepMind Technologies Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
   mjpc::agent_grpc::AgentService service(mjpc::GetTasks(),
                                          absl::GetFlag(FLAGS_mjpc_workers));
-  builder.SetMaxReceiveMessageSize(40 * 1024 * 1024);
+  builder.SetMaxReceiveMessageSize(40 * 1024 * 1024 * 4);
   builder.RegisterService(&service);
 
   std::unique_ptr<grpc::Server> server(builder.BuildAndStart());

@@ -1,4 +1,4 @@
-<mujoco model="H1 Maze new">
+<mujoco model="Maze H1">
     <include file="../h1/h1_pos.xml"/>
     <include file="maze.xml"/>
     <include file="../../common.xml"/>
@@ -27,7 +27,6 @@
         <numeric name="gradient_spline_points" data="5"/>
         <numeric name="residual_Torso" data="1.25 0 1.7"/>
         <numeric name="residual_Speed" data="1.0 0.0 5.0"/>
-        <numeric name="residual_direction" data="0 -45 45"/>
     </custom>
 
 

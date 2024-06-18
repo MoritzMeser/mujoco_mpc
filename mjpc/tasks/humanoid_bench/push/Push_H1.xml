@@ -11,7 +11,7 @@
     </keyframe>
 
     <custom>
-        <numeric name="agent_planner" data="2"/>
+        <numeric name="agent_planner" data="3"/>
         <numeric name="agent_horizon" data="0.35"/>
         <numeric name="agent_timestep" data="0.015"/>
         <numeric name="sampling_spline_points" data="3"/>
@@ -36,9 +36,9 @@
         <user name="Control" dim="19" user="3 0.1 0 1.0 0.3"/>
 
         <!--        task specific cost terms-->
-        <user name="goal dist" dim="3" user="6 0.0 0.0 100.0 0.1"/>
-        <user name="left_hand_dist" dim="3" user="6 0.0 0.0 100.0 0.1"/>
-        <user name="right_hand_dist" dim="3" user="6 0.0 0.0 100.0 0.1"/>
+        <user name="goal dist" dim="3" user="6 37.0 0.0 100.0 0.1"/>
+        <user name="left_hand_dist" dim="3" user="6 10.0 0.0 100.0 0.1"/>
+        <user name="right_hand_dist" dim="3" user="6 10.0 0.0 100.0 0.1"/>
 
 
         <!--        traces-->

@@ -23,6 +23,7 @@
 
     <sensor>
         <!-- cost -->
+        <user name="humanoid_bench" dim="1" user="6 0.0 0.0 100.0 0.0"/>
         <user name="Height" dim="1" user="7 5.0 0 25.0 0.1 4.0"/>
         <user name="Pelvis/Feet" dim="1" user="8 1.0 0.0 10.0 0.05"/>
         <user name="Balance" dim="2" user="1 5.0 0.0 25.0 0.02 4.0"/>

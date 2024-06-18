@@ -68,6 +68,7 @@ namespace mjpc {
                         if (CheckAnyCollision(model, data, geom_id)) {
 //                            wall_collision_discount = 0.1;
                             wall_collision = true;
+                            printf("Wall collision detected\n");
                             break;
                         }
                     }
@@ -229,14 +230,9 @@ namespace mjpc {
         mju_scl3(&residual[counter], &residual[counter], 0.1 * standing);
         counter += 3;
 
-//        // ----- posture ----- //
-//        mju_copy(&residual[counter], data->qpos + 7, model->nq - 7);
-//        counter += model->nq - 7;
-
-        std::array<double, 27> qpos_initial = {0, 0, 0.98, 1, 0, 0, 0, 0, 0, -0.4, 0.8, -0.4, 0, 0, -0.4, 0.8, -0.4, 0,
-                                               0, 0, 0, 0, 0, 0, 0, 0, 0};
-        mju_sub(&residual[counter], data->qpos + 7, qpos_initial.data() + 7, model->nq - 7);
-        counter += model->nq - 7;
+        // ----- posture ----- //
+        mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
+        counter += model->nu;
 
         // ----- Walk ----- //
         double *torso_forward = SensorByName(model, data, "torso_forward");
@@ -295,8 +291,7 @@ namespace mjpc {
         counter += 2;
 
         // ----- control ----- //
-//        mju_copy(&residual[counter], data->ctrl, model->nu);
-        mju_sub(&residual[counter], data->ctrl, qpos_initial.data() + 7, model->nq - 7); // because of pos control
+        mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nu); // because of pos control
         counter += model->nu;
 
         // sensor dim sanity check

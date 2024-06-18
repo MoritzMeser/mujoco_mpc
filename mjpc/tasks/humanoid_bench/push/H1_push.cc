@@ -157,6 +157,9 @@ namespace mjpc {
         residual[counter + 0] = data->qpos[0];
         residual[counter + 1] = data->qpos[1];
         residual[counter + 2] = 1.0 - data->qpos[2];
+//        residual[counter + 0] = 0.0;
+//        residual[counter + 1] = 0.0;
+//        residual[counter + 2] = 0.0;
         residual[counter + 3] = 1.0 - data->qpos[3];
         residual[counter + 4] = data->qpos[4];
         residual[counter + 5] = data->qpos[5];
@@ -196,24 +199,42 @@ namespace mjpc {
         double const *goal_pos = task_->target_position_.data();
         double const *object_pos = SensorByName(model, data, "object_pos");
 
-        mju_sub3(&residual[counter], object_pos, goal_pos);
-        mju_scl3(&residual[counter], &residual[counter], standing);
-        counter += 3;
 
-        // ----- left hand distance ----- //
-        double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
-        mju_sub3(&residual[counter], left_hand_pos, object_pos);
+        double object_dist = mju_dist3(object_pos, goal_pos);
+        if (object_dist > -0.05) {//TODO this is a hack
+            mju_sub3(&residual[counter], object_pos, goal_pos);
+            mju_scl3(&residual[counter], &residual[counter], standing);
+            counter += 3;
+
+            double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
+            double *right_hand_pos = SensorByName(model, data, "right_hand_pos");
+
+            double left_hand_dist = mju_dist3(left_hand_pos, object_pos);
+            double right_hand_dist = mju_dist3(right_hand_pos, object_pos);
+            double min_dist = std::min(left_hand_dist, right_hand_dist);
+
+            if (min_dist > -0.05) {
+
+
+                // ----- left hand distance ----- //
+                mju_sub3(&residual[counter], left_hand_pos, object_pos);
 //        residual[counter + 1] -= 0.1;
-        mju_scl3(&residual[counter], &residual[counter], standing);
-        counter += 3;
+                mju_scl3(&residual[counter], &residual[counter], standing);
+                counter += 3;
 
-        // ----- right hand distance ----- //
-        double *right_hand_pos = SensorByName(model, data, "right_hand_pos");
-        mju_sub3(&residual[counter], right_hand_pos, object_pos);
+                // ----- right hand distance ----- //
+                mju_sub3(&residual[counter], right_hand_pos, object_pos);
 //        residual[counter + 1] += 0.1;
-        mju_scl3(&residual[counter], &residual[counter], standing);
-        counter += 3;
-
+                mju_scl3(&residual[counter], &residual[counter], standing);
+                counter += 3;
+            } else {
+                std::fill_n(&residual[counter], 6, 0.0);
+                counter += 6;
+            }
+        } else {
+            std::fill_n(&residual[counter], 9, 0.0);
+            counter += 9;
+        }
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function
         int user_sensor_dim = 0;

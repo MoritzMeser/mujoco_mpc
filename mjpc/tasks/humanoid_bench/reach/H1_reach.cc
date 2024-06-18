@@ -192,19 +192,11 @@ namespace mjpc {
         residual[counter + 6] = data->qpos[6];
 
         counter += 7;
-//        for (int i = 0; i < 7; i++) {
-//            printf("qpos[%d]: %f\n", i, data->qpos[i]);
-//        }
-//        printf("-------------------\n");
 
 
-        std::array<double, 27> qpos_initial = {0, 0, 0.98, 1, 0, 0, 0, 0, 0, -0.4, 0.8, -0.4, 0, 0, -0.4, 0.8, -0.4, 0,
-                                               0, 0, 0, 0, 0, 0, 0, 0, 0};
-        mju_sub(&residual[counter], data->qpos + 7, qpos_initial.data() + 7, model->nq - 7);
-        counter += model->nq - 7;
         // ----- posture ----- //
-//        mju_copy(&residual[counter], data->qpos + 7, model->nq - 7);
-//        counter += model->nq - 7;
+        mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
+        counter += model->nu;
 
         // ----- Walk ----- //
         double *torso_forward = SensorByName(model, data, "torso_forward");
@@ -244,7 +236,7 @@ namespace mjpc {
         counter += 2;
 
         // ----- control ----- //
-        mju_copy(&residual[counter], data->ctrl, model->nu);
+        mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nu); // because of pos control
         counter += model->nu;
 
 //         ----- reach task ----- //

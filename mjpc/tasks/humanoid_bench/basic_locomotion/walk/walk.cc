@@ -31,8 +31,8 @@ namespace mjpc {
 //     Parameter (1): speed goal
 // ------------------------------------------------------------------------- //
     void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
-
         int counter = 0;
+        residual[counter++] = 1.0 - walk_reward(model, data, parameters_[0], parameters_[1]);
 
         // ----- torso height ----- //
         double torso_height = SensorByName(model, data, "torso_position")[2];
@@ -111,10 +111,8 @@ namespace mjpc {
         counter += 3;
 
         // ----- posture ----- //
-        mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nq - 7);
-//        mju_copy(&residual[counter], data->qpos + 7, model->nq - 7);
-
-        counter += model->nq - 7;
+        mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
+        counter += model->nu;
 
         std::cout << std::endl;
         // ----- Walk ----- //
@@ -163,10 +161,8 @@ namespace mjpc {
         mju_scl(&residual[counter], &residual[counter], standing, 2);
         counter += 2;
 
-//        // ----- control ----- //
-        mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nq - 7); // because of pos control
-////        mju_copy(&residual[counter], data->ctrl, model->nq - 7);
-//
+        // ----- control ----- //
+        mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nu); // because of pos control
         counter += model->nu;
 
         // sensor dim sanity check

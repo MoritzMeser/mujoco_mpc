@@ -60,61 +60,72 @@ namespace mjpc {
             return GetModelPath("humanoid_bench/maze/Maze_H1.xml");
         }
     };
+//
+//    class H1_maze_hand : public H1_maze {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Maze Hand";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/maze/H1_maze_hand.xml");
+//        }
+//    };
+//
+//    class H1_maze_gripper : public H1_maze {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Maze Gripper";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/maze/H1_maze_gripper.xml");
+//        }
+//    };
+//
+//    class H1_maze_simple_hand : public H1_maze {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Maze Simple Hand";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/maze/H1_maze_simple_hand.xml");
+//        }
+//    };
+//
+//    class H1_maze_strong : public H1_maze {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Maze Strong";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/maze/H1_maze_strong.xml");
+//        }
+//    };
+//
+//    class H1_maze_touch : public H1_maze {
+//    public:
+//        std::string Name() const override {
+//            return "H1 Maze Touch";
+//        }
+//
+//        std::string XmlPath() const override {
+//            return GetModelPath("humanoid_bench/maze/H1_maze_touch.xml");
+//        }
+//    };
+class Maze_G1 : public H1_maze {
+public:
+    std::string Name() const override {
+        return "Maze G1";
+    }
 
-    class H1_maze_hand : public H1_maze {
-    public:
-        std::string Name() const override {
-            return "H1 Maze Hand";
-        }
+    std::string XmlPath() const override {
+        return GetModelPath("humanoid_bench/maze/Maze_G1.xml");
+    }
 
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/maze/H1_maze_hand.xml");
-        }
-    };
-
-    class H1_maze_gripper : public H1_maze {
-    public:
-        std::string Name() const override {
-            return "H1 Maze Gripper";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/maze/H1_maze_gripper.xml");
-        }
-    };
-
-    class H1_maze_simple_hand : public H1_maze {
-    public:
-        std::string Name() const override {
-            return "H1 Maze Simple Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/maze/H1_maze_simple_hand.xml");
-        }
-    };
-
-    class H1_maze_strong : public H1_maze {
-    public:
-        std::string Name() const override {
-            return "H1 Maze Strong";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/maze/H1_maze_strong.xml");
-        }
-    };
-
-    class H1_maze_touch : public H1_maze {
-    public:
-        std::string Name() const override {
-            return "H1 Maze Touch";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/maze/H1_maze_touch.xml");
-        }
-    };
+};
 }  // namespace mjpc
 
 #endif //MUJOCO_MPC_H1_MAZE_H

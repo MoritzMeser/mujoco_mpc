@@ -40,7 +40,7 @@
         <user name="Velocity" dim="2" user="7 0.625 0 25.0 0.2 4.0"/>
         <user name="Control" dim="19" user="3 0.1 0 1.0 0.3"/>
 
-        <user name="goal dist" dim="3" user="6 0.0 0.0 100.0 0.1"/>
+        <user name="goal dist" dim="3" user="6 3.0 0.0 100.0 0.1"/>
         <!--        traces-->
         <framepos name="trace0" objtype="body" objname="torso_link"/>
 

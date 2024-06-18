@@ -21,6 +21,7 @@
 
     <sensor>
         <!--cost terms-->
+        <user name="humanoid_bench" dim="1" user="6 0.0 0.0 100.0 0.01"/>
         <user name="Height" dim="1" user="6 100.0 0.0 100.0 0.1"/>
         <user name="CoM Vel." dim="2" user="0 10.0 0.0 100.0"/>
         <user name="Joint Vel." dim="19" user="0 0.01 0.0 0.1"/>
@@ -57,5 +58,10 @@
         <framexaxis name="foot_left_forward" objtype="xbody" objname="left_ankle_link"/>
         <subtreelinvel name="waist_lower_subcomvel" body="pelvis"/>
         <framelinvel name="torso_velocity" objtype="body" objname="torso_link"/>
+
+        <!--for humanoid bench reward-->
+        <framepos name="head_height" objtype="site" objname="head"/>
+        <framezaxis name="torso_upright" objtype="xbody" objname="torso_link"/>
+        <subtreelinvel name="center_of_mass_velocity" body="pelvis"/>
     </sensor>
 </mujoco>

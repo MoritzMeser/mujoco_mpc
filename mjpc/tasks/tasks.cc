@@ -97,7 +97,7 @@ namespace mjpc {
 //
 //
 //                //Slide Task
-                std::make_shared<H1_slide_position>(),
+//                std::make_shared<H1_slide_position>(),
 //                std::make_shared<H1_slide_hand>(),
 //                std::make_shared<H1_slide_gripper>(),
 //                std::make_shared<H1_slide_simple_hand>(),
@@ -179,7 +179,7 @@ namespace mjpc {
 //
 //                //Cube Task
 //                std::make_shared<H1_cube_position>(),
-                std::make_shared<H1_cube_hand>(),
+//                std::make_shared<H1_cube_hand>(),
 //                std::make_shared<H1_cube_gripper>(),
 //                std::make_shared<H1_cube_simple_hand>(),
 //                std::make_shared<H1_cube_strong>(),
@@ -224,6 +224,7 @@ namespace mjpc {
 //                std::make_shared<H1_maze_simple_hand>(),
 //                std::make_shared<H1_maze_strong>(),
 //                std::make_shared<H1_maze_touch>(),
+                std::make_shared<Maze_G1>(),
 //
 //                //Package Task
 //                std::make_shared<H1_package_position>(),
@@ -304,7 +305,7 @@ namespace mjpc {
 //                std::make_shared<Allegro>(),
 //                std::make_shared<aloha::Handover>(),
 //                std::make_shared<aloha::Reorient>(),
-//                std::make_shared<Cartpole>(),
+                std::make_shared<Cartpole>(),
 //                std::make_shared<Fingers>(),
                 std::make_shared<humanoid::Stand>(),
                 std::make_shared<humanoid::Tracking>(),
