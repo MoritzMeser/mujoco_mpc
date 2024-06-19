@@ -260,6 +260,7 @@ namespace mjpc {
 //
 //                //Reach Task
                 std::make_shared<H1_reach_position>(),
+                std::make_shared<Reach_G1>(),
 //                std::make_shared<H1_reach_hand>(),
 //                std::make_shared<H1_reach_gripper>(),
 //                std::make_shared<H1_reach_simple_hand>(),

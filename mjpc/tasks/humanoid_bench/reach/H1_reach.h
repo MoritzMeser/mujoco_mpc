@@ -52,6 +52,16 @@ namespace mjpc {
             return GetModelPath("humanoid_bench/reach/Reach_H1.xml");
         }
     };
+    class Reach_G1 : public H1_reach {
+    public:
+        std::string Name() const override {
+            return "Reach G1";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("humanoid_bench/reach/Reach_G1.xml");
+        }
+    };
 
 //    class H1_reach_hand : public H1_reach {
 //    public:

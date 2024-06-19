@@ -1,4 +1,4 @@
-<mujoco model="H1 Reach Pos">
+<mujoco model="Reach H1">
     <include file="../h1/h1_pos.xml"/>
     <include file="reach.xml"/>
     <include file="../../common.xml"/>
