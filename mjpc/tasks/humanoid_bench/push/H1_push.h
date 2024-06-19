@@ -60,6 +60,17 @@ namespace mjpc {
             return GetModelPath("humanoid_bench/push/Push_H1.xml");
         }
     };
+    class G1_push : public H1_push {
+    public:
+        std::string Name() const override {
+            return "Push G1";
+        }
+
+        std::string XmlPath() const override {
+            return GetModelPath("humanoid_bench/push/Push_G1.xml");
+        }
+
+    };
 
 //    class H1_push_hand : public H1_push {
 //    public:

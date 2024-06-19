@@ -252,6 +252,7 @@ namespace mjpc {
 //
 //                //Push Task
                 std::make_shared<Push_H1>(),
+                std::make_shared<G1_push>(),
 //                std::make_shared<H1_push_hand>(),
 //                std::make_shared<H1_push_gripper>(),
 //                std::make_shared<H1_push_simple_hand>(),
