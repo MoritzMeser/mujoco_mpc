@@ -19,40 +19,36 @@ namespace mjpc {
 // ---------------------------------------------------------------------------- //
     void H1_push::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                        double *residual) const {
-//        // ----- define goal position ----- //
-//        double const goal_pos[] = {1.0, 0.0, 1.0};
-//
-//        double const hand_dist_penalty = 0.1;
-//        double const target_dist_penalty = 1.0;
-//        double const success = 1000;
-//
-//        // ----- object position ----- //
-//        double *object_pos = SensorByName(model, data, "object_pos");
-//
-//        double goal_dist = std::sqrt(std::pow(goal_pos[0] - object_pos[0], 2) +
-//                                     std::pow(goal_pos[1] - object_pos[1], 2) +
-//                                     std::pow(goal_pos[2] - object_pos[2], 2));
-//
-//        double penalty_dist = target_dist_penalty * goal_dist;
-//        double reward_success = (goal_dist < 0.05) ? success : 0;
-//
-//        // ----- hand position ----- //
-//        double *left_hand_pos = SensorByName(model, data, "left_hand_position");
-//        double hand_dist = std::sqrt(std::pow(left_hand_pos[0] - object_pos[0], 2) +
-//                                     std::pow(left_hand_pos[1] - object_pos[1], 2) +
-//                                     std::pow(left_hand_pos[2] - object_pos[2], 2));
-//        double penalty_hand = hand_dist_penalty * hand_dist;
-//
-//        // ----- reward ----- //
-//        double reward = -penalty_hand - penalty_dist + reward_success;
-//
-//        // ----- residuals ----- //
-//        residual[0] = std::exp(-reward);
+        // ----- define goal position ----- //
+        double const *goal_pos = task_->target_position_.data();
+        double const *object_pos = SensorByName(model, data, "object_pos");
+
+
+        double const hand_dist_penalty = 0.1;
+        double const target_dist_penalty = 1.0;
+        double const success = 1000;
+
+        // ----- object position ----- //
+        double goal_dist = mju_dist3(object_pos, goal_pos);
+
+        double penalty_dist = target_dist_penalty * goal_dist;
+        double reward_success = (goal_dist < 0.05) ? success : 0;
+
+        // ----- hand position ----- //
+        double hand_dist = mju_dist3(SensorByName(model, data, "left_hand_pos"), object_pos);
+        double penalty_hand = hand_dist_penalty * hand_dist;
+
+        // ----- reward ----- //
+        double reward = -penalty_hand - penalty_dist + reward_success;
+
+        // ----- residuals ----- //
+        int counter = 0;
+        residual[counter++] = 1.0000 - reward;
 
 
         double const height_goal = parameters_[0];
 
-        int counter = 0;
+
 
         // ----- Height: head feet vertical error ----- //
 
@@ -197,10 +193,6 @@ namespace mjpc {
         counter += model->nu;
 
         // ------ object position ------ //
-        double const *goal_pos = task_->target_position_.data();
-        double const *object_pos = SensorByName(model, data, "object_pos");
-
-
         double object_dist = mju_dist3(object_pos, goal_pos);
         if (object_dist > -0.05) {//TODO this is a hack
             mju_sub3(&residual[counter], object_pos, goal_pos);
@@ -276,6 +268,7 @@ namespace mjpc {
             std::uniform_real_distribution<> dis_1(-0.5, 0.5);
             target_position_[0] = dis_0(gen);
             target_position_[1] = dis_1(gen);
+            printf("New target position: %f, %f\n", target_position_[0], target_position_[1]);
         }
         mju_copy3(data->mocap_pos, target_position_.data());
     }
