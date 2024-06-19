@@ -7,6 +7,7 @@
 # include <limits>
 #include <cmath>
 #include <algorithm>
+#include <random>
 
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
@@ -255,8 +256,27 @@ namespace mjpc {
 // -------- Transition for humanoid_bench push task -------- //
 // ------------------------------------------------------------ //
     void H1_push::TransitionLocked(mjModel *model, mjData *data) {
-        target_position_ = {parameters[2], parameters[3], 1.0};
+        //// use slider to move object
+//        target_position_ = {parameters[2], parameters[3], 1.0};
+//        mju_copy3(data->mocap_pos, target_position_.data());
+
+//// set object randomly
+//// here the python code
+//        def reset_model(self):
+//        self.goal[0] = np.random.uniform(0.7, 1.0)
+//        self.goal[1] = np.random.uniform(-0.5, 0.5)
+//        terminated = self.goal_dist() < 0.05
+
+        double *object_pos = SensorByName(model, data, "object_pos");
+        double goal_dist = mju_dist3(object_pos, target_position_.data());
+        if (goal_dist < 0.05) {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_real_distribution<> dis_0(0.7, 1.0);
+            std::uniform_real_distribution<> dis_1(-0.5, 0.5);
+            target_position_[0] = dis_0(gen);
+            target_position_[1] = dis_1(gen);
+        }
         mju_copy3(data->mocap_pos, target_position_.data());
     }
-
 }  // namespace mjpc
