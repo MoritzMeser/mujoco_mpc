@@ -3,14 +3,15 @@ from evaluate import evaluate
 
 
 def main():
-    n_experiments = 8
+    n_experiments = 2
 
     result_path = run_multiple_experiments(
-        task_id="Walk H1",
-        total_time=10,  # seconds
+        task_id="Push H1",
+        total_time=1,  # seconds
         planer_iterations=1,
         n_experiments=n_experiments,
         home_path="/Users/moritzmeser/Desktop/experiments")
+    print(result_path)
     evaluate(result_path, n_experiments)
 
 

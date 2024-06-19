@@ -87,7 +87,7 @@ def evaluate(path, n_experiments):
     plt.legend()
 
     # Set y-axis limits
-    plt.ylim(0, 1)
+    # plt.ylim(0, 1)
 
     plt.savefig(f"{path}/humanoid_bench_reward.png")
     plt.show()

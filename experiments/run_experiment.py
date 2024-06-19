@@ -250,7 +250,7 @@ def run_multiple_experiments(task_id, total_time, planer_iterations, n_experimen
     time = datetime.today().strftime("%H_%M_%S")
     path = home_path + '/' + date + '/' + task_id.split(' ')[0] + '_' + task_id.split(' ')[1] + '_' + time
     config = {
-        'render_video': False,
+        'render_video': True,
         'make_plots': False,
         'log_costs': True,
         'sim_time_step': 0.02,
