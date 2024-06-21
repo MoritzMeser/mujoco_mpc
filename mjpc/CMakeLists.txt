@@ -141,13 +141,13 @@ add_library(
         task.cc
         task.h
         tasks/humanoid_bench/utility/dm_control_utils_rewards.cpp
-        tasks/humanoid_bench/balance/H1_balance.h
-        tasks/humanoid_bench/balance/H1_balance.cc
+        tasks/humanoid_bench/balance/balance.h
+        tasks/humanoid_bench/balance/balance.cc
         tasks/humanoid_bench/basic_locomotion/walk/walk.cc
         tasks/humanoid_bench/basic_locomotion/walk/walk.h
         tasks/humanoid_bench/package/H1_package.h
         tasks/humanoid_bench/package/H1_package.cc
-        tasks/humanoid_bench/reach/H1_reach.cc
+        tasks/humanoid_bench/reach/reach.cc
         tasks/humanoid_bench/basic_locomotion/walk_reward.cc
         tasks/humanoid_bench/basic_locomotion/walk_reward.h
         tasks/humanoid_bench/basic_locomotion/stand/stand.cc
@@ -171,8 +171,8 @@ add_library(
         tasks/humanoid_bench/poles/H1_poles.h
         tasks/humanoid_bench/basic_locomotion/sit/H1_sit.cc
         tasks/humanoid_bench/basic_locomotion/sit/H1_sit.h
-        tasks/humanoid_bench/push/H1_push.cc
-        tasks/humanoid_bench/push/H1_push.h
+        tasks/humanoid_bench/push/push.cc
+        tasks/humanoid_bench/push/push.h
         tasks/humanoid_bench/cabinet/H1_cabinet.cc
         tasks/humanoid_bench/cabinet/H1_cabinet.h
         tasks/humanoid_bench/high_bar/H1_highbar.cc
@@ -203,6 +203,8 @@ add_library(
         tasks/humanoid_bench/utility/utility_functions.cpp
         tasks/humanoid_bench/utility/utility_functions.h
         $<TARGET_OBJECTS:mujoco::platform_ui_adapter>
+        tasks/humanoid_bench/punch/punch.h
+        tasks/humanoid_bench/punch/punch.cc
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})

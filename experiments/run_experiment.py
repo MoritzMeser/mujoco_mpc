@@ -1,7 +1,9 @@
 import json
 from datetime import datetime
+import time
 import platform
 import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor
 import logging
 
 from util import parse_xml, util
@@ -21,7 +23,6 @@ def run_single_experiment(config):
 
     render_video = config['render_video']
     make_plots = config['make_plots']
-    log_costs = config['log_costs']
     sim_time_step = config['sim_time_step']
     total_time = config['total_time']
     planer_iterations = config['planer_iterations']
@@ -29,6 +30,10 @@ def run_single_experiment(config):
     reward_function = config['reward_function']
     path = config['path']
     folder = config['folder']
+
+    # ------ Run Task ------ #
+    if config['task_id'] == "Run H1":  # This is kind of a hack, the tasks are identical but the Speed parameter
+        task_id = "Walk H1"
 
     # check if the render_fps is a valid value
     if render_video:
@@ -83,15 +88,32 @@ def run_single_experiment(config):
         agent.set_cost_weights({name: 0 for name in agent.get_cost_weights().keys()})
         # set humanoid bench to 1
         agent.set_cost_weights({"humanoid_bench": 1})
-    elif reward_function == 'my_reward':
+    elif reward_function == 'full_reward_no_hb':
         # set humanoid bench to zero
         agent.set_cost_weights({"humanoid_bench": 0})
+    elif reward_function == 'hb_posture_control':
+        # set all costs to zero
+        agent.set_cost_weights({name: 0 for name in agent.get_cost_weights().keys()})
+        # set humanoid bench to 1
+        agent.set_cost_weights({"humanoid_bench": 1})
+        # set posture to 0.5
+        agent.set_cost_weights({"posture": 0.2})
+        # # set control to 0.5
+        # agent.set_cost_weights({"control": 0.5})
     else:
         raise ValueError("Unknown reward function")
     logger.info(f"Reward function set to {reward_function}")
 
+    if config['task_id'] == "Run H1":
+        # parameters
+        agent.set_task_parameter("Speed", 5.0)
+        print("Parameters:", agent.get_task_parameters())
+        logger.info("Task parameters set for Run Task")
+
     # rollout horizon
     T = int(total_time / sim_time_step)
+    assert T == 1000  # TODO obviously this is just for this experiment, but I want to go save ;)
+    logger.info(f"Rollout horizon set to {T}")
 
     # trajectories
     qpos = np.zeros((model.nq, T))
@@ -118,8 +140,12 @@ def run_single_experiment(config):
     if render_video:
         frames = []
 
+    cost_term_names = list(agent.get_cost_term_values().keys())
+
     # simulation loop
     def loop():
+        if t % 100 == 0:
+            logger.info(f"Time step {t}")
         # set planner state
         agent.set_state(
             time=data.time,
@@ -142,7 +168,8 @@ def run_single_experiment(config):
         # get costs
         cost_total[t] = agent.get_total_cost()
         for i, c in enumerate(agent.get_cost_term_values().items()):
-            cost_terms[i, t] = c[1]
+            index = cost_term_names.index(c[0])
+            cost_terms[index, t] = c[1]
 
         # step
         mujoco.mj_step(model, data)
@@ -191,7 +218,7 @@ def run_single_experiment(config):
             'machine': platform.machine(),
         }
         # Add cost terms
-        config['cost_terms'] = [c[0] for c in agent.get_cost_term_values().items()]
+        config['cost_terms'] = cost_term_names
         json.dump(config, f, indent=4)
     logger.info("Config file saved")
 
@@ -200,8 +227,10 @@ def run_single_experiment(config):
         # plot costs
         fig = plt.figure()
 
-        for i, c in enumerate(agent.get_cost_term_values().items()):
-            plt.plot(time[:-1], cost_terms[i, :], label=c[0])
+        # for i, c in enumerate(agent.get_cost_term_values().items()):
+        #     plt.plot(time[:-1], cost_terms[i, :], label=c[0])
+        for i, c in enumerate(cost_term_names):
+            plt.plot(time[:-1], cost_terms[i, :], label=c)
 
         plt.plot(time[:-1], cost_total, label="Total (weighted)", color="black")
 
@@ -213,17 +242,24 @@ def run_single_experiment(config):
 
         # plot humaniod bench reward
         plt.figure()
-        for index, c in enumerate(agent.get_cost_term_values().items()):
-            if c[0] == 'humanoid_bench':
+        for index, c in enumerate(cost_term_names):
+            if c == 'humanoid_bench':
                 plt.plot(time[:-1], 1.0 - cost_terms[index, :], label="humanoid_bench_reward", color="blue")
                 plt.savefig(results_dir / "humanoid_bench_reward.png")
                 break
 
-    # ------ Save Cost Values ------ #
-    if log_costs:
-        np.save(results_dir / "costs_individual.npy", cost_terms)
-        np.save(results_dir / "costs_total.npy", cost_total)
-        logger.info("Costs saved")
+    # ------ Save Cost Values + Trajectory ------ #
+
+    np.save(results_dir / "costs_individual.npy", cost_terms)
+    np.save(results_dir / "costs_total.npy", cost_total)
+    logger.info("Costs saved")
+
+    np.save(results_dir / "qpso.npy", qpos)
+    np.save(results_dir / "qvel.npy", qvel)
+    np.save(results_dir / "ctrl.npy", ctrl)
+    np.save(results_dir / "time.npy", time)
+
+    logger.info("Trajectory saved")
 
     # ------ Save video ------ #
     if render_video:
@@ -245,29 +281,31 @@ def run_single_experiment(config):
     logger.info("Experiment finished")
 
 
-def run_multiple_experiments(task_id, total_time, planer_iterations, n_experiments, home_path):
-    date = datetime.today().strftime("%Y_%m_%d")
-    time = datetime.today().strftime("%H_%M_%S")
-    path = home_path + '/' + date + '/' + task_id.split(' ')[0] + '_' + task_id.split(' ')[1] + '_' + time
+def run_multiple_experiments(task_id, planer_iterations, n_experiments, home_path, reward_fuction):
+    curr_date = datetime.today().strftime("%Y_%m_%d")
+    curr_time = datetime.today().strftime("%H_%M_%S")
+    path = home_path + '/' + curr_date + '/' + task_id.split(' ')[0] + '_' + task_id.split(' ')[1] + '_' + curr_time
     config = {
-        'render_video': True,
-        'make_plots': False,
-        'log_costs': True,
-        'sim_time_step': 0.02,
-        'total_time': total_time,
+        'render_video': False,
+        'make_plots': True,
+        'sim_time_step': 0.002,
+        'total_time': 2.0,
         'planer_iterations': planer_iterations,
         'task_id': task_id,
-        'reward_function': 'my_reward',
+        'reward_function': reward_fuction,
         'path': path,
         'folder': None  # set to None to use date and time for folder name
     }
-    with concurrent.futures.ProcessPoolExecutor() as executor:
+    # Use ThreadPoolExecutor with max_workers set to 1 to run tasks sequentially in separate threads
+    with ThreadPoolExecutor(max_workers=1) as executor:
         for i in range(n_experiments):
             curr_config = config.copy()
             curr_config['folder'] = 'experiment_' + str(i).zfill(3)
-            executor.submit(run_single_experiment, curr_config)
 
-    # wait for all experiments to finish
-    executor.shutdown(wait=True)
+            future = executor.submit(run_single_experiment, curr_config)
+            print(f"Experiment {i} finished")
+            # Wait for the current task to complete before moving to the next one
+            future.result()
+            time.sleep(1)  # sleep for 1 second to avoid problems with the initialization of the server
 
     return path

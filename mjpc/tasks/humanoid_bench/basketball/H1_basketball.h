@@ -36,7 +36,7 @@ namespace mjpc {
         ResidualFn residual_;
     };
 
-    class H1_basketball_position : public H1_basketball {
+    class Basketball_H1 : public H1_basketball {
     public:
         std::string Name() const override {
             return "H1 Basketball Position";
@@ -69,10 +69,10 @@ namespace mjpc {
         }
     };
 
-    class H1_basketball_simple_hand : public H1_basketball {
+    class Basketball_H1_Simple_Hand : public H1_basketball {
     public:
         std::string Name() const override {
-            return "H1 Basketball Simple Hand";
+            return "Basketball H1 Simple Hand";
         }
 
         std::string XmlPath() const override {

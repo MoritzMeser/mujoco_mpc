@@ -1,27 +1,59 @@
-//
-// Created by Moritz Meser on 15.05.24.
-//
-
-#include "stand.h"
+#include "balance.h"
 
 #include <string>
+# include <limits>
 
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
 
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/walk_reward.h"
 #include "mjpc/tasks/humanoid_bench/utility/dm_control_utils_rewards.h"
 
-
 namespace mjpc {
-// ----------------- Residuals for humanoid_bench stand task ---------------- //
-// ----------------------------------------------------------------------------- //
-    void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
-        double const height_goal = parameters_[0];
+// ----------------- Residuals for humanoid_bench balance task ---------------- //
+// ---------------------------------------------------------------------------- //
+    void Balance_Simple::ResidualFn::Residual(const mjModel *model, const mjData *data,
+                                              double *residual) const {
+         // ----------------- Reward as in the humanoid_bench paper (unmodified) ---------------- //
+
+        // ----- set parameters ----- //
+        double const standHeight = 1.65;
+
+        // ----- standing ----- //
+        double head_height = SensorByName(model, data, "head_height")[2];
+        double hb_standing = tolerance(head_height, {standHeight + 0.35, INFINITY}, standHeight / 4);
+
+
+        // ----- torso upright ----- //
+        double torso_upright = SensorByName(model, data, "torso_upright")[2];
+        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
+
+        // ----- stand_reward ----- //
+        double stand_reward = hb_standing * upright;
+
+
+        // ----- small control ----- //
+        double small_control = 0.0;
+        for (int i = 0; i < model->nu; i++) {
+            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 1.0, "quadratic", 0.0);
+        }
+        small_control /= model->nu;  // average over all controls
+        small_control = (4 + small_control) / 5;
+
+        // ----- horizontal velocity ----- //
+        double horizontal_velocity_x = SensorByName(model, data, "center_of_mass_velocity")[0];
+        double horizontal_velocity_y = SensorByName(model, data, "center_of_mass_velocity")[1];
+        double dont_move = (tolerance(horizontal_velocity_x, {0.0, 0.0}, 2.0) +
+                            tolerance(horizontal_velocity_y, {0.0, 0.0}, 2.0)) / 2;
+
+        // ----- reward ----- //
+        double reward = stand_reward * small_control * dont_move;
+
+        //--------------------------- here end the implementation of the reward ----------------------------//
+        // ----- residuals ----- //
         int counter = 0;
-        residual[counter] = 1.0 - walk_reward(model, data, 0.0, height_goal);
-        counter++;
-//        printf("residual[0]: %f\n", residual[0]);
+        residual[counter++] = 1.0 - reward;  //  set the residual as 1 - reward, because we the reward is limited to [0, 1]
+
+        // ----------- all the residuals below are not part of the original humanoid_bench reward ----------- //
 
         // ----- Height: head feet vertical error ----- //
 
@@ -30,9 +62,7 @@ namespace mjpc {
         double *foot_left_pos = SensorByName(model, data, "foot_left_pos");
 
         double *head_position = SensorByName(model, data, "head_position");
-        double head_feet_error =
-                head_position[2] - 0.5 * (foot_right_pos[2] + foot_left_pos[2]);
-        residual[counter++] = head_feet_error - height_goal;
+        residual[counter++] = head_position[2] - ( parameters_[0] + 0.34);
 
         // ----- Balance: CoM-feet xy error ----- //
 
@@ -45,8 +75,8 @@ namespace mjpc {
         counter += 2;
 
         // ----- joint velocity ----- //
-        mju_copy(residual + counter, data->qvel + 6, model->nv - 6);
-        counter += model->nv - 6;
+        mju_copy(residual + counter, data->qvel + 6, model->nu);
+        counter += model->nu;
 
         // ----- torso height ----- //
         double torso_height = SensorByName(model, data, "torso_position")[2];
@@ -114,9 +144,14 @@ namespace mjpc {
         mju_scl3(&residual[counter], &residual[counter], 0.1 * standing);
         counter += 3;
 
+
+        // ----- keep initial position and orientation -----//
+        mju_sub(&residual[counter], data->qpos, model->key_qpos, 7);
+        counter += 7;
+
         // ----- posture ----- //
-        mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nq - 7);
-        counter += model->nq - 7;
+        mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
+        counter += model->nu;
 
         // com vel
         double *waist_lower_subcomvel =
@@ -139,8 +174,8 @@ namespace mjpc {
         counter += 2;
 
         // ----- control ----- //
-        mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nq - 7); // because of pos control
-        counter += model->nq - 7;
+        mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nu); // because of pos control
+        counter += model->nu;
 
 
         // sensor dim sanity check
@@ -158,4 +193,11 @@ namespace mjpc {
                     counter);
         }
     }
+
+// -------- Transition for humanoid_bench balance task -------- //
+// --------------------------------------------------------------- //
+    void Balance_Simple::TransitionLocked(mjModel *model, mjData *data) {
+        //
+    }
+
 }  // namespace mjpc

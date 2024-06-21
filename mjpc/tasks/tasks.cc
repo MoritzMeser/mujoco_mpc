@@ -49,7 +49,7 @@
 #include "mjpc/tasks/humanoid_bench/basic_locomotion/sit/H1_sit.h"
 #include "mjpc/tasks/humanoid_bench/maze/H1_maze.h"
 #include "mjpc/tasks/humanoid_bench/poles/H1_poles.h"
-#include "mjpc/tasks/humanoid_bench/push/H1_push.h"
+#include "mjpc/tasks/humanoid_bench/push/push.h"
 #include "mjpc/tasks/humanoid_bench/cabinet/H1_cabinet.h"
 #include "mjpc/tasks/humanoid_bench/high_bar/H1_highbar.h"
 #include "mjpc/tasks/humanoid_bench/door/H1_door.h"
@@ -66,9 +66,10 @@
 #include "mjpc/tasks/humanoid_bench/insert/H1_insert.h"
 
 
-#include "mjpc/tasks/humanoid_bench/balance/H1_balance.h"
+#include "mjpc/tasks/humanoid_bench/balance/balance.h"
 
-#include "mjpc/tasks/humanoid_bench/reach/H1_reach.h"
+#include "mjpc/tasks/humanoid_bench/reach/reach.h"
+#include "mjpc/tasks/humanoid_bench/punch/punch.h"
 
 namespace mjpc {
 
@@ -76,15 +77,10 @@ namespace mjpc {
         return {
                 //Humanoid Bench Tasks
 
-//                //Balance Task
-//                std::make_shared<Balance_Simple_position>(),
-//                std::make_shared<Balance_Simple_hand>(),
-//                std::make_shared<Balance_Simple_gripper>(),
-//                std::make_shared<Balance_Simple_simple_hand>(),
-//                std::make_shared<Balance_Simple_strong>(),
-//                std::make_shared<Balance_Simple_touch>(),
-//
-//
+                //Balance Task
+                std::make_shared<Balance_Simple_H1>(),
+
+
 //                // Walk Task
                 std::make_shared<Walk_H1>(),
 //                std::make_shared<H1_walk_hand>(),
@@ -154,6 +150,7 @@ namespace mjpc {
 //                std::make_shared<H1_hurdle_touch>(),
 //
 //                //Basketball Task
+                std::make_shared<Basketball_H1_Simple_Hand>(),
 //                std::make_shared<H1_basketball_position>(),
 //                std::make_shared<H1_basketball_hand>(),
 //                std::make_shared<H1_basketball_gripper>(),
@@ -259,14 +256,10 @@ namespace mjpc {
 //                std::make_shared<H1_push_strong>(),
 //                std::make_shared<H1_push_touch>(),
 //
-//                //Reach Task
-                std::make_shared<H1_reach_position>(),
+                //Reach Task
+                std::make_shared<Reach_H1>(),
                 std::make_shared<Reach_G1>(),
-//                std::make_shared<H1_reach_hand>(),
-//                std::make_shared<H1_reach_gripper>(),
-//                std::make_shared<H1_reach_simple_hand>(),
-//                std::make_shared<H1_reach_strong>(),
-//                std::make_shared<H1_reach_touch>(),
+
 //
 //                //Room Task
 //                std::make_shared<H1_room_position>(),
@@ -300,6 +293,10 @@ namespace mjpc {
 //                std::make_shared<H1_window_strong>(),
 //                std::make_shared<H1_window_touch>(),
 
+                // not part of original humanoid bench tasks
+//                //Punch Task
+                std::make_shared<Punch_H1>(),
+                std::make_shared<Punch_G1>(),
 
 //                // original tasks from MuJoCo MPC
 

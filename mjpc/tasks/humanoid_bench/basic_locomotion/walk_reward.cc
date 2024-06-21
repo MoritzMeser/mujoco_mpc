@@ -12,6 +12,8 @@
 #include "mujoco/mujoco.h"
 
 namespace mjpc {
+    // ----- this is a one to one re-implementation of the reward as it is done in the humanoid_bench paper ----- //
+    // ----- it is used for the Stand, Walk, and Run task, with respective values for walk_speed ----- //
     double
     walk_reward(const mjModel *model, const mjData *data, const double walk_speed, const double stand_height) {
         // initialize reward
@@ -26,7 +28,7 @@ namespace mjpc {
 
         // ----- torso upright ----- //
         double torso_upright = SensorByName(model, data, "torso_upright")[2];
-        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9);
+        double upright = tolerance(torso_upright, {0.9, INFINITY}, 1.9, "linear", 0.0);
 
         reward *= upright;
 
@@ -34,7 +36,7 @@ namespace mjpc {
         // ----- small control ----- //
         double small_control = 0.0;
         for (int i = 0; i < model->nu; i++) {
-            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic", 0.0);
+            small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic");
         }
         small_control /= model->nu;  // average over all controls
         small_control = (4 + small_control) / 5;

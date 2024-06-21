@@ -21,7 +21,7 @@
 
     <sensor>
         <!--cost terms-->
-        <user name="humanoid_bench" dim="1" user="6 0.0 0.0 100.0 0.01"/>
+        <user name="humanoid_bench" dim="1" user="6 0.0 0.0 1.0 0.01"/>
         <user name="Height" dim="1" user="6 100.0 0.0 100.0 0.1"/>
         <user name="CoM Vel." dim="2" user="0 10.0 0.0 100.0"/>
         <user name="Joint Vel." dim="19" user="0 0.01 0.0 0.1"/>

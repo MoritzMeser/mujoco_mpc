@@ -1,54 +1,24 @@
-//
-// Created by Moritz Meser on 21.05.24.
-//
+#include "punch.h"
 
-#include "H1_push.h"
 #include <string>
-# include <limits>
+#include <limits>
 #include <cmath>
-#include <algorithm>
-#include <random>
 
 #include "mujoco/mujoco.h"
 #include "mjpc/utilities.h"
 
 #include "mjpc/tasks/humanoid_bench/utility/dm_control_utils_rewards.h"
+#include <array>
+#include <random>
 
 namespace mjpc {
-// ----------------- Residuals for humanoid_bench push task ---------------- //
-// ---------------------------------------------------------------------------- //
-    void H1_push::ResidualFn::Residual(const mjModel *model, const mjData *data,
-                                       double *residual) const {
-        // ----- define goal position ----- //
-        double const *goal_pos = task_->target_position_.data();
-        double const *object_pos = SensorByName(model, data, "object_pos");
-
-
-        double const hand_dist_penalty = 0.1;
-        double const target_dist_penalty = 1.0;
-        double const success = 1000;
-
-        // ----- object position ----- //
-        double goal_dist = mju_dist3(object_pos, goal_pos);
-
-        double penalty_dist = target_dist_penalty * goal_dist;
-        double reward_success = (goal_dist < 0.05) ? success : 0;
-
-        // ----- hand position ----- //
-        double hand_dist = mju_dist3(SensorByName(model, data, "left_hand_pos"), object_pos);
-        double penalty_hand = hand_dist_penalty * hand_dist;
-
-        // ----- reward ----- //
-        double reward = -penalty_hand - penalty_dist + reward_success;
-
-        // ----- residuals ----- //
-        int counter = 0;
-        residual[counter++] = 1.0000 - reward;
-
-
+// ----------------- Residuals for humanoid_bench reach task ---------------- //
+// ----------------------------------------------------------------------------- //
+    void Punch::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const height_goal = parameters_[0];
+        double const walk_speed = parameters_[1];
 
-
+        int counter = 0;
 
         // ----- Height: head feet vertical error ----- //
 
@@ -66,22 +36,23 @@ namespace mjpc {
         // capture point
         double *com_velocity = SensorByName(model, data, "torso_subtreelinvel");
 
-
         // ----- COM xy velocity should be 0 ----- //
-        mju_copy(&residual[counter], com_velocity, 2);
+        if (std::abs(walk_speed) < 1e-3) {
+            mju_copy(&residual[counter], com_velocity, 2);
+        } else {
+            mju_copy(&residual[counter], com_velocity, 2);
+            residual[counter] = 0.0;
+        }
         counter += 2;
-
 
         // ----- joint velocity ----- //
         mju_copy(residual + counter, data->qvel + 6, model->nu);
         counter += model->nu;
-
-//        double sum_qvel = 0;
-//        for (int i = 0; i < model->nv - 6; i++) {
-//            sum_qvel += std::abs(data->qvel[6 + i]);
-//        }
-//        double q_vel_low = tolerance(sum_qvel, {-10, +10}, 5.0, "quadratic", 0.0);
-
+        double sum_qvel = 0;
+        for (int i = 0; i < model->nv - 6; i++) {
+            sum_qvel += std::abs(data->qvel[6 + i]);
+        }
+        double q_vel_low = tolerance(sum_qvel, {-10, +10}, 5.0, "quadratic", 0.0);
 
 
         // ----- torso height ----- //
@@ -132,7 +103,6 @@ namespace mjpc {
         double *pelvis_up = SensorByName(model, data, "pelvis_up");
         double *foot_right_up = SensorByName(model, data, "foot_right_up");
         double *foot_left_up = SensorByName(model, data, "foot_left_up");
-
         double z_ref[3] = {0.0, 0.0, 1.0};
 
         // torso
@@ -154,9 +124,6 @@ namespace mjpc {
         residual[counter + 0] = data->qpos[0];
         residual[counter + 1] = data->qpos[1];
         residual[counter + 2] = 1.0 - data->qpos[2];
-//        residual[counter + 0] = 0.0;
-//        residual[counter + 1] = 0.0;
-//        residual[counter + 2] = 0.0;
         residual[counter + 3] = 1.0 - data->qpos[3];
         residual[counter + 4] = data->qpos[4];
         residual[counter + 5] = data->qpos[5];
@@ -164,9 +131,23 @@ namespace mjpc {
 
         counter += 7;
 
-// ----- posture ----- //
+
+        // ----- posture ----- //
         mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
         counter += model->nu;
+
+        // ----- Walk ----- //
+        double *torso_forward = SensorByName(model, data, "torso_forward");
+        double *pelvis_forward = SensorByName(model, data, "pelvis_forward");
+        double *foot_right_forward = SensorByName(model, data, "foot_right_forward");
+        double *foot_left_forward = SensorByName(model, data, "foot_left_forward");
+
+        double forward[2];
+        mju_copy(forward, torso_forward, 2);
+        mju_addTo(forward, pelvis_forward, 2);
+        mju_addTo(forward, foot_right_forward, 2);
+        mju_addTo(forward, foot_left_forward, 2);
+        mju_normalize(forward, 2);
 
         // com vel
         double *waist_lower_subcomvel =
@@ -175,6 +156,10 @@ namespace mjpc {
         double com_vel[2];
         mju_add(com_vel, waist_lower_subcomvel, torso_velocity, 2);
         mju_scl(com_vel, com_vel, 0.5, 2);
+
+        // Walk forward
+        residual[counter++] =
+                standing * (mju_dot(com_vel, forward, 2) - walk_speed);
 
         // ----- move feet ----- //
         double *foot_right_vel = SensorByName(model, data, "foot_right_vel");
@@ -192,42 +177,22 @@ namespace mjpc {
         mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nu); // because of pos control
         counter += model->nu;
 
-        // ------ object position ------ //
-        double object_dist = mju_dist3(object_pos, goal_pos);
-        if (object_dist > -0.05) {//TODO this is a hack
-            mju_sub3(&residual[counter], object_pos, goal_pos);
-            mju_scl3(&residual[counter], &residual[counter], standing);
-            counter += 3;
-
-            double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
-            double *right_hand_pos = SensorByName(model, data, "right_hand_pos");
-
-            double left_hand_dist = mju_dist3(left_hand_pos, object_pos);
-            double right_hand_dist = mju_dist3(right_hand_pos, object_pos);
-            double min_dist = std::min(left_hand_dist, right_hand_dist);
-
-            if (min_dist > -0.05) {
+        // ----- reach task ----- //
+        double *goal_pos = SensorByName(model, data, "goal_pos");
+        double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
+        double *right_hand_pos = SensorByName(model, data, "right_hand_pos");
+//        printf(task_->use_left_hand_ ? "left hand in residual\n" : "right hand in residual\n");
 
 
-                // ----- left hand distance ----- //
-                mju_sub3(&residual[counter], left_hand_pos, object_pos);
-//        residual[counter + 1] -= 0.1;
-                mju_scl3(&residual[counter], &residual[counter], standing);
-                counter += 3;
-
-                // ----- right hand distance ----- //
-                mju_sub3(&residual[counter], right_hand_pos, object_pos);
-//        residual[counter + 1] += 0.1;
-                mju_scl3(&residual[counter], &residual[counter], standing);
-                counter += 3;
-            } else {
-                std::fill_n(&residual[counter], 6, 0.0);
-                counter += 6;
-            }
+        if (task_->use_left_hand_) {
+            mju_sub3(&residual[counter], goal_pos, left_hand_pos);
         } else {
-            std::fill_n(&residual[counter], 9, 0.0);
-            counter += 9;
+            mju_sub3(&residual[counter], goal_pos, right_hand_pos);
         }
+
+        mju_scl(&residual[counter], &residual[counter], standing * q_vel_low, 3);
+        counter += 3;
+
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function
         int user_sensor_dim = 0;
@@ -245,31 +210,73 @@ namespace mjpc {
     }
 
 
-// -------- Transition for humanoid_bench push task -------- //
-// ------------------------------------------------------------ //
-    void H1_push::TransitionLocked(mjModel *model, mjData *data) {
-        //// use slider to move object
-//        target_position_ = {parameters[2], parameters[3], 1.0};
-//        mju_copy3(data->mocap_pos, target_position_.data());
+// -------- Transition for humanoid_bench reach task -------- //
+// ------------------------------------------------------------- //
+    void Punch::TransitionLocked(mjModel *model, mjData *data) {
 
-//// set object randomly
-//// here the python code
-//        def reset_model(self):
-//        self.goal[0] = np.random.uniform(0.7, 1.0)
-//        self.goal[1] = np.random.uniform(-0.5, 0.5)
-//        terminated = self.goal_dist() < 0.05
-
-        double *object_pos = SensorByName(model, data, "object_pos");
-        double goal_dist = mju_dist3(object_pos, target_position_.data());
-        if (goal_dist < 0.05) {
+        double *hand_pos;
+        if (use_left_hand_) {
+            hand_pos = SensorByName(model, data, "left_hand_pos");
+        } else {
+            hand_pos = SensorByName(model, data, "right_hand_pos");
+        }
+        double hand_dist = std::sqrt(std::pow(target_position_[0] - hand_pos[0], 2) +
+                                     std::pow(target_position_[1] - hand_pos[1], 2) +
+                                     std::pow(target_position_[2] - hand_pos[2], 2));
+        // check if task is done
+        if ((hand_dist < 0.05 || hand_dist > 100) && data->time > 0.1) {
+            // generate new random target
+            std::array<double, 3> target_low = {0, -0.20, -0.30};
+            std::array<double, 3> target_high = {0.20, 0.20, 0.30};
             std::random_device rd;
             std::mt19937 gen(rd());
-            std::uniform_real_distribution<> dis_0(0.7, 1.0);
-            std::uniform_real_distribution<> dis_1(-0.5, 0.5);
-            target_position_[0] = dis_0(gen);
-            target_position_[1] = dis_1(gen);
-            printf("New target position: %f, %f\n", target_position_[0], target_position_[1]);
+            std::array<double, 3> new_target = {0, 0, 0};
+            for (int i = 0; i < 3; ++i) {
+                std::uniform_real_distribution<> dis(target_low[i], target_high[i]);
+                new_target[i] = dis(gen);
+            }
+
+            // add offset to the left hand site or right hand site
+            double left_hand_offset[3] = {0.3, -0.2, -0.1};
+            double right_hand_offset[3] = {0.3, 0.2, -0.1};
+            if (use_left_hand_) {
+                mju_add3(new_target.data(), new_target.data(), left_hand_offset);
+            } else {
+                mju_add3(new_target.data(), new_target.data(), right_hand_offset);
+            }
+
+
+            // move new target to front of robot
+            double *pelvis_position = SensorByName(model, data, "torso_position");
+            double *pelvis_orientation = SensorByName(model, data, "torso_orientation");
+
+            // Compute the relative target position in the local coordinate system of the pelvis
+            double relative_target_pos[3] = {new_target[0], new_target[1], new_target[2]};
+
+            // Convert the pelvis's orientation quaternion to a rotation matrix
+            double pelvis_rotmat[9];
+            mju_quat2Mat(pelvis_rotmat, pelvis_orientation);
+
+            // Multiply the relative target position by the rotation matrix to rotate it according to the pelvis's orientation
+            double rotated_relative_target_pos[3];
+            mju_mulMatVec(rotated_relative_target_pos, pelvis_rotmat, relative_target_pos, 3, 3);
+
+            // Add the rotated relative target position to the pelvis's position to get the target position in the global coordinate system
+            double global_target_pos[3];
+            mju_add(global_target_pos, pelvis_position, rotated_relative_target_pos, 3);
+
+            // Copy the global target position to mocap_pos
+            target_position_[0] = global_target_pos[0];
+            target_position_[1] = global_target_pos[1];
+            target_position_[2] = global_target_pos[2];
+
+            printf("new target %f %f %f\n", target_position_[0], target_position_[1], target_position_[2]);
+            use_left_hand_ = !use_left_hand_;
+
         }
         mju_copy3(data->mocap_pos, target_position_.data());
+        mju_copy3(data->mocap_pos + 3, hand_pos);
     }
+
+
 }  // namespace mjpc

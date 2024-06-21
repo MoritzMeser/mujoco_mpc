@@ -51,62 +51,6 @@ namespace mjpc {
         }
     };
 
-//    class H1_walk_hand : public Walk {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Walk Hand";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/basic_locomotion/Walk/H1_walk_hand.xml");
-//        }
-//
-//    };
-//
-//    class H1_walk_gripper : public Walk {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Walk Gripper";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/basic_locomotion/Walk/H1_walk_gripper.xml");
-//        }
-//    };
-//
-//    class H1_walk_simple_hand : public Walk {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Walk Simple Hand";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/basic_locomotion/Walk/H1_walk_simple_hand.xml");
-//        }
-//    };
-//
-//    class H1_walk_strong : public Walk {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Walk Strong";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/basic_locomotion/Walk/H1_walk_strong.xml");
-//        }
-//    };
-//
-//    class H1_walk_touch : public Walk {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Walk Touch";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/basic_locomotion/Walk/H1_walk_touch.xml");
-//        }
-//    };
-
     class Walk_G1 : public Walk {
     public:
         std::string Name() const override {
