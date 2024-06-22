@@ -114,7 +114,6 @@ namespace mjpc {
         mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
         counter += model->nu;
 
-        std::cout << std::endl;
         // ----- Walk ----- //
         double *torso_forward = SensorByName(model, data, "torso_forward");
         double *pelvis_forward = SensorByName(model, data, "pelvis_forward");
