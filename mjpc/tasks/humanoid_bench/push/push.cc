@@ -18,7 +18,7 @@ namespace mjpc {
 // ----------------- Residuals for humanoid_bench push task ---------------- //
 // ---------------------------------------------------------------------------- //
     void push::ResidualFn::Residual(const mjModel *model, const mjData *data,
-                                       double *residual) const {
+                                    double *residual) const {
         //------------- Reward for the push task as in humanoid_bench --------------//
         // ----- define goal position ----- //
         double const *goal_pos = task_->target_position_.data();
@@ -159,7 +159,7 @@ namespace mjpc {
 
         counter += 7;
 
-// ----- posture ----- //
+        // ----- posture ----- //
         mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
         counter += model->nu;
 
@@ -207,13 +207,13 @@ namespace mjpc {
                 // ----- left hand distance ----- //
                 mju_sub3(&residual[counter], left_hand_pos, object_pos);
 //        residual[counter + 1] -= 0.1;
-                mju_scl3(&residual[counter], &residual[counter], standing);
+//                mju_scl3(&residual[counter], &residual[counter], standing);
                 counter += 3;
 
                 // ----- right hand distance ----- //
                 mju_sub3(&residual[counter], right_hand_pos, object_pos);
 //        residual[counter + 1] += 0.1;
-                mju_scl3(&residual[counter], &residual[counter], standing);
+//                mju_scl3(&residual[counter], &residual[counter], standing);
                 counter += 3;
             } else {
                 std::fill_n(&residual[counter], 6, 0.0);
@@ -247,18 +247,28 @@ namespace mjpc {
 //        target_position_ = {parameters[2], parameters[3], 1.0};
 //        mju_copy3(data->mocap_pos, target_position_.data());
 
-        //// set object randomly
-        double *object_pos = SensorByName(model, data, "object_pos");
-        double goal_dist = mju_dist3(object_pos, target_position_.data());
-        if (goal_dist < 0.05) {
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::uniform_real_distribution<> dis_0(0.7, 1.0);
-            std::uniform_real_distribution<> dis_1(-0.5, 0.5);
-            target_position_[0] = dis_0(gen);
-            target_position_[1] = dis_1(gen);
-            printf("New target position: %f, %f\n", target_position_[0], target_position_[1]);
-        }
+        //// set target randomly
+//        double *object_pos = SensorByName(model, data, "object_pos");
+//        double goal_dist = mju_dist3(object_pos, target_position_.data());
+//        if (goal_dist < 0.05) {
+//            std::random_device rd;
+//            std::mt19937 gen(rd());
+//            std::uniform_real_distribution<> dis_0(0.7, 1.0);
+//            std::uniform_real_distribution<> dis_1(-0.5, 0.5);
+//            target_position_[0] = dis_0(gen);
+//            target_position_[1] = dis_1(gen);
+//            printf("New target position: %f, %f\n", target_position_[0], target_position_[1]);
+//        }
         mju_copy3(data->mocap_pos, target_position_.data());
+    }
+
+    void push::ResetLocked(const mjModel *model) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<> dis_x(0.7, 1.0);
+        std::uniform_real_distribution<> dis_y(-0.5, 0.5);
+
+        target_position_ = {dis_x(gen), dis_y(gen), 1.0};
+        printf("Initial target position: %f, %f\n", target_position_[0], target_position_[1]);
     }
 }  // namespace mjpc

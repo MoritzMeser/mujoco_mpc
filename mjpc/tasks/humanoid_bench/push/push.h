@@ -2,6 +2,7 @@
 #define MUJOCO_MPC_PUSH_H
 
 #include <string>
+#include <random>
 #include "mujoco/mujoco.h"
 #include "mjpc/task.h"
 #include "mjpc/utilities.h"
@@ -16,7 +17,7 @@ namespace mjpc {
         class ResidualFn : public mjpc::BaseResidualFn {
         public:
             explicit ResidualFn(const push *task) : mjpc::BaseResidualFn(task),
-                                                       task_(const_cast<push *>(task)) {}
+                                                    task_(const_cast<push *>(task)) {}
 
             void Residual(const mjModel *model, const mjData *data,
                           double *residual) const override;
@@ -26,9 +27,21 @@ namespace mjpc {
 
         };
 
-        push() : residual_(this), target_position_({0.4, 0.0, 1.0}) {}
+        push() : residual_(this) {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_real_distribution<> dis_x(0.7, 1.0);
+            std::uniform_real_distribution<> dis_y(-0.5, 0.5);
+
+
+            target_position_ = {dis_x(gen), dis_y(gen), 1.0};
+            printf("Initial target position: %f, %f\n", target_position_[0], target_position_[1]);
+        }
+
 
         void TransitionLocked(mjModel *model, mjData *data) override;
+
+        void ResetLocked(const mjModel *model) override;
 
     protected:
 
@@ -60,6 +73,7 @@ namespace mjpc {
             return GetModelPath("humanoid_bench/push/Push_H1.xml");
         }
     };
+
     class G1_push : public push {
     public:
         std::string Name() const override {
@@ -71,61 +85,6 @@ namespace mjpc {
         }
 
     };
-
-//    class H1_push_hand : public push {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Push Hand";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/push/H1_push_hand.xml");
-//        }
-//    };
-//
-//    class H1_push_gripper : public push {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Push Gripper";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/push/H1_push_gripper.xml");
-//        }
-//    };
-//
-//    class H1_push_simple_hand : public push {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Push Simple Hand";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/push/H1_push_simple_hand.xml");
-//        }
-//    };
-//
-//    class H1_push_strong : public push {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Push Strong";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/push/H1_push_strong.xml");
-//        }
-//    };
-//
-//    class H1_push_touch : public push {
-//    public:
-//        std::string Name() const override {
-//            return "H1 Push Touch";
-//        }
-//
-//        std::string XmlPath() const override {
-//            return GetModelPath("humanoid_bench/push/H1_push_touch.xml");
-//        }
-//    };
 }  // namespace mjpc
 
 #endif //MUJOCO_MPC_PUSH_H

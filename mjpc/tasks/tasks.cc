@@ -108,14 +108,10 @@ namespace mjpc {
 //                std::make_shared<H1_stand_strong>(),
 //                std::make_shared<H1_stand_touch>(),
                 std::make_shared<Stand_G1>(),
-//
-//                //Run Task
-//                std::make_shared<H1_run_position>(),
-//                std::make_shared<H1_run_hand>(),
-//                std::make_shared<H1_run_gripper>(),
-//                std::make_shared<H1_run_simple_hand>(),
-//                std::make_shared<H1_run_strong>(),
-//                std::make_shared<H1_run_touch>(),
+
+                //Run Task
+                std::make_shared<Run_H1>(),
+                std::make_shared<Run_G1>(),
 //
 //                //Stairs Task
 //                std::make_shared<H1_stairs_position>(),
@@ -224,6 +220,7 @@ namespace mjpc {
                 std::make_shared<Maze_G1>(),
 //
 //                //Package Task
+                std::make_shared<Package_H1>(),
 //                std::make_shared<H1_package_position>(),
 //                std::make_shared<H1_package_hand>(),
 //                std::make_shared<H1_package_gripper>(),

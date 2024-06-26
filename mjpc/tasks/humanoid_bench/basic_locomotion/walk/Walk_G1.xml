@@ -20,6 +20,7 @@
         <numeric name="sampling_exploration" data="0.05"/>
         <numeric name="gradient_spline_points" data="5"/>
         <numeric name="residual_Torso" data="0.96 0 1.7"/>
+        <numeric name="residual_HeadHeight" data="0.96 0.0 2.0"/>
         <numeric name="residual_Speed" data="1.0 0.0 5.0"/>
         <numeric name="residual_direction" data="0 -45 45"/>
     </custom>

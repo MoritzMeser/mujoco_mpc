@@ -15,13 +15,13 @@
 
 namespace mjpc {
 // ----------------- Residuals for humanoid_bench stand task ---------------- //
-// ----------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------- //
     void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const height_goal = parameters_[0];
+
         int counter = 0;
         residual[counter] = 1.0 - walk_reward(model, data, 0.0, height_goal);
         counter++;
-//        printf("residual[0]: %f\n", residual[0]);
 
         // ----- Height: head feet vertical error ----- //
 

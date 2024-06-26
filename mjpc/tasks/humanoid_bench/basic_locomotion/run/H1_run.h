@@ -39,69 +39,25 @@ namespace mjpc {
         ResidualFn residual_;
     };
 
-    class H1_run_position : public H1_run {
+    class Run_H1 : public H1_run {
     public:
         std::string Name() const override {
-            return "H1 Run";
+            return "Run H1";
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/run/H1_run_pos.xml");
+            return GetModelPath("humanoid_bench/basic_locomotion/run/Run_H1.xml");
         }
     };
 
-    class H1_run_hand : public H1_run {
+    class Run_G1 : public H1_run {
     public:
         std::string Name() const override {
-            return "H1 Run Hand";
+            return "Run G1";
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/run/H1_run_hand.xml");
-        }
-    };
-
-    class H1_run_gripper : public H1_run {
-    public:
-        std::string Name() const override {
-            return "H1 Run Gripper";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/run/H1_run_gripper.xml");
-        }
-    };
-
-    class H1_run_simple_hand : public H1_run {
-    public:
-        std::string Name() const override {
-            return "H1 Run Simple Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/run/H1_run_simple_hand.xml");
-        }
-    };
-
-    class H1_run_strong : public H1_run {
-    public:
-        std::string Name() const override {
-            return "H1 Run Strong";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/run/H1_run_strong.xml");
-        }
-    };
-
-    class H1_run_touch : public H1_run {
-    public:
-        std::string Name() const override {
-            return "H1 Run Touch";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/run/H1_run_touch.xml");
+            return GetModelPath("humanoid_bench/basic_locomotion/run/Run_G1.xml");
         }
     };
 }  // namespace mjpc

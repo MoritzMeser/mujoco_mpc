@@ -11,7 +11,7 @@
                   density="5"/>
         </body>
 
-        <body name="package_destination" pos="0 0 0">
+        <body name="package_destination" mocap="true" pos="0 0 0">
             <site name="destination_loc" pos="0 0 0.35" rgba="0 0 0 0"/>
             <geom type="sphere" name="reaching_point" pos="0 0 0.35" size=".01" rgba="1 1 1 0.9" class="visual"/>
             <geom type="sphere" name="reaching_sphere" pos="0 0 0.35" size=".05" rgba="0.4 0.8 0.8 0.6" class="visual"/>

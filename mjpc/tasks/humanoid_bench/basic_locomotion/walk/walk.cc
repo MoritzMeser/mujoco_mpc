@@ -17,26 +17,19 @@
 
 namespace mjpc {
 // ----------------- Residuals for humanoid_bench Walk task ---------------- //
-//   Number of residuals:
-//     Residual (0): torso height
-//     Residual (1): pelvis-feet aligment
-//     Residual (2): balance
-//     Residual (3): upright
-//     Residual (4): posture
-//     Residual (5): Walk
-//     Residual (6): move feet
-//     Residual (7): control
-//   Number of parameters:
-//     Parameter (0): torso height goal
-//     Parameter (1): speed goal
 // ------------------------------------------------------------------------- //
     void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
+        double const torso_height_goal = parameters_[0];
+        double const head_height_goal = parameters_[1];
+        double const speed_goal = parameters_[2];
+        double const direction_goal = parameters_[3];
+
         int counter = 0;
-        residual[counter++] = 1.0 - walk_reward(model, data, parameters_[0], parameters_[1]);
+        residual[counter++] = 1.0 - walk_reward(model, data, speed_goal, head_height_goal);
 
         // ----- torso height ----- //
         double torso_height = SensorByName(model, data, "torso_position")[2];
-        residual[counter++] = torso_height - parameters_[0];
+        residual[counter++] = torso_height -torso_height_goal;
 
         // ----- pelvis / feet ----- //
         double *foot_right = SensorByName(model, data, "foot_right");
@@ -127,11 +120,10 @@ namespace mjpc {
         mju_addTo(forward, foot_left_forward, 2);
         mju_normalize(forward, 2);
 
-        // Face in right-direction
-        double goal_direction = parameters_[2];
+        // Face in right-direction;
         // from degree to radian
-        goal_direction = goal_direction * M_PI / 180;
-        double face_x[2] = {cos(goal_direction), sin(goal_direction)};
+        double direction_goal_radiant = direction_goal * M_PI / 180;
+        double face_x[2] = {cos(direction_goal_radiant), sin(direction_goal_radiant)};
         mju_sub(&residual[counter], forward, face_x, 2);
         mju_scl(&residual[counter], &residual[counter], standing, 2);
         counter += 2;
@@ -146,7 +138,7 @@ namespace mjpc {
 
         // Walk forward
         residual[counter++] =
-                standing * (mju_dot(com_vel, forward, 2) - parameters_[1]);
+                standing * (mju_dot(com_vel, forward, 2) - speed_goal);
 
         // ----- move feet ----- //
         double *foot_right_vel = SensorByName(model, data, "foot_right_velocity");
