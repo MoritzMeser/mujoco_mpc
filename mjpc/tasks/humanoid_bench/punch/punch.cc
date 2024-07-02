@@ -48,11 +48,11 @@ namespace mjpc {
         // ----- joint velocity ----- //
         mju_copy(residual + counter, data->qvel + 6, model->nu);
         counter += model->nu;
-        double sum_qvel = 0;
-        for (int i = 0; i < model->nv - 6; i++) {
-            sum_qvel += std::abs(data->qvel[6 + i]);
-        }
-        double q_vel_low = tolerance(sum_qvel, {-10, +10}, 5.0, "quadratic", 0.0);
+//        double sum_qvel = 0;
+//        for (int i = 0; i < model->nv - 6; i++) {
+//            sum_qvel += std::abs(data->qvel[6 + i]);
+//        }
+//        double q_vel_low = tolerance(sum_qvel, {-10, +10}, 5.0, "quadratic", 0.0);
 
 
         // ----- torso height ----- //
@@ -190,7 +190,9 @@ namespace mjpc {
             mju_sub3(&residual[counter], goal_pos, right_hand_pos);
         }
 
-        mju_scl(&residual[counter], &residual[counter], standing * q_vel_low, 3);
+//        mju_scl(&residual[counter], &residual[counter], standing * q_vel_low, 3);
+        mju_scl(&residual[counter], &residual[counter], standing, 3);
+
         counter += 3;
 
         // sensor dim sanity check

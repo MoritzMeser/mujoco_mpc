@@ -10,7 +10,7 @@
 
     <custom>
 
-        <numeric name="agent_planner" data="1" />
+        <numeric name="agent_planner" data="2" />
         <numeric name="agent_horizon" data="0.35" />
         <numeric name="agent_timestep" data="0.015" />
         <numeric name="sampling_spline_points" data="3" />
