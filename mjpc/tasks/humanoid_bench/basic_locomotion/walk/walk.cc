@@ -1,23 +1,43 @@
+// Copyright 2022 DeepMind Technologies Limited
 //
-// Created by Moritz Meser on 15.05.24.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #include "walk.h"
-
 #include <string>
-#include <limits>
 #include <cmath>
-
 #include "mujoco/mujoco.h"
-#include "mjpc/utilities.h"
-
-#include "mjpc/tasks/humanoid_bench/utility/dm_control_utils_rewards.h"
 #include "mjpc/tasks/humanoid_bench/basic_locomotion/walk_reward.h"
 
 
 namespace mjpc {
-// ----------------- Residuals for humanoid_bench Walk task ---------------- //
-// ------------------------------------------------------------------------- //
+// ------------------ Residuals for humanoid walk task ------------
+//   Number of residuals:
+//      Residual(0): 1 - humanoid_bench reward
+//      Residual(1): torso height
+//      Residual(2): pelvis-feet alignment
+//      Residual(3): balance
+//      Residual(4): upright
+//      Residual(5): posture
+//      Residual(6): face direction
+//      Residual(7): walk
+//      Residual(8): velocity
+//      Residual(9): control
+//   Number of parameters:
+//      Parameter(0): torso height goal
+//      Parameter(1): head height goal
+//      Parameter(2): speed goal
+//      Parameter(3): direction goal
+// ----------------------------------------------------------------
     void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const torso_height_goal = parameters_[0];
         double const head_height_goal = parameters_[1];
@@ -25,6 +45,8 @@ namespace mjpc {
         double const direction_goal = parameters_[3];
 
         int counter = 0;
+
+        // ----- humanoid_bench reward ----- //
         residual[counter++] = 1.0 - walk_reward(model, data, speed_goal, head_height_goal);
 
         // ----- torso height ----- //
@@ -120,8 +142,7 @@ namespace mjpc {
         mju_addTo(forward, foot_left_forward, 2);
         mju_normalize(forward, 2);
 
-        // Face in right-direction;
-        // from degree to radian
+        // Face in right-direction
         double direction_goal_radiant = direction_goal * M_PI / 180;
         double face_x[2] = {cos(direction_goal_radiant), sin(direction_goal_radiant)};
         mju_sub(&residual[counter], forward, face_x, 2);

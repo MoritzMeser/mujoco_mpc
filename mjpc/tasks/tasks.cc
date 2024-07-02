@@ -114,6 +114,7 @@ namespace mjpc {
                 std::make_shared<Run_G1>(),
 //
 //                //Stairs Task
+                std::make_shared<Stairs_H1>(),
 //                std::make_shared<H1_stairs_position>(),
 //                std::make_shared<H1_stairs_hand>(),
 //                std::make_shared<H1_stairs_gripper>(),

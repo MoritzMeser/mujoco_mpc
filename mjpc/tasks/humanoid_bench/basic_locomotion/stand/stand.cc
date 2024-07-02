@@ -1,27 +1,45 @@
+// Copyright 2022 DeepMind Technologies Limited
 //
-// Created by Moritz Meser on 15.05.24.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #include "stand.h"
-
-#include <string>
-
 #include "mujoco/mujoco.h"
-#include "mjpc/utilities.h"
-
 #include "mjpc/tasks/humanoid_bench/basic_locomotion/walk_reward.h"
-#include "mjpc/tasks/humanoid_bench/utility/dm_control_utils_rewards.h"
+
 
 
 namespace mjpc {
-// ----------------- Residuals for humanoid_bench stand task ---------------- //
-// -------------------------------------------------------------------------- //
+// ------------------ Residuals for humanoid stand task ------------
+//   Number of residuals:
+//      Residual(0): 1 - humanoid_bench reward
+//      Residual(1): Height: head feet vertical error
+//      Residual(2): Balance: CoM Velocity
+//      Residual(3): joint velocity
+//      Residual(4): balance
+//      Residual(5): upright
+//      Residual(6): posture
+//      Residual(7): velocity
+//      Residual(8): control
+//   Number of parameters:
+//      Parameter(0): head height goal
+// ----------------------------------------------------------------
     void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
         double const height_goal = parameters_[0];
 
         int counter = 0;
-        residual[counter] = 1.0 - walk_reward(model, data, 0.0, height_goal);
-        counter++;
+
+        // ----- humanoid_bench reward ----- //
+        residual[counter++] = 1.0 - walk_reward(model, data, 0.0, height_goal);
 
         // ----- Height: head feet vertical error ----- //
 

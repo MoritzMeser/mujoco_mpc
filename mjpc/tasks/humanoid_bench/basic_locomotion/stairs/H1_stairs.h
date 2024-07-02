@@ -39,69 +39,14 @@ namespace mjpc {
         ResidualFn residual_;
     };
 
-    class H1_stairs_position : public H1_stairs {
+    class Stairs_H1 : public H1_stairs {
     public:
         std::string Name() const override {
-            return "H1 Stairs";
+            return "Stairs H1";
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/stairs/H1_stairs_pos.xml");
-        }
-    };
-
-    class H1_stairs_hand : public H1_stairs {
-    public:
-        std::string Name() const override {
-            return "H1 Stairs Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/stairs/H1_stairs_hand.xml");
-        }
-    };
-
-    class H1_stairs_gripper : public H1_stairs {
-    public:
-        std::string Name() const override {
-            return "H1 Stairs Gripper";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/stairs/H1_stairs_gripper.xml");
-        }
-    };
-
-    class H1_stairs_simple_hand : public H1_stairs {
-    public:
-        std::string Name() const override {
-            return "H1 Stairs Simple Hand";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/stairs/H1_stairs_simple_hand.xml");
-        }
-    };
-
-    class H1_stairs_strong : public H1_stairs {
-    public:
-        std::string Name() const override {
-            return "H1 Stairs Strong";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/stairs/H1_stairs_strong.xml");
-        }
-    };
-
-    class H1_stairs_touch : public H1_stairs {
-    public:
-        std::string Name() const override {
-            return "H1 Stairs Touch";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/stairs/H1_stairs_touch.xml");
+            return GetModelPath("humanoid_bench/basic_locomotion/stairs/Stairs_H1.xml");
         }
     };
 }  // namespace mjpc

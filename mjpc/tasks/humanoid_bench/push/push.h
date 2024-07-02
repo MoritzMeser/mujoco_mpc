@@ -32,10 +32,8 @@ namespace mjpc {
             std::mt19937 gen(rd());
             std::uniform_real_distribution<> dis_x(0.7, 1.0);
             std::uniform_real_distribution<> dis_y(-0.5, 0.5);
-
-
             target_position_ = {dis_x(gen), dis_y(gen), 1.0};
-            printf("Initial target position: %f, %f\n", target_position_[0], target_position_[1]);
+//            printf("Initial target position: %f, %f\n", target_position_[0], target_position_[1]);
         }
 
 
