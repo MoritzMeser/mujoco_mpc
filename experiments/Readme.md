@@ -9,7 +9,7 @@ python setup.py install
 ```
 This has to be done after each change again !!!
 
-## Maingit reset Script
+## Main Script
 
 This file runs the actual experiment, the results are stored in a folder. 
 Keep in mind, all the parameters (planner, horizon, cost weights, etc.) are loaded from the xml file. Someone might have changed them in the last pull. And they might be different for different tasks. 

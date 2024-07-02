@@ -29,7 +29,9 @@ def get_data(task_name):
         data = json.load(f)
     data = data[task_name]
 
-    algo_names = list(data.keys())
+    # algo_names = list(data.keys())
+    # want to oder them by hand
+    algo_names = ['TD-MPC2', 'DreamerV3', 'SAC', 'PPO']
     seeds = list(data[algo_names[0]].keys())
     all_data = []
     mean_data = []
@@ -45,28 +47,29 @@ def get_data(task_name):
 
 
 if __name__ == "__main__":
-    # list_fields('hb_original.json', depth=5)
-    # with open('hb_original.json', 'r') as f:
-    #     data = json.load(f)
-    # x = data['push']['TD-MPC2']['seed_2']['million_steps']
-    # y = data['push']['TD-MPC2']['seed_2']['return']
-    # plt.plot(x, y)
-    # plt.show()
-    means, stds, algo_names = get_data('push')
-
-    sum_of_rewards = means
-    rewards_std = stds
-    experiment_labels = algo_names
-
-    # Create the bar plot
-    x_pos = np.arange(len(experiment_labels))
-    plt.figure(figsize=(10, 6))
-    plt.bar(x_pos, sum_of_rewards, yerr=rewards_std, align='center', alpha=0.7, capsize=10, width=0.5)
-    plt.xticks(x_pos, experiment_labels, rotation=45, ha="right")
-    plt.ylabel('Sum of Rewards')
-    plt.title(f"Sum of Rewards over Time for {'push'} Task")
-
-    # Adjust layout and display the plot
-    plt.tight_layout()
+    list_fields('hb_original.json', depth=5)
+    with open('hb_original.json', 'r') as f:
+        data = json.load(f)
+    for i in range(3):
+        x = data['stand']['PPO'][f'seed_{i}']['million_steps']
+        y = data['stand']['PPO'][f'seed_{i}']['return']
+        plt.plot(x, y)
     plt.show()
+    # means, stds, algo_names = get_data('push')
+
+    # sum_of_rewards = means
+    # rewards_std = stds
+    # experiment_labels = algo_names
+    #
+    # # Create the bar plot
+    # x_pos = np.arange(len(experiment_labels))
+    # plt.figure(figsize=(10, 6))
+    # plt.bar(x_pos, sum_of_rewards, yerr=rewards_std, align='center', alpha=0.7, capsize=10, width=0.5)
+    # plt.xticks(x_pos, experiment_labels, rotation=45, ha="right")
+    # plt.ylabel('Sum of Rewards')
+    # plt.title(f"Sum of Rewards over Time for {'push'} Task")
+    #
+    # # Adjust layout and display the plot
+    # plt.tight_layout()
+    # plt.show()
 
