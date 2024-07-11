@@ -141,70 +141,17 @@ add_library(
         task.cc
         task.h
         tasks/humanoid_bench/utility/dm_control_utils_rewards.cpp
-        tasks/humanoid_bench/balance/balance.h
-        tasks/humanoid_bench/balance/balance.cc
         tasks/humanoid_bench/walk/walk.cc
         tasks/humanoid_bench/walk/walk.h
-        tasks/humanoid_bench/package/H1_package.h
-        tasks/humanoid_bench/package/H1_package.cc
-        tasks/humanoid_bench/reach/reach.cc
         tasks/humanoid_bench/walk_reward.cc
         tasks/humanoid_bench/walk_reward.h
         tasks/humanoid_bench/stand/stand.cc
         tasks/humanoid_bench/stand/stand.h
-        tasks/humanoid_bench/basic_locomotion/run/H1_run.cc
-        tasks/humanoid_bench/basic_locomotion/run/H1_run.h
-        tasks/humanoid_bench/basic_locomotion/stairs/H1_stairs.cc
-        tasks/humanoid_bench/basic_locomotion/stairs/H1_stairs.h
-        tasks/humanoid_bench/basic_locomotion/climbing_upwards_reward.cc
-        tasks/humanoid_bench/basic_locomotion/climbing_upwards_reward.h
-        tasks/humanoid_bench/basic_locomotion/slide/H1_slide.cc
-        tasks/humanoid_bench/basic_locomotion/slide/H1_slide.h
-        tasks/humanoid_bench/basic_locomotion/crawl/H1_crawl.h
-        tasks/humanoid_bench/basic_locomotion/crawl/H1_crawl.cc
-        tasks/humanoid_bench/basic_locomotion/crawl/H1_crawl.h
-        tasks/humanoid_bench/basic_locomotion/hurdle/H1_hurdle.cc
-        tasks/humanoid_bench/basic_locomotion/hurdle/H1_hurdle.h
-        tasks/humanoid_bench/maze/H1_maze.cc
-        tasks/humanoid_bench/maze/H1_maze.h
-        tasks/humanoid_bench/poles/H1_poles.cc
-        tasks/humanoid_bench/poles/H1_poles.h
-        tasks/humanoid_bench/basic_locomotion/sit/H1_sit.cc
-        tasks/humanoid_bench/basic_locomotion/sit/H1_sit.h
         tasks/humanoid_bench/push/push.cc
         tasks/humanoid_bench/push/push.h
-        tasks/humanoid_bench/cabinet/H1_cabinet.cc
-        tasks/humanoid_bench/cabinet/H1_cabinet.h
-        tasks/humanoid_bench/high_bar/H1_highbar.cc
-        tasks/humanoid_bench/high_bar/H1_highbar.h
-        tasks/humanoid_bench/door/H1_door.cc
-        tasks/humanoid_bench/door/H1_door.h
-        tasks/humanoid_bench/truck/H1_truck.cc
-        tasks/humanoid_bench/truck/H1_truck.h
-        tasks/humanoid_bench/cube/H1_cube.cc
-        tasks/humanoid_bench/cube/H1_cube.h
-        tasks/humanoid_bench/bookshelf/H1_bookshelf.cc
-        tasks/humanoid_bench/bookshelf/H1_bookshelf.h
-        tasks/humanoid_bench/basketball/H1_basketball.cc
-        tasks/humanoid_bench/basketball/H1_basketball.h
-        tasks/humanoid_bench/window/H1_window.cc
-        tasks/humanoid_bench/window/H1_window.h
-        tasks/humanoid_bench/spoon/H1_spoon.cc
-        tasks/humanoid_bench/spoon/H1_spoon.h
-        tasks/humanoid_bench/kitchen/H1_kitchen.cc
-        tasks/humanoid_bench/kitchen/H1_kitchen.h
-        tasks/humanoid_bench/powerlift/H1_powerlift.cc
-        tasks/humanoid_bench/powerlift/H1_powerlift.cc
-        tasks/humanoid_bench/powerlift/H1_powerlift.h
-        tasks/humanoid_bench/room/H1_room.cc
-        tasks/humanoid_bench/room/H1_room.h
-        tasks/humanoid_bench/insert/H1_insert.cc
-        tasks/humanoid_bench/insert/H1_insert.h
         tasks/humanoid_bench/utility/utility_functions.cpp
         tasks/humanoid_bench/utility/utility_functions.h
         $<TARGET_OBJECTS:mujoco::platform_ui_adapter>
-        tasks/humanoid_bench/punch/punch.h
-        tasks/humanoid_bench/punch/punch.cc
 )
 set_target_properties(libmjpc PROPERTIES OUTPUT_NAME mjpc)
 target_compile_options(libmjpc PUBLIC ${MJPC_COMPILE_OPTIONS})
