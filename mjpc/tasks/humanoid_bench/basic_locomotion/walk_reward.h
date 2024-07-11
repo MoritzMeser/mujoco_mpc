@@ -18,6 +18,6 @@
 #include "mujoco/mujoco.h"
 
 namespace mjpc {
-    double walk_reward(const mjModel *model, const mjData *data, double walk_speed, double stand_height);
+double walk_reward(const mjModel *model, const mjData *data, double walk_speed, double stand_height);
 } // namespace mjpc
 #endif //MUJOCO_MPC_WALK_REWARD_H

@@ -2,7 +2,7 @@ import pathlib
 
 
 def model_path_from_id(task_id):
-    basic_locomotion = {"Walk", "Stand", "Run"}
+    basic_locomotion = {"Walk", "Stand", "Run", "Stairs"}
 
     # Split the task_id into task and robot
     task, robot = task_id.split()

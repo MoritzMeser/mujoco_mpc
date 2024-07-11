@@ -40,6 +40,7 @@ def get_data(task_name):
         algo_data = []
         for seed in seeds:
             algo_data.append(np.max(data[algo_name][seed]['return']))  # use max, as this is training over time
+            # algo_data.append(data[algo_name][seed]['return'][-1])
         all_data.append(algo_data)
         mean_data.append(np.mean(algo_data, axis=0))
         std_data.append(np.std(algo_data, axis=0))

@@ -1,6 +1,0 @@
-- Stand - Moritz
-- Walk - Moritz
-- Run - Moritz
-- Maze - Aditya
-- Reach - Aditya
-- Push - Aditya

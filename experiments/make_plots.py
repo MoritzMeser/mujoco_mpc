@@ -212,24 +212,6 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
     #
     # order experiments by reward function
 
-    # print("Task: ", experiments[0].task_name.name)
-    # for exp in experiments:
-    #     qvel = np.array(exp.qvel)
-    #     # print("before qvel shape: ", qvel.shape)
-    #     # remove the first 6 elements, as they are belong to the free base joint, not an actual joint
-    #     qvel = qvel[:, 6:, :]
-    #     if exp.task_name == TaskName.Push:  # the last 6 entries belong to the free base joint of the box
-    #         qvel = qvel[:, :19, :]
-    #
-    #     # print("after qvel shape: ", qvel.shape)
-    #     # compute v_dot^2
-    #     v_dot = np.diff(qvel, axis=2)
-    #     v_dot = np.linalg.norm(v_dot, axis=1)
-    #     v_dot = np.mean(v_dot, axis=1)
-    #     v_dot = np.mean(v_dot, axis=0)
-    #     print(f"v_dot^2 for {exp.reward_function.name}: {v_dot}")
-
-
     filtered_experiments = []
     for exp in experiments:
         if exp.reward_function.name == 'ours_plus_hb':
@@ -239,20 +221,46 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
             filtered_experiments.append(exp)
     experiments = filtered_experiments
 
-    # report inference time
+    print("Task: ", experiments[0].task_name.name)
     for exp in experiments:
-        print(f"Average Inference Time for {exp.task_name}, Planner {exp.planner.name}:, Simulated Time: {exp.total_time}, Planner Iterations: {exp.planner_iterations}, Agent Horizon: {exp.agent_horizon} Number of Runs: {exp.num_runs}, Reward Function: {exp.reward_function.name}")
-        parsed_times = [parse_time_string(time) for time in exp.inference_times]
-        average_time_string = average_time([str(time) for time in parsed_times])
-        print(f"Average Inference Time: {average_time_string}")
+        qvel = np.array(exp.qvel)
+        # print("before qvel shape: ", qvel.shape)
+        # remove the first 6 elements, as they are belong to the free base joint, not an actual joint
+        qvel = qvel[:, 6:, :]
+        if exp.task_name == TaskName.Push:  # the last 6 entries belong to the free base joint of the box
+            qvel = qvel[:, :19, :]
+
+        # print("after qvel shape: ", qvel.shape)
+        # compute v_dot^2
+        v_dot = np.diff(qvel, axis=2)
+        v_dot = np.linalg.norm(v_dot, axis=1)
+        v_dot = np.mean(v_dot, axis=1)
+
+        v_dot_mean = np.mean(v_dot, axis=0)
+        v_dot_std = np.std(v_dot, axis=0)
+
+        function_name = exp.reward_function.name
+        if function_name == 'ours_plus_hb':
+            function_name = 'ours'
+        print(f"{function_name} v_dot^2: {v_dot_mean:.3f} ± {v_dot_std:.3f}")
+
+
+
+
+    # # report inference time
+    # for exp in experiments:
+    #     print(f"Average Inference Time for {exp.task_name}, Planner {exp.planner.name}:, Simulated Time: {exp.total_time}, Planner Iterations: {exp.planner_iterations}, Agent Horizon: {exp.agent_horizon} Number of Runs: {exp.num_runs}, Reward Function: {exp.reward_function.name}")
+    #     parsed_times = [parse_time_string(time) for time in exp.inference_times]
+    #     average_time_string = average_time([str(time) for time in parsed_times])
+    #     print(f"Average Inference Time: {average_time_string}")
 
 
 
 
 
     # make one plot, showing mean and std of rewards
-    plt.figure(figsize=(11, 6))  # Increase width to create space for text
-    plt.axes([0.05, 0.08, 0.69, 0.84])  # Adjust axes to leave space on the right
+    plt.figure(figsize=(8.5, 4))  # Increase width to create space for text
+    plt.axes([0.07, 0.12, 0.64, 0.87])  # Adjust axes to leave space on the right
     colors = ['b', 'g']
     for i, exp in enumerate(experiments):
         median = np.median(exp.rewards, axis=0)
@@ -265,9 +273,9 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
         plt.fill_between(time_list[:-1], mean - std, mean + std, alpha=0.3, color=colors[i])
         plt.plot(time_list[:-1], median, linestyle='--', color=colors[i])
     plt.xlabel("Time (s)")
-    plt.ylabel("Reward")
+    plt.ylabel("HumanoidBench Instantaneous Reward")
     plt.ylim(0, experiment.task_name.max_reward + 0.1)
-    plt.title("Humanoid Bench Reward over Time Walk Task")
+    # plt.title("Humanoid Bench Reward over Time Walk Task")
 
     # add a vertical line at 2s
     plt.axvline(x=2, color='black', linestyle=':', label='2s', linewidth=3)

@@ -16,6 +16,7 @@ class TaskName(Enum):
     Walk = (auto(), 1.0)
     Run = (auto(), 1.0)
     Push = (auto(), 1000.0)
+    Stairs = (auto(), 1.0)
 
     def __init__(self, _, max_reward):
         self._max_reward = max_reward
