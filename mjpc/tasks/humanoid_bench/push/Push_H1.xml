@@ -1,12 +1,12 @@
 <mujoco model="H1 Push">
-    <include file="../h1/h1_pos.xml"/>
+    <include file="../assets/h1_modified.xml"/>
     <include file="push.xml"/>
     <include file="../../common.xml"/>
     <include file="../../floor.xml"/>
 
     <keyframe>
         <key name="home"
-             qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0                 0.7 0 1 1 0 0 0"/>
+             qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0 0.7 0 1 1 0 0 0"/>
     </keyframe>
 
     <custom>
