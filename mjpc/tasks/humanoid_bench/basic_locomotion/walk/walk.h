@@ -71,17 +71,6 @@ namespace mjpc {
             return GetModelPath("humanoid_bench/basic_locomotion/Walk/Walk_G1.xml");
         }
     };
-
-    class Walk_H1_Torque : public Walk {
-    public:
-        std::string Name() const override {
-            return "Walk H1 Torque Control";
-        }
-
-        std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/Walk/Walk_H1_Torque.xml");
-        }
-    };
 }  // namespace mjpc
 
 #endif  // MJPC_TASKS_H1_WALK_H_
