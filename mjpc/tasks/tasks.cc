@@ -39,36 +39,9 @@
 #include "mjpc/tasks/swimmer/swimmer.h"
 #include "mjpc/tasks/walker/walker.h"
 // Humanoid Bench Tasks
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/walk/walk.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/stand/stand.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/run/H1_run.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/stairs/H1_stairs.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/slide/H1_slide.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/crawl/H1_crawl.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/hurdle/H1_hurdle.h"
-#include "mjpc/tasks/humanoid_bench/basic_locomotion/sit/H1_sit.h"
-#include "mjpc/tasks/humanoid_bench/maze/H1_maze.h"
-#include "mjpc/tasks/humanoid_bench/poles/H1_poles.h"
+#include "mjpc/tasks/humanoid_bench/walk/walk.h"
+#include "mjpc/tasks/humanoid_bench/stand/stand.h"
 #include "mjpc/tasks/humanoid_bench/push/push.h"
-#include "mjpc/tasks/humanoid_bench/cabinet/H1_cabinet.h"
-#include "mjpc/tasks/humanoid_bench/high_bar/H1_highbar.h"
-#include "mjpc/tasks/humanoid_bench/door/H1_door.h"
-#include "mjpc/tasks/humanoid_bench/truck/H1_truck.h"
-#include "mjpc/tasks/humanoid_bench/cube/H1_cube.h"
-#include "mjpc/tasks/humanoid_bench/bookshelf/H1_bookshelf.h"
-#include "mjpc/tasks/humanoid_bench/basketball/H1_basketball.h"
-#include "mjpc/tasks/humanoid_bench/window/H1_window.h"
-#include "mjpc/tasks/humanoid_bench/spoon/H1_spoon.h"
-#include "mjpc/tasks/humanoid_bench/kitchen/H1_kitchen.h"
-#include "mjpc/tasks/humanoid_bench/package/H1_package.h"
-#include "mjpc/tasks/humanoid_bench/powerlift/H1_powerlift.h"
-#include "mjpc/tasks/humanoid_bench/room/H1_room.h"
-#include "mjpc/tasks/humanoid_bench/insert/H1_insert.h"
-
-#include "mjpc/tasks/humanoid_bench/balance/balance.h"
-
-#include "mjpc/tasks/humanoid_bench/reach/reach.h"
-#include "mjpc/tasks/humanoid_bench/punch/punch.h"
 
 namespace mjpc {
 

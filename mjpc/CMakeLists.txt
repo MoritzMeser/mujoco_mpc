@@ -143,15 +143,15 @@ add_library(
         tasks/humanoid_bench/utility/dm_control_utils_rewards.cpp
         tasks/humanoid_bench/balance/balance.h
         tasks/humanoid_bench/balance/balance.cc
-        tasks/humanoid_bench/basic_locomotion/walk/walk.cc
-        tasks/humanoid_bench/basic_locomotion/walk/walk.h
+        tasks/humanoid_bench/walk/walk.cc
+        tasks/humanoid_bench/walk/walk.h
         tasks/humanoid_bench/package/H1_package.h
         tasks/humanoid_bench/package/H1_package.cc
         tasks/humanoid_bench/reach/reach.cc
-        tasks/humanoid_bench/basic_locomotion/walk_reward.cc
-        tasks/humanoid_bench/basic_locomotion/walk_reward.h
-        tasks/humanoid_bench/basic_locomotion/stand/stand.cc
-        tasks/humanoid_bench/basic_locomotion/stand/stand.h
+        tasks/humanoid_bench/walk_reward.cc
+        tasks/humanoid_bench/walk_reward.h
+        tasks/humanoid_bench/stand/stand.cc
+        tasks/humanoid_bench/stand/stand.h
         tasks/humanoid_bench/basic_locomotion/run/H1_run.cc
         tasks/humanoid_bench/basic_locomotion/run/H1_run.h
         tasks/humanoid_bench/basic_locomotion/stairs/H1_stairs.cc
