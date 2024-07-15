@@ -25,7 +25,7 @@ namespace mjpc {
             Reach *task_;
         };
 
-        Reach() : residual_(this), target_position_({1.0, 1.0, 1.0}) {}
+        Reach() : residual_(this), target_position_({1.0, 1.0, 1.0}), reward_state_("walk") {}
 
         void TransitionLocked(mjModel *model, mjData *data) override;
 
@@ -39,6 +39,8 @@ namespace mjpc {
     private:
         ResidualFn residual_;
         std::array<double, 3> target_position_;
+        std::string reward_state_;
+
     };
 
     class Reach_H1 : public Reach {
