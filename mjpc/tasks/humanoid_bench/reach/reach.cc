@@ -14,36 +14,40 @@
 namespace mjpc {
 // ----------------- Residuals for humanoid_bench reach task ---------------- //
 // -----------------------------------------------------------------------------
-// //
+//
 void Reach::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                  double *residual) const {
   double const height_goal = parameters_[0];
   double walk_speed = parameters_[1];
+  double const torso_height_goal = parameters_[2];
 
   int counter = 0;
+
+  // --------- reward as in humanoid_bench push task --------- //
+  double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
+  double hand_dist = mju_dist3(left_hand_pos, task_->target_position_.data());
+
+  double healthy_reward = data->xmat[1 * 9 + 8];
+  double motion_penalty = 0.0;
+  for (int i = 0; i < model->nu; i++) {
+    motion_penalty += data->qvel[i];
+  }
+  double reward_close = (hand_dist < 1) ? 5 : 0;
+  double reward_success = (hand_dist < 0.05) ? 10 : 0;
+
+  // ----- reward ----- //
+  double reward = healthy_reward - 0.0001 * motion_penalty + reward_close +
+                  reward_success;
+
+  // ----- residual ----- //
+  residual[counter++] = 16.0 - reward; // max reward is 16.0
+
+  // ---------- End of reward as in humanoid_bench push task --------- //
+
+
+  // switch between reach and walk reward
   if (task_->reward_state_ == "reach") {
     walk_speed = 0.0;
-    // --------- reward as in humanoid_bench push task --------- //
-    double *left_hand_pos = SensorByName(model, data, "left_hand_pos");
-    double hand_dist = mju_dist3(left_hand_pos, task_->target_position_.data());
-
-    double healthy_reward = data->xmat[1 * 9 + 8];
-    double motion_penalty = 0.0;
-    for (int i = 0; i < model->nu; i++) {
-      motion_penalty += data->qvel[i];
-    }
-    double reward_close = (hand_dist < 1) ? 5 : 0;
-    double reward_success = (hand_dist < 0.05) ? 10 : 0;
-
-    // ----- reward ----- //
-    double reward = healthy_reward - 0.0001 * motion_penalty + reward_close +
-                    reward_success;
-
-    // ----- residual ----- //
-    residual[counter++] = 16.0 - reward; // max reward is 16.0
-
-    // ---------- End of reward as in humanoid_bench push task --------- //
-
     // ----- Height: head feet vertical error ----- //
 
     // feet sensor positions
@@ -56,7 +60,6 @@ void Reach::ResidualFn::Residual(const mjModel *model, const mjData *data,
     residual[counter++] = head_feet_error - height_goal;
 
     // ----- Balance: CoM-feet xy error ----- //
-
     // capture point
     double *com_velocity = SensorByName(model, data, "torso_subtreelinvel");
 
@@ -213,9 +216,9 @@ void Reach::ResidualFn::Residual(const mjModel *model, const mjData *data,
     counter += dim_walk_reward;
     // ------------------------------------------------------------- //
   } else if (task_->reward_state_ == "walk") {
-    double const torso_height_goal = 1.25;
-    //    double const head_height_goal = parameters_[0];
-    double const speed_goal = parameters_[1];
+    int dim_reach_reward = 26 + 3 * model->nu;
+    mju_scl(&residual[counter], &residual[counter], 0.0, dim_reach_reward);
+    counter += dim_reach_reward;
 
     // compute direction goal
     double *torso_subcom = SensorByName(model, data, "torso_subcom");
@@ -228,9 +231,6 @@ void Reach::ResidualFn::Residual(const mjModel *model, const mjData *data,
     double angle_degrees = angle_radians * (180.0 / M_PI);
     double direction_goal = angle_degrees;
 
-    int dim_reach_reward = 27 + 3 * model->nu;
-    mju_scl(&residual[counter], &residual[counter], 0.0, dim_reach_reward);
-    counter = dim_reach_reward;
 
     // ----- torso height ----- //
     double torso_height = SensorByName(model, data, "torso_position")[2];
@@ -344,7 +344,7 @@ void Reach::ResidualFn::Residual(const mjModel *model, const mjData *data,
 
     // Walk forward
     residual[counter++] =
-        standing * (mju_dot(com_vel, forward, 2) - speed_goal);
+        standing * (mju_dot(com_vel, forward, 2) - walk_speed);
 
     // ----- move feet ----- //
     double *foot_right_vel = SensorByName(model, data, "foot_right_vel");
