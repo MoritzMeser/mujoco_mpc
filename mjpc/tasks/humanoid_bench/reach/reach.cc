@@ -390,7 +390,9 @@ void Reach::TransitionLocked(mjModel *model, mjData *data) {
     // generate new random target
 //    std::array<double, 3> target_low = {-2, -2, 0.2};
     std::array<double, 3> target_low = {-2, -2, 1.0}; //make it easier
-    std::array<double, 3> target_high = {2, 2, 2};
+//    std::array<double, 3> target_high = {2, 2, 2};
+    std::array<double, 3> target_high = {2, 2, 1.6}; //make it easier
+
     std::random_device rd;
     std::mt19937 gen(rd());
     std::array<double, 3> new_target = {0, 0, 0};
