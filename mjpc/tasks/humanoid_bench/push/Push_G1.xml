@@ -1,5 +1,5 @@
 <mujoco model="Push G1">
-    <include file="../g1/g1.xml"/>
+    <include file="../unitree_g1/assets/g1.xml"/>
     <default>
         <default class="visual">
             <geom contype="0" conaffinity="0" group="2" material="black"/>
@@ -19,9 +19,17 @@
     </worldbody>
 
     <keyframe>
-        <!-- home is the initial position of the robot at the beginning and after reset-->
         <key name="home"
-             qpos="0 0 0.77 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0 1 1 0 0 0"/>
+             qpos="0 0 0.75
+              1 0 0 0
+              0 0 0 0 0 0
+              0 0 0 0 0 0
+              0
+              0 0 0 0 0
+              0 0 0 0 0
+              0 0 0 0 0 0 0
+              0 0 0 0 0 0 0
+              0.7 0 1 1 0 0 0"/>
     </keyframe>
 
     <custom>

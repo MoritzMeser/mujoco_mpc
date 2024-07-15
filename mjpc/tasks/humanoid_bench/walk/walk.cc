@@ -13,10 +13,10 @@
 // limitations under the License.
 
 #include "walk.h"
-#include <string>
-#include <cmath>
-#include "mujoco/mujoco.h"
 #include "mjpc/tasks/humanoid_bench/walk_reward.h"
+#include "mujoco/mujoco.h"
+#include <cmath>
+#include <string>
 
 namespace mjpc {
 // ------------------ Residuals for humanoid walk task ------------
@@ -37,7 +37,8 @@ namespace mjpc {
 //      Parameter(2): speed goal
 //      Parameter(3): direction goal
 // ----------------------------------------------------------------
-void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
+void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data,
+                                double *residual) const {
   double const torso_height_goal = parameters_[0];
   double const head_height_goal = parameters_[1];
   double const speed_goal = parameters_[2];
@@ -46,7 +47,8 @@ void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double
   int counter = 0;
 
   // ----- humanoid_bench reward ----- //
-  residual[counter++] = 1.0 - walk_reward(model, data, speed_goal, head_height_goal);
+  residual[counter++] =
+      1.0 - walk_reward(model, data, speed_goal, head_height_goal);
 
   // ----- torso height ----- //
   double torso_height = SensorByName(model, data, "torso_position")[2];
@@ -100,7 +102,6 @@ void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double
   mju_scl(&residual[counter], &residual[counter], standing, 2);
 
   counter += 2;
-
 
   // ----- upright ----- //
   double *torso_up = SensorByName(model, data, "torso_up");
@@ -157,8 +158,7 @@ void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double
   mju_scl(com_vel, com_vel, 0.5, 2);
 
   // Walk forward
-  residual[counter++] =
-      standing * (mju_dot(com_vel, forward, 2) - speed_goal);
+  residual[counter++] = standing * (mju_dot(com_vel, forward, 2) - speed_goal);
 
   // ----- move feet ----- //
   double *foot_right_vel = SensorByName(model, data, "foot_right_velocity");
@@ -173,7 +173,8 @@ void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double
   counter += 2;
 
   // ----- control ----- //
-  mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nu); // because of pos control
+  mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7,
+          model->nu); // because of pos control
   counter += model->nu;
 
   // sensor dim sanity check
@@ -185,10 +186,9 @@ void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data, double
     }
   }
   if (user_sensor_dim != counter) {
-    mju_error_i(
-        "mismatch between total user-sensor dimension "
-        "and actual length of residual %d",
-        counter);
+    mju_error_i("mismatch between total user-sensor dimension "
+                "and actual length of residual %d",
+                counter);
   }
 }
-}  // namespace mjpc
+} // namespace mjpc

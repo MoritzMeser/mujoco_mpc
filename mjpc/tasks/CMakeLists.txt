@@ -201,9 +201,6 @@ add_custom_target(
         ${CMAKE_CURRENT_BINARY_DIR}/manipulation/panda_robotiq.xml
 
         # Unitree H1
-
-
-        # Copy H1 model assets directory
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${menagerie_SOURCE_DIR}/unitree_h1/assets
         ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/assets
@@ -213,6 +210,16 @@ add_custom_target(
         COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/assets/h1_modified.xml
         ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/assets/h1.xml
         <${CMAKE_CURRENT_SOURCE_DIR}/humanoid_bench/h1.xml.patch
+
+        # Unitree G1
+#        COMMAND ${CMAKE_COMMAND} -E copy
+#        ${menagerie_SOURCE_DIR}/unitree_g1/g1.xml
+#        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1.xml
+#        COMMAND ${CMAKE_COMMAND} -E copy
+#        ${menagerie_SOURCE_DIR}/unitree_g1/g1.xml
+#        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1.xml
+#        COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1_modified.xml
+
 
         COMMENT "Copying Menagerie and dm_control assets into binary directory")
 

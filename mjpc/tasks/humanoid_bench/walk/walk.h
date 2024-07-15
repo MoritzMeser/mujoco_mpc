@@ -57,7 +57,7 @@ namespace mjpc {
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/Walk/Walk_H1.xml");
+            return GetModelPath("humanoid_bench/Walk/Walk_H1.xml");
         }
     };
 
@@ -68,7 +68,7 @@ namespace mjpc {
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/basic_locomotion/Walk/Walk_G1.xml");
+            return GetModelPath("humanoid_bench/Walk/Walk_G1.xml");
         }
     };
 }  // namespace mjpc

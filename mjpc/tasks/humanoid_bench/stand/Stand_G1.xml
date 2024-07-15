@@ -1,14 +1,22 @@
 <mujoco model="Walk G1">
-    <include file="../../g1/g1.xml"/>
-    <include file="../../../common.xml"/>
+    <include file="../unitree_g1/assets/g1.xml"/>
+    <include file="../../common.xml"/>
 
     <worldbody>
         <geom name="floor" type="plane" conaffinity="1" size="50 50 .05" material="blue_grid"/>
     </worldbody>
 
     <keyframe>
-        <!-- home is the initial position of the robot at the beginning and after reset-->
-        <key name="home" qpos="0 0 0.77 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/>
+        <key name="home"
+             qpos="0 0 0.75
+              1 0 0 0
+              0 0 0 0 0 0
+              0 0 0 0 0 0
+              0
+              0 0 0 0 0
+              0 0 0 0 0
+              0 0 0 0 0 0 0
+              0 0 0 0 0 0 0"/>
     </keyframe>
 
     <custom>
