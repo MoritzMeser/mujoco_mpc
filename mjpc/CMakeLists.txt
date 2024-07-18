@@ -196,10 +196,10 @@ target_include_directories(mjpc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_compile_options(mjpc PUBLIC ${MJPC_COMPILE_OPTIONS})
 target_link_options(mjpc PRIVATE ${MJPC_LINK_OPTIONS})
 target_compile_definitions(mjpc PRIVATE MJSIMULATE_STATIC)
-if (APPLE)
+if(APPLE)
   target_sources(mjpc PRIVATE macos_gui.mm)
   target_link_libraries(mjpc "-framework Cocoa")
-endif ()
+endif()
 
 add_library(
   libtestspeed STATIC
@@ -235,11 +235,11 @@ target_compile_definitions(testspeed PRIVATE MJSIMULATE_STATIC)
 
 add_subdirectory(tasks)
 
-if (BUILD_TESTING AND MJPC_BUILD_TESTS)
+if(BUILD_TESTING AND MJPC_BUILD_TESTS)
   enable_testing()
   add_subdirectory(test)
-endif ()
+endif()
 
-if (MJPC_BUILD_GRPC_SERVICE)
+if(MJPC_BUILD_GRPC_SERVICE)
   add_subdirectory(grpc)
-endif ()
+endif()
