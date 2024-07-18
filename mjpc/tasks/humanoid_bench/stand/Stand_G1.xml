@@ -1,5 +1,5 @@
 <mujoco model="Walk G1">
-    <include file="../unitree_g1/assets/g1.xml"/>
+    <include file="../g1/g1_modified.xml"/>
     <include file="../../common.xml"/>
 
     <worldbody>

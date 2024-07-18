@@ -4,9 +4,9 @@
 -<mujoco model="h1">
 +<mujoco model="Unitree H1">
    <compiler angle="radian" meshdir="assets" autolimits="true"/>
- 
+
    <statistic meansize="0.05"/>
- 
+
    <default>
      <default class="h1">
 +      <geom type="mesh"/>
@@ -51,7 +51,7 @@
 +      </default>
      </default>
    </default>
- 
+
 @@ -59,39 +81,42 @@
      <light mode="targetbodycom" target="torso_link" pos="2 0 2.5"/>
      <body name="pelvis" pos="0 0 1.06" childclass="h1">
@@ -255,7 +255,7 @@
            </body>
 @@ -219,24 +261,24 @@
    </contact>
- 
+
    <actuator>
 -    <motor class="h1" name="left_hip_yaw" joint="left_hip_yaw" ctrlrange="-200 200"/>
 -    <motor class="h1" name="left_hip_roll" joint="left_hip_roll" ctrlrange="-200 200"/>

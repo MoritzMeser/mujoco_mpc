@@ -89,15 +89,15 @@ add_custom_target(
         ${CMAKE_CURRENT_BINARY_DIR}/panda/panda.xml
         <${CMAKE_CURRENT_SOURCE_DIR}/panda/panda.xml.patch
 
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${menagerie_SOURCE_DIR}/unitree_a1/a1.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1.xml
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${menagerie_SOURCE_DIR}/unitree_a1/assets
-        ${CMAKE_CURRENT_BINARY_DIR}/quadruped/assets
-        COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1_modified.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1.xml
-        <${CMAKE_CURRENT_SOURCE_DIR}/quadruped/a1.xml.patch
+#        COMMAND ${CMAKE_COMMAND} -E copy
+#        ${menagerie_SOURCE_DIR}/unitree_a1/a1.xml
+#        ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1.xml
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory
+#        ${menagerie_SOURCE_DIR}/unitree_a1/assets
+#        ${CMAKE_CURRENT_BINARY_DIR}/quadruped/assets
+#        COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1_modified.xml
+#        ${CMAKE_CURRENT_BINARY_DIR}/quadruped/a1.xml
+#        <${CMAKE_CURRENT_SOURCE_DIR}/quadruped/a1.xml.patch
 
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${menagerie_SOURCE_DIR}/franka_emika_panda
@@ -203,23 +203,24 @@ add_custom_target(
         # Unitree H1
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${menagerie_SOURCE_DIR}/unitree_h1/assets
-        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/assets
+        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/h1
         COMMAND ${CMAKE_COMMAND} -E copy
         ${menagerie_SOURCE_DIR}/unitree_h1/h1.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/assets/h1.xml
-        COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/assets/h1_modified.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/assets/h1.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/h1/h1.xml
+        COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/h1/h1_modified.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/h1/h1.xml
         <${CMAKE_CURRENT_SOURCE_DIR}/humanoid_bench/h1.xml.patch
 
         # Unitree G1
-#        COMMAND ${CMAKE_COMMAND} -E copy
-#        ${menagerie_SOURCE_DIR}/unitree_g1/g1.xml
-#        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1.xml
-#        COMMAND ${CMAKE_COMMAND} -E copy
-#        ${menagerie_SOURCE_DIR}/unitree_g1/g1.xml
-#        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1.xml
-#        COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1_modified.xml
-
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${menagerie_SOURCE_DIR}/unitree_g1/assets
+        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${menagerie_SOURCE_DIR}/unitree_g1/g1.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1.xml
+        COMMAND patch -o ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1_modified.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/humanoid_bench/g1/g1.xml
+        <${CMAKE_CURRENT_SOURCE_DIR}/humanoid_bench/g1.xml.patch
 
         COMMENT "Copying Menagerie and dm_control assets into binary directory")
 

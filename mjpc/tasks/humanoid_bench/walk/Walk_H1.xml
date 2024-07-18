@@ -1,5 +1,5 @@
 <mujoco model="Walk H1">
-    <include file="../assets/h1_modified.xml"/>
+    <include file="../h1/h1_modified.xml"/>
     <include file="../../common.xml" />
     <include file="../../floor.xml" />
 

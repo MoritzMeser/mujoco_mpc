@@ -1,5 +1,5 @@
 <mujoco model="Push G1">
-    <include file="../unitree_g1/assets/g1.xml"/>
+    <include file="../g1/g1_modified.xml"/>
     <default>
         <default class="visual">
             <geom contype="0" conaffinity="0" group="2" material="black"/>

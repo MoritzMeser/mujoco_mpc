@@ -1,5 +1,5 @@
 <mujoco model="H1 Push">
-    <include file="../assets/h1_modified.xml"/>
+    <include file="../h1/h1_modified.xml"/>
     <include file="push.xml"/>
     <include file="../../common.xml"/>
     <include file="../../floor.xml"/>

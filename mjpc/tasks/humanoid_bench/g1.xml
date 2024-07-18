@@ -1,4 +1,4 @@
-<mujoco model="g1">
+<mujoco model="Unitree G1">
   <compiler angle="radian" meshdir="assets" autolimits="true"/>
 
   <visual>
