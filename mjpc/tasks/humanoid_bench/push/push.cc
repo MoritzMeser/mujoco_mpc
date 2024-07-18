@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "push.h"
+#include "mjpc/tasks/humanoid_bench/push/push.h"
 
 #include <algorithm>
 #include <cmath>

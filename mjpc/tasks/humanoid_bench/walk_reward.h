@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MUJOCO_MPC_WALK_REWARD_H
-#define MUJOCO_MPC_WALK_REWARD_H
+#ifndef MJPC_TASKS_HUMANOID_BENCH_WALK_REWARD_H_
+#define MJPC_TASKS_HUMANOID_BENCH_WALK_REWARD_H_
 
 #include "mujoco/mujoco.h"
 
 namespace mjpc {
-double walk_reward(const mjModel *model, const mjData *data, double walk_speed, double stand_height);
-} // namespace mjpc
-#endif //MUJOCO_MPC_WALK_REWARD_H
+double walk_reward(const mjModel *model, const mjData *data, double walk_speed,
+                   double stand_height);
+}  // namespace mjpc
+#endif  // MJPC_TASKS_HUMANOID_BENCH_WALK_REWARD_H_

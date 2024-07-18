@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "walk_reward.h"
+#include "mjpc/tasks/humanoid_bench/walk_reward.h"
 
 #include <cmath>
 #include <limits>
@@ -50,7 +50,7 @@ double walk_reward(const mjModel *model, const mjData *data,
   for (int i = 0; i < model->nu; i++) {
     small_control += tolerance(data->ctrl[i], {0.0, 0.0}, 10.0, "quadratic");
   }
-  small_control /= model->nu; // average over all controls
+  small_control /= model->nu;  // average over all controls
   small_control = (4 + small_control) / 5;
 
   reward *= small_control;
@@ -75,4 +75,4 @@ double walk_reward(const mjModel *model, const mjData *data,
   }
   return reward;
 }
-} // namespace mjpc
+}  // namespace mjpc
