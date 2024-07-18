@@ -56,18 +56,18 @@ set(MUJOCO_BUILD_TESTS OFF)
 set(MUJOCO_TEST_PYTHON_UTIL OFF)
 
 set(MUJOCO_MPC_MUJOCO_GIT_TAG
-    3.1.4
-    CACHE STRING "Git revision for MuJoCo."
+  3.1.4
+  CACHE STRING "Git revision for MuJoCo."
 )
 
 set(MUJOCO_MPC_MENAGERIE_GIT_TAG
-    aff360ad958cb0e45d8f740816b1aacad84e9282
-    CACHE STRING "Git revision for MuJoCo Menagerie."
+  aff360ad958cb0e45d8f740816b1aacad84e9282
+  CACHE STRING "Git revision for MuJoCo Menagerie."
 )
 
 set(MUJOCO_MPC_DM_CONTROL_GIT_TAG
-    774f46182140106e22725914aad3c6299ed91edd
-    CACHE STRING "Git revision for dm_control."
+  774f46182140106e22725914aad3c6299ed91edd
+  CACHE STRING "Git revision for dm_control."
 )
 
 findorfetch(
@@ -90,15 +90,15 @@ findorfetch(
 # TODO(nimrod): Update to the latest version of abseil, or use the one defined
 # by MuJoCo, once grpc fix their build issues.
 set(MUJOCO_DEP_VERSION_abseil
-    fb3621f4f897824c0dbe0615fa94543df6192f30 # LTS 20230802.1
-    CACHE STRING "Version of `abseil` to be fetched."
-    FORCE
+  fb3621f4f897824c0dbe0615fa94543df6192f30 # LTS 20230802.1
+  CACHE STRING "Version of `abseil` to be fetched."
+  FORCE
 )
 
 set(BUILD_SHARED_LIBS_OLD ${BUILD_SHARED_LIBS})
 set(BUILD_SHARED_LIBS
-    OFF
-    CACHE INTERNAL "Build SHARED libraries"
+  OFF
+  CACHE INTERNAL "Build SHARED libraries"
 )
 
 findorfetch(
@@ -162,8 +162,8 @@ findorfetch(
 )
 
 set(BUILD_SHARED_LIBS
-    ${BUILD_SHARED_LIBS_OLD}
-    CACHE BOOL "Build SHARED libraries" FORCE
+  ${BUILD_SHARED_LIBS_OLD}
+  CACHE BOOL "Build SHARED libraries" FORCE
 )
 unset(BUILD_SHARED_LIBS_OLD)
 
