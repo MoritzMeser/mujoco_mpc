@@ -39,9 +39,9 @@
 #include "mjpc/tasks/swimmer/swimmer.h"
 #include "mjpc/tasks/walker/walker.h"
 // Humanoid Bench Tasks
-#include "mjpc/tasks/humanoid_bench/walk/walk.h"
-#include "mjpc/tasks/humanoid_bench/stand/stand.h"
 #include "mjpc/tasks/humanoid_bench/push/push.h"
+#include "mjpc/tasks/humanoid_bench/stand/stand.h"
+#include "mjpc/tasks/humanoid_bench/walk/walk.h"
 
 namespace mjpc {
 

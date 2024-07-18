@@ -13,8 +13,9 @@
 // limitations under the License.
 
 #include "stand.h"
-#include "mujoco/mujoco.h"
+
 #include "mjpc/tasks/humanoid_bench/walk_reward.h"
+#include "mujoco/mujoco.h"
 
 namespace mjpc {
 // ------------------ Residuals for humanoid stand task ------------
@@ -31,7 +32,8 @@ namespace mjpc {
 //   Number of parameters:
 //      Parameter(0): head height goal
 // ----------------------------------------------------------------
-void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data, double *residual) const {
+void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data,
+                                 double *residual) const {
   double const height_goal = parameters_[0];
 
   int counter = 0;
@@ -54,7 +56,6 @@ void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data, doubl
 
   // capture point
   double *com_velocity = SensorByName(model, data, "torso_subtreelinvel");
-
 
   // ----- COM xy velocity should be 0 ----- //
   mju_copy(&residual[counter], com_velocity, 2);
@@ -131,7 +132,8 @@ void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data, doubl
   counter += 3;
 
   // ----- posture ----- //
-  mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nq - 7);
+  mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7,
+          model->nq - 7);
   counter += model->nq - 7;
 
   // com vel
@@ -155,9 +157,9 @@ void Stand::ResidualFn::Residual(const mjModel *model, const mjData *data, doubl
   counter += 2;
 
   // ----- control ----- //
-  mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nq - 7); // because of pos control
+  mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7,
+          model->nq - 7);  // because of pos control
   counter += model->nq - 7;
-
 
   // sensor dim sanity check
   // TODO: use this pattern everywhere and make this a utility function

@@ -5,9 +5,9 @@
 #ifndef MUJOCO_MPC_UTILITY_FUNCTIONS_H
 #define MUJOCO_MPC_UTILITY_FUNCTIONS_H
 
-#include "mujoco/mjmodel.h"
 #include "mujoco/mjdata.h"
+#include "mujoco/mjmodel.h"
 
 bool CheckAnyCollision(const mjModel *pModel, const mjData *pData, int id);
 
-#endif //MUJOCO_MPC_UTILITY_FUNCTIONS_H
+#endif  // MUJOCO_MPC_UTILITY_FUNCTIONS_H

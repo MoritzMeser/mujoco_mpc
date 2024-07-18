@@ -13,10 +13,12 @@
 // limitations under the License.
 
 #include "push.h"
-#include "mujoco/mujoco.h"
+
 #include <algorithm>
 #include <cmath>
 #include <random>
+
+#include "mujoco/mujoco.h"
 
 namespace mjpc {
 // ------------------ Residuals for humanoid stand task ------------
@@ -189,7 +191,7 @@ void push::ResidualFn::Residual(const mjModel *model, const mjData *data,
 
   // ----- control ----- //
   mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7,
-          model->nu); // because of pos control
+          model->nu);  // because of pos control
   counter += model->nu;
 
   // ------ box position ------ //
@@ -214,9 +216,10 @@ void push::ResidualFn::Residual(const mjModel *model, const mjData *data,
     }
   }
   if (user_sensor_dim != counter) {
-    mju_error_i("mismatch between total user-sensor dimension "
-                "and actual length of residual %d",
-                counter);
+    mju_error_i(
+        "mismatch between total user-sensor dimension "
+        "and actual length of residual %d",
+        counter);
   }
 }
 
@@ -225,15 +228,15 @@ void push::ResidualFn::Residual(const mjModel *model, const mjData *data,
 void push::TransitionLocked(mjModel *model, mjData *data) {
   double *object_pos = SensorByName(model, data, "object_pos");
   double goal_dist = mju_dist3(object_pos, target_position_.data());
-  if (goal_dist < 0.05) { // consider task as solved
-                              // set random target position
-                              std::random_device rd;
-                              std::mt19937 gen(rd());
-        std::uniform_real_distribution<> dis_x(0.7, 1.0);
-        std::uniform_real_distribution<> dis_y(-0.5, 0.5);
-        target_position_ = {dis_x(gen), dis_y(gen), 1.0};
-        printf("New target position: %f, %f\n", target_position_[0],
-        target_position_[1]);
+  if (goal_dist < 0.05) {  // consider task as solved
+    // set random target position
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis_x(0.7, 1.0);
+    std::uniform_real_distribution<> dis_y(-0.5, 0.5);
+    target_position_ = {dis_x(gen), dis_y(gen), 1.0};
+    printf("New target position: %f, %f\n", target_position_[0],
+           target_position_[1]);
   }
   mju_copy3(data->mocap_pos, target_position_.data());
 }
@@ -247,4 +250,4 @@ void push::ResetLocked(const mjModel *model) {
   printf("New target position: %f, %f\n", target_position_[0],
          target_position_[1]);
 }
-} // namespace mjpc
+}  // namespace mjpc
