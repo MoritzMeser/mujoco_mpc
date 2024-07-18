@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "stand.h"
+#include "mjpc/tasks/humanoid_bench/stand/stand.h"
 
 #include "mjpc/tasks/humanoid_bench/walk_reward.h"
 #include "mujoco/mujoco.h"

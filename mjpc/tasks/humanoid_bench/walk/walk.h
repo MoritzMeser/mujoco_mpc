@@ -12,23 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef MJPC_TASKS_H1_WALK_H_
-#define MJPC_TASKS_H1_WALK_H_
+#ifndef MJPC_TASKS_HUMANOID_BENCH_WALK_WALK_H_
+#define MJPC_TASKS_HUMANOID_BENCH_WALK_WALK_H_
+
+#include <memory>
+#include <string>
 
 #include "mjpc/task.h"
 #include "mjpc/utilities.h"
 #include "mujoco/mujoco.h"
-#include <string>
 
 namespace mjpc {
 class Walk : public Task {
-public:
+ public:
   std::string Name() const override = 0;
 
   std::string XmlPath() const override = 0;
 
   class ResidualFn : public mjpc::BaseResidualFn {
-  public:
+   public:
     explicit ResidualFn(const Walk *task) : mjpc::BaseResidualFn(task) {}
 
     void Residual(const mjModel *model, const mjData *data,
@@ -37,19 +39,19 @@ public:
 
   Walk() : residual_(this) {}
 
-protected:
+ protected:
   std::unique_ptr<mjpc::ResidualFn> ResidualLocked() const override {
     return std::make_unique<ResidualFn>(this);
   }
 
   ResidualFn *InternalResidual() override { return &residual_; }
 
-private:
+ private:
   ResidualFn residual_;
 };
 
 class Walk_H1 : public Walk {
-public:
+ public:
   std::string Name() const override { return "Walk H1"; }
 
   std::string XmlPath() const override {
@@ -58,13 +60,13 @@ public:
 };
 
 class Walk_G1 : public Walk {
-public:
+ public:
   std::string Name() const override { return "Walk G1"; }
 
   std::string XmlPath() const override {
     return GetModelPath("humanoid_bench/Walk/Walk_G1.xml");
   }
 };
-} // namespace mjpc
+}  // namespace mjpc
 
-#endif // MJPC_TASKS_H1_WALK_H_
+#endif  // MJPC_TASKS_HUMANOID_BENCH_WALK_WALK_H_

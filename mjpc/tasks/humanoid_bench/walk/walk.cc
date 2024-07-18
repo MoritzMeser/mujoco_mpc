@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "walk.h"
-#include "mjpc/tasks/humanoid_bench/walk_reward.h"
-#include "mujoco/mujoco.h"
+#include "mjpc/tasks/humanoid_bench/walk/walk.h"
+
+#include <algorithm>
 #include <cmath>
 #include <string>
+
+#include "mjpc/tasks/humanoid_bench/walk_reward.h"
+#include "mujoco/mujoco.h"
 
 namespace mjpc {
 // ------------------ Residuals for humanoid walk task ------------
@@ -174,7 +177,7 @@ void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data,
 
   // ----- control ----- //
   mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7,
-          model->nu); // because of pos control
+          model->nu);  // because of pos control
   counter += model->nu;
 
   // sensor dim sanity check
@@ -186,9 +189,10 @@ void Walk::ResidualFn::Residual(const mjModel *model, const mjData *data,
     }
   }
   if (user_sensor_dim != counter) {
-    mju_error_i("mismatch between total user-sensor dimension "
-                "and actual length of residual %d",
-                counter);
+    mju_error_i(
+        "mismatch between total user-sensor dimension "
+        "and actual length of residual %d",
+        counter);
   }
 }
-} // namespace mjpc
+}  // namespace mjpc
