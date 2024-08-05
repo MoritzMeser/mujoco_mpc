@@ -1,22 +1,30 @@
 <mujocoinclude>
-    <asset>
-        <material name="spherebody"  texuniform="true" texture="basketball"
-                  reflectance="0.8" shininess="0.9"/>
-        <texture type="2d" name="basketball" file="../assets/basketball.png"/>
-    </asset>
-    <worldbody>
-        <body name="football" pos="0.35 0.9 2">
-            <freejoint name="free_basketball"/>
-            <geom type="sphere" pos="0 0 0" size="0.1193" density="35" material="spherebody" class="visual"/>
-            <geom name="basketball_collision" type="sphere" pos="0 0 0" size="0.1193" density="35" class="collision"/>
-        </body>
-        <site name="hoop_center" pos="5.9 0 2.25" />
+  <asset>
+    <material name="spherebody" texuniform="true" texture="basketball"
+              reflectance="0.8" shininess="0.9"/>
+    <texture type="2d" name="basketball" file="../assets/basketball.png"/>
+  </asset>
+  <worldbody>
+    <body name="football" pos="0.35 0.9 2">
+      <freejoint name="free_basketball"/>
+      <geom type="sphere" pos="0 0 0" size="0.1193" density="35" material="spherebody" class="visual"/>
+      <geom name="basketball_collision" type="sphere" pos="0 0 0" size="0.1193" density="35" class="collision"/>
+    </body>
+    <site name="hoop_center" pos="5.9 0 2.25"/>
 
-<body name="goal" mocap="true" pos="5 0 0">
-    <site name="destination_loc" pos="0 0 0.35" rgba="0 0 0 0"/>
-    <geom type="cylinder" name="reaching_point" pos="0 0 0.0" size=".1 .001" rgba="1 1 1 0.9" class="visual"/>
-    <geom type="cylinder" name="reaching_sphere" pos="0 0 0.0" size=".5 .001" rgba="0.4 0.8 0.8 0.6" class="visual"/>
-    <geom type="cylinder" name="reaching_crust" pos="0 0 0.0" size=".9 .001" rgba="0.2 0.69 0.69 0.3" class="visual"/>
-</body>
-    </worldbody>
+    <body name="goal" mocap="true" pos="5 0 0">
+      <site name="destination_loc" pos="0 0 0.35" rgba="0 0 0 0"/>
+      <geom type="cylinder" name="reaching_point" pos="0 0 0.0" size=".1 .001" rgba="1 1 1 0.9" class="visual"/>
+      <geom type="cylinder" name="reaching_sphere" pos="0 0 0.0" size=".5 .001" rgba="0.4 0.8 0.8 0.6" class="visual"/>
+      <geom type="cylinder" name="reaching_crust" pos="0 0 0.0" size=".9 .001" rgba="0.2 0.69 0.69 0.3" class="visual"/>
+    </body>
+
+    <body name="robot_stand_goal" mocap="true" pos="-2 0 0">
+      <site name="destination_loc_r" pos="0 0 0.35" rgba="0 0 0 0"/>
+      <geom type="cylinder" name="reaching_point_r" pos="0 0 0.0" size=".1 .001" rgba="1 1 1 0.9" class="visual"/>
+      <geom type="cylinder" name="reaching_sphere_r" pos="0 0 0.0" size=".5 .001" rgba="0.8 0.4 0.8 0.6" class="visual"/>
+      <geom type="cylinder" name="reaching_crust_r" pos="0 0 0.0" size=".9 .001" rgba="0.69 0.2 0.69 0.3"
+            class="visual"/>
+    </body>
+  </worldbody>
 </mujocoinclude>
