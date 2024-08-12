@@ -219,6 +219,9 @@ namespace mjpc {
         mju_scl3(&residual[counter], &residual[counter], standing);
         counter += 3;
 
+        // package height
+        residual[counter++] = package_location[2] - 1.0;
+
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function
         int user_sensor_dim = 0;
