@@ -28,8 +28,8 @@ class Football : public Task {
 
   Football()
       : residual_(this),
-        target_position_({3.0, 0.0, 0.0}),
-        robot_goal_position_({0.5, 0.0, 0.0}),
+        target_position_({4.0, -3.0, 0.0}),
+        robot_goal_position_({2.0, -1.0, 0.0}),
         reward_machine_state_(0),
         robot_facing_dir_({1.0, 0.0}) {}
 

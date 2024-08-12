@@ -58,7 +58,7 @@ void Football::ResidualFn::Residual(const mjModel *model, const mjData *data,
   int counter = 0;
 
   // head-feet-error
-  if (rm_state == 0 || rm_state == 1 || rm_state == 2) {
+  if (rm_state == 0 || rm_state == 1 || rm_state == 2 || rm_state == 3) {
     double *head_position = SensorByName(model, data, "head_position");
     double head_feet_error =
         head_position[2] - 0.5 * (foot_right_pos[2] + foot_left_pos[2]);
@@ -68,7 +68,7 @@ void Football::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // balance
-  if (rm_state == 0 || rm_state == 1 || rm_state == 2) {
+  if (rm_state == 0 || rm_state == 1 || rm_state == 2 || rm_state == 3) {
     // capture point
     double *subcom =
         SensorByName(model, data, "torso_subcom");  // TODO: redundant
@@ -112,7 +112,7 @@ void Football::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // upright
-  if (rm_state == 0 || rm_state == 1 || rm_state == 2) {
+  if (rm_state == 0 || rm_state == 1 || rm_state == 2 || rm_state == 3) {
     double *torso_up = SensorByName(model, data, "torso_up");
     double *pelvis_up = SensorByName(model, data, "pelvis_up");
     double *foot_right_up = SensorByName(model, data, "foot_right_up");
@@ -139,7 +139,7 @@ void Football::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // posture
-  if (rm_state == 0 || rm_state == 1 || rm_state == 2) {
+  if (rm_state == 0 || rm_state == 1 || rm_state == 2 || rm_state == 3) {
     mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
     counter += model->nu;
   } else {
@@ -148,7 +148,7 @@ void Football::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // face direction
-  if (rm_state == 0 || rm_state == 1 || rm_state == 2) {
+  if (rm_state == 0 || rm_state == 1 || rm_state == 2 || rm_state == 3) {
     mju_sub(&residual[counter], forward, task_->robot_facing_dir_.data(), 2);
     mju_scl(&residual[counter], &residual[counter], standing, 2);
     counter += 2;
@@ -182,7 +182,7 @@ void Football::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // control
-  if (rm_state == 0 || rm_state == 1 || rm_state == 2) {
+  if (rm_state == 0 || rm_state == 1 || rm_state == 2 || rm_state == 3) {
     mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7, model->nu);
     counter += model->nu;
   } else {
@@ -244,6 +244,7 @@ void Football::TransitionLocked(mjModel *model, mjData *data) {
                   std::pow(torso_position[1] - robot_goal_position_[1], 2));
     if (distance > 0.2) {
       reward_machine_state_ = 1;  // switch to walk
+      printf("switch to walk state\n");
     } else {
       // set facing direction to ball goal
       mju_sub(robot_facing_dir_.data(), target_position_.data(), torso_position,
@@ -265,12 +266,25 @@ void Football::TransitionLocked(mjModel *model, mjData *data) {
                   std::pow(torso_position[1] - robot_goal_position_[1], 2));
     if (distance < 0.2) {
       reward_machine_state_ = 0;  // switch to stand
+      printf("switch to stand state\n");
     } else {
       // set facing direction as direction to stand goal
       mju_sub(robot_facing_dir_.data(), robot_goal_position_.data(),
               torso_position, 2);
       // normalize facing direction vector
       mju_normalize(robot_facing_dir_.data(), 2);
+    }
+  }
+  if (reward_machine_state_ == 2) {
+    if (mju_norm3(SensorByName(model, data, "football_velocity")) > 0.5) {
+      reward_machine_state_ = 3;
+      printf("switch to wait state\n");
+    }
+  }
+  if (reward_machine_state_ == 3) {
+    if (mju_norm3(SensorByName(model, data, "football_velocity")) < 0.4) {
+      reward_machine_state_ = 0;
+      printf("switch to stand state\n");
     }
   }
 }
