@@ -1,15 +1,15 @@
 
 #include "H1_package.h"
 
-#include <string>
-# include <limits>
-#include <cmath>
 #include <algorithm>
-
-#include "mujoco/mujoco.h"
-#include "mjpc/utilities.h"
+#include <cmath>
+#include <limits>
+#include <string>
 
 #include "mjpc/tasks/humanoid_bench/utility/dm_control_utils_rewards.h"
+#include "mjpc/tasks/humanoid_bench/utility/utility_functions.h"
+#include "mjpc/utilities.h"
+#include "mujoco/mujoco.h"
 
 namespace mjpc {
 // ----------------- Residuals for humanoid_bench package task ---------------- //
@@ -220,7 +220,40 @@ namespace mjpc {
         counter += 3;
 
         // package height
-        residual[counter++] = package_location[2] - 1.0;
+        //  0.55 0 0.35
+        residual[counter++] = 0; //package_location[0] - 0.55;
+        residual[counter++] = 0; //package_location[1] - 0.0;
+        residual[counter++] = package_location[2] - 0.5;
+
+
+
+        // contact right hand
+        bool contact_right_hand = CheckBodyCollision(model, data, "right_elbow_collision", "package_a_collision");
+
+        if (contact_right_hand) {
+          residual[counter++] = 0;
+        } else {
+          residual[counter++] = 10;
+        }
+
+        // contact left hand
+        bool contact_left_hand = CheckBodyCollision(model, data, "left_elbow_collision", "package_a_collision");
+
+        if (contact_left_hand) {
+          residual[counter++] = 0;
+        } else {
+          residual[counter++] = 10;
+        }
+
+        // no contact with the ground
+        bool contact_ground = CheckBodyCollision(model, data, "floor", "package_a_collision");
+
+        if (contact_ground) {
+          residual[counter++] = 10;
+        } else {
+          residual[counter++] = 0;
+        }
+
 
         // sensor dim sanity check
         // TODO: use this pattern everywhere and make this a utility function

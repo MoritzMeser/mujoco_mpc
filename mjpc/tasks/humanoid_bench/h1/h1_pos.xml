@@ -198,7 +198,7 @@
                                           diaginertia="0.00601829 0.00600579 0.000408305"/>
                                 <joint name="left_elbow" axis="0 1 0" range="-1.25 2.61"/>
                                 <geom class="visual" mesh="left_elbow_link"/>
-                                <geom class="collision" mesh="left_elbow_link"/>
+                                <geom class="collision" mesh="left_elbow_link" name="left_elbow_collision"/>
                                 <site name="left_hand" pos="0.31 0 -0.01" rgba="0 1 0 1" size="0.01"/>
 <!--                                <site name="left_hand" pos="0.31 0 -0.01" rgba="0 1 0 1" size="0.01"/>-->
                                 <body name="left_hand" pos="0.31 0 -0.01"/>
@@ -233,7 +233,7 @@
                                           diaginertia="0.00601829 0.00600579 0.000408305"/>
                                 <joint name="right_elbow" axis="0 1 0" range="-1.25 2.61"/>
                                 <geom class="visual" mesh="right_elbow_link"/>
-                                <geom class="collision" mesh="right_elbow_link"/>
+                                <geom class="collision" mesh="right_elbow_link" name="right_elbow_collision"/>
                                 <site name="right_hand" pos="0.31 0 -0.01" rgba="0 1 0 1" size="0.01"/>
                                 <body name="right_hand" pos="0.31 0 -0.01"/>
                             </body>
