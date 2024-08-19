@@ -39,11 +39,11 @@ namespace mjpc {
     class H1_door_position : public H1_door {
     public:
         std::string Name() const override {
-            return "H1 Door Position";
+            return "Door H1";
         }
 
         std::string XmlPath() const override {
-            return GetModelPath("humanoid_bench/door/H1_door_pos.xml");
+            return GetModelPath("humanoid_bench/door/Door_H1.xml");
         }
     };
 

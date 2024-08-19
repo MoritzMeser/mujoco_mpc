@@ -21,6 +21,25 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   // ----- set parameters ----- //
   double const stand_height = 1.65;
 
+  // compute walk speed
+  double walk_speed = 0.0;
+  if (task_->reward_machine_state_ == 0) {
+    walk_speed = 0.0;
+  } else if (task_->reward_machine_state_ == 1) {
+    walk_speed = 1.0;
+  }
+
+  // compute walk direction
+  double walk_direction[2];
+  if (task_->reward_machine_state_ == 0) {
+    walk_direction[0] = 1.0;
+    walk_direction[1] = 0.0;
+  } else if (task_->reward_machine_state_ == 1) {
+    mju_sub(walk_direction, task_->target_position_.data(),
+            SensorByName(model, data, "torso_position"), 2);
+    mju_normalize(walk_direction, 2);
+  }
+
   // ----- standing ----- //
   double head_height = SensorByName(model, data, "head_height")[2];
   double hb_standing =
@@ -168,13 +187,14 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   mju_normalize(forward, 2);
 
   // Face in right-direction
-  double goal_direction = parameters_[2];
-  // from degree to radian
-  goal_direction = goal_direction * M_PI / 180;
-  double face_x[2] = {cos(goal_direction), sin(goal_direction)};
-  mju_sub(&residual[counter], forward, face_x, 2);
-  mju_scl(&residual[counter], &residual[counter], standing, 2);
-  counter += 2;
+  if (task_->reward_machine_state_ == 1) {
+    mju_sub(&residual[counter], forward, walk_direction, 2);
+    mju_scl(&residual[counter], &residual[counter], standing, 2);
+    counter += 2;
+  } else {
+    residual[counter++] = 0;
+    residual[counter++] = 0;
+  }
 
   // com vel
   double *waist_lower_subcomvel =
@@ -185,8 +205,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   mju_scl(com_vel, com_vel, 0.5, 2);
 
   // Walk forward
-  residual[counter++] =
-      standing * (mju_dot(com_vel, forward, 2) - parameters_[1]);
+  residual[counter++] = standing * (mju_dot(com_vel, forward, 2) - walk_speed);
 
   // ----- move feet ----- //
   double *foot_right_vel = SensorByName(model, data, "foot_right_velocity");
@@ -206,19 +225,34 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   counter += model->nu;
 
   // ----- right hand distance ----- //
-  mju_sub3(&residual[counter], right_hand_location, package_location);
-  mju_scl3(&residual[counter], &residual[counter], standing);
-  counter += 3;
+  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+    mju_sub3(&residual[counter], right_hand_location, package_location);
+    mju_scl3(&residual[counter], &residual[counter], standing);
+    counter += 3;
+  } else {
+    mju_zero3(&residual[counter]);
+    counter += 3;
+  }
 
   // ----- left hand distance ----- //
-  mju_sub3(&residual[counter], left_hand_location, package_location);
-  mju_scl3(&residual[counter], &residual[counter], standing);
-  counter += 3;
+  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+    mju_sub3(&residual[counter], left_hand_location, package_location);
+    mju_scl3(&residual[counter], &residual[counter], standing);
+    counter += 3;
+  } else {
+    mju_zero3(&residual[counter]);
+    counter += 3;
+  }
 
   // ----- goal distance ----- //
-  mju_sub3(&residual[counter], package_location, package_destination);
-  mju_scl3(&residual[counter], &residual[counter], standing);
-  counter += 3;
+  if (task_->reward_machine_state_ == 2) {
+    mju_sub3(&residual[counter], package_location, package_destination);
+    mju_scl3(&residual[counter], &residual[counter], standing);
+    counter += 3;
+  } else {
+    mju_zero3(&residual[counter]);
+    counter += 3;
+  }
 
   // package height
   //  0.55 0 0.35
@@ -227,31 +261,43 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   residual[counter++] = package_location[2] - 0.5;
 
   // contact right hand
-  bool contact_right_hand = CheckBodyCollision(
-      model, data, "right_elbow_collision", "package_a_collision");
+  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+    bool contact_right_hand = CheckBodyCollision(
+        model, data, "right_elbow_collision", "package_a_collision");
 
-  if (contact_right_hand) {
-    residual[counter++] = 0;
+    if (contact_right_hand) {
+      residual[counter++] = 0;
+    } else {
+      residual[counter++] = 1;
+    }
   } else {
-    residual[counter++] = 1;
+    residual[counter++] = 0;
   }
 
   // contact left hand
-  bool contact_left_hand = CheckBodyCollision(
-      model, data, "left_elbow_collision", "package_a_collision");
+  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+    bool contact_left_hand = CheckBodyCollision(
+        model, data, "left_elbow_collision", "package_a_collision");
 
-  if (contact_left_hand) {
-    residual[counter++] = 0;
+    if (contact_left_hand) {
+      residual[counter++] = 0;
+    } else {
+      residual[counter++] = 1;
+    }
   } else {
-    residual[counter++] = 1;
+    residual[counter++] = 0;
   }
 
   // no contact with the ground
-  bool contact_ground =
-      CheckBodyCollision(model, data, "floor", "package_a_collision");
+  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+    bool contact_ground =
+        CheckBodyCollision(model, data, "floor", "package_a_collision");
 
-  if (contact_ground) {
-    residual[counter++] = 1;
+    if (contact_ground) {
+      residual[counter++] = 1;
+    } else {
+      residual[counter++] = 0;
+    }
   } else {
     residual[counter++] = 0;
   }
@@ -319,17 +365,68 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
 // targets)
 // ---------------------------------------------
 void H1_package::TransitionLocked(mjModel *model, mjData *data) {
+  // show the target position
   mju_copy3(data->mocap_pos, target_position_.data());
+
+  // update state machine
+  if (reward_machine_state_ == 0) {  // lift state
+    bool switch_to_walk = true;
+
+    // check package height
+    double *package_location = SensorByName(model, data, "package_location");
+    if (package_location[2] < 1.0) {
+      switch_to_walk = false;
+    }
+
+    // check if package is gripped
+    bool contact_right_hand = CheckBodyCollision(
+        model, data, "right_elbow_collision", "package_a_collision");
+    bool contact_left_hand = CheckBodyCollision(
+        model, data, "left_elbow_collision", "package_a_collision");
+    if (!contact_right_hand || !contact_left_hand) {
+      switch_to_walk = false;
+    }
+
+    // check if package is not fast moving
+    double *package_velocity = SensorByName(model, data, "package_velocity");
+    double package_speed = mju_norm3(package_velocity);
+    if (package_speed > 0.2) {  // ToDo: fine tune this value
+      switch_to_walk = false;
+    }
+
+    // ToDo: check if robot is stable
+
+    if (switch_to_walk) {
+      reward_machine_state_ = 1;
+      printf("Switching to walk state\n");
+    }
+  } else if (reward_machine_state_ == 1) {  // walk state
+    bool switch_to_place = true;
+
+    // check distance to target
+    double *package_location = SensorByName(model, data, "package_location");
+    double dist_package_destination =
+        std::sqrt(std::pow(package_location[0] - target_position_[0], 2) +
+                  std::pow(package_location[1] - target_position_[1], 2));
+    if (dist_package_destination > 0.6) {
+      switch_to_place = false;
+    }
+
+    if (switch_to_place) {
+      reward_machine_state_ = 2;
+      printf("Switching to place state\n");
+    }
+  }
 }
 
-void H1_package::ResetLocked(const mjModel *model){
-    //  std::random_device rd;
-    //  std::mt19937 gen(rd());
-    //  std::uniform_real_distribution<> dis_x(-2, 2);
-    //  std::uniform_real_distribution<> dis_y(-2, 2);
-    //
-    //  target_position_ = {dis_x(gen), dis_y(gen), 0.35};
-    //  printf("Initial target position: %f, %f\n", target_position_[0],
-    //         target_position_[1]);
+void H1_package::ResetLocked(const mjModel *model) {
+  //  std::random_device rd;
+  //  std::mt19937 gen(rd());
+  //  std::uniform_real_distribution<> dis_x(-2, 2);
+  //  std::uniform_real_distribution<> dis_y(-2, 2);
+  //
+  //  target_position_ = {dis_x(gen), dis_y(gen), 0.35};
+  //  printf("Initial target position: %f, %f\n", target_position_[0],
+  //         target_position_[1]);
 }
 }  // namespace mjpc

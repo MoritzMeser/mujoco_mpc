@@ -27,7 +27,7 @@ class H1_package : public Task {
     const H1_package *task_;
   };
 
-  H1_package() : residual_(this) {
+  H1_package() : residual_(this), reward_machine_state_(0) {
     //            std::random_device rd;
     //            std::mt19937 gen(rd());
     //            std::uniform_real_distribution<> dis_x(-2, 2);
@@ -53,6 +53,7 @@ class H1_package : public Task {
 
  private:
   ResidualFn residual_;
+  int reward_machine_state_;
   std::array<double, 3> target_position_;
 };
 

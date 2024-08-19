@@ -1,32 +1,26 @@
-<mujoco model="Package H1">
-  <include file="../h1/h1_pos.xml"/>
-  <include file="package.xml"/>
+<mujoco model="H1 Door">
+  <include file="../h1/h1gripper_pos.xml"/>
+  <include file="door.xml"/>
   <include file="../../common.xml"/>
   <include file="../../floor.xml"/>
 
   <keyframe>
     <!-- home is the initial position of the robot at the beginning and after reset-->
     <key name="home"
-         qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0
-           0.75 0 0.35 1 0 0 0"/>
-<!--             0.35 0 1.55 1 0 0 0"/>-->
-    <!--         qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0-->
-    <!--    qpos="0 0 0.98 1 0 0 0 0 0 -0.7 1.47 -0.7 0 0 -0.7 1.47 -0.7 0 0 0 0 0 0 0 0 0-->
-
-    <!-- 0.75 0 0.35 1 0 0 0"/>-->
+         qpos="0 0 0.98 1 0 0 0 0 0 -0.4 0.8 -0.4 0 0 -0.4 0.8 -0.4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2"/>
   </keyframe>
 
 
   <custom>
     <!-- agent -->
     <numeric name="agent_planner" data="6"/>
-<!--    <numeric name="agent_horizon" data="0.35"/>-->
+    <!--    <numeric name="agent_horizon" data="0.35"/>-->
     <numeric name="agent_horizon" data="0.8"/>
     <numeric name="agent_timestep" data="0.015"/>
     <numeric name="sampling_spline_points" data="3"/>
     <numeric name="sampling_exploration" data="0.05"/>
     <numeric name="gradient_spline_points" data="5"/>
-    <numeric name="residual_Torso" data="1.25 0 1.7"/>
+    <numeric name="residual_Walk_Speed" data="0.0 0.0 2.0"/>
   </custom>
 
 
@@ -37,27 +31,15 @@
     <user name="Pelvis/Feet" dim="1" user="8 1.0 0.0 10.0 0.05"/>
     <user name="Balance" dim="2" user="1 5.0 0.0 25.0 0.02 4.0"/>
     <user name="Upright" dim="8" user="2 5.0 0.0 25.0 0.01"/>
-    <user name="Posture" dim="19" user="0 0.025 0 1.0"/>
+    <user name="Posture" dim="21" user="0 0.025 0 1.0"/>
     <user name="Face Forward" dim="2" user="7 10.0 0.0 25.0 0.5 3.0"/>
     <user name="Walk" dim="1" user="7 10.0 0.0 25.0 0.5 3.0"/>
     <user name="Velocity" dim="2" user="7 0.625 0 25.0 0.2 4.0"/>
-    <user name="Control" dim="19" user="3 0.1 0 1.0 0.3"/>
+    <user name="Control" dim="21" user="3 0.1 0 1.0 0.3"/>
 
-    <user name="right" dim="3" user="6 4.0 0.0 100.0 0.01"/>
-    <user name="left" dim="3" user="6 4.0 0.0 100.0 0.01"/>
-    <user name="goal_dist" dim="3" user="6 40.0 0.0 100.0 0.01"/>
+    <user name="door_open" dim="1" user="6 10.0 0.0 100.0 0.01"/>
 
-    <user name="pa_height" dim="3" user="6 0.0 0.0 25.0 0.01"/>
-
-    <user name="contact_right" dim="1" user="6 10.0 0.0 100.0 0.01"/>
-    <user name="contact_left" dim="1" user="6 10.0 0.0 100.0 0.01"/>
-    <user name="no_floor_contact" dim="1" user="6 10.0 0.0 100.0 0.01"/>
-
-    <user name="right_foot_contact" dim="1" user="6 0.0 0.0 100.0 0.01"/>
-    <user name="left_foot_contact" dim="1" user="6 0.0 0.0 100.0 0.01"/>
-
-    <user name="unwanted_collisions" dim="1" user="6 5.0 0.0 100.0 0.01"/>
-
+    <user name="right" dim="3" user="6 10.0 0.0 100.0 0.01"/>
 
     <!-- trace -->
     <framepos name="trace0" objtype="body" objname="torso_link"/>
@@ -82,18 +64,16 @@
     <framelinvel name="foot_right_velocity" objtype="body" objname="right_ankle_link"/>
     <framelinvel name="foot_left_velocity" objtype="body" objname="left_ankle_link"/>
 
-    <framepos name="left_hand_pos" objtype="site" objname="left_hand"/>
-    <framepos name="right_hand_pos" objtype="site" objname="right_hand"/>
+    <framepos name="left_hand_position" objtype="site" objname="left_hand"/>
+    <framepos name="right_hand_position" objtype="site" objname="right_hand"/>
 
     <!--for humanoid bench reward-->
     <framepos name="head_height" objtype="site" objname="head"/>
     <framezaxis name="torso_upright" objtype="xbody" objname="torso_link"/>
     <subtreelinvel name="center_of_mass_velocity" body="pelvis"/>
 
-    <!-- sensors specific to the package task-->
-    <framepos name="package_location" objtype="body" objname="package_a"/>
-    <framelinvel name="package_velocity" objtype="body" objname="package_a"/>
+    <framepos name="imu" objtype="site" objname="imu"/>
 
-    <framepos name="package_destination" objtype="site" objname="destination_loc"/>
+    <framepos name="door_hatch" objtype="body" objname="door_hatch"/>
   </sensor>
 </mujoco>
