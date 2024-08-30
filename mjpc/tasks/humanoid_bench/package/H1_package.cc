@@ -20,6 +20,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                       double *residual) const {
   // ----- set parameters ----- //
   double const stand_height = 1.65;
+  double const squat = parameters_[1];
 
   // compute walk speed
   double walk_speed = 0.0;
@@ -96,7 +97,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   residual[counter++] = std::exp(-reward);
   // ----- torso height ----- //
   double torso_height = SensorByName(model, data, "torso_position")[2];
-  residual[counter++] = torso_height - parameters_[0];
+  residual[counter++] = torso_height - parameters_[0] - squat * (-0.35); // guessed value that squat is 0.5 m lower than standing
 
   // ----- pelvis / feet ----- //
   double *foot_right = SensorByName(model, data, "foot_right");
@@ -170,7 +171,13 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   counter += 3;
 
   // ----- posture ----- //
-  mju_sub(&residual[counter], data->qpos + 7, model->key_qpos + 7, model->nu);
+  auto *desired_posture = new double[model->nu];
+
+  mju_scl(desired_posture, model->key_qpos + 7, (1.0 - squat), model->nu);
+  mju_addToScl(desired_posture, model->key_qpos + model->nq + 7, squat,
+               model->nu);
+
+  mju_sub(&residual[counter], data->qpos + 7, desired_posture, model->nu);
   counter += model->nu;
 
   // ----- Walk ----- //
@@ -220,9 +227,11 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   counter += 2;
 
   // ----- control ----- //
-  mju_sub(&residual[counter], data->ctrl, model->key_qpos + 7,
+  mju_sub(&residual[counter], data->ctrl, desired_posture,
           model->nu);  // because of pos control
   counter += model->nu;
+
+  delete[] desired_posture;  // Free the allocated memory
 
   // ----- right hand distance ----- //
   if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
