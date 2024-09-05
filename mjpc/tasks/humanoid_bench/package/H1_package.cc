@@ -20,13 +20,13 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
                                       double *residual) const {
   // ----- set parameters ----- //
   double const stand_height = 1.65;
-  double const squat = parameters_[1];
+  double const squat = task_->squat_;
 
   // compute walk speed
   double walk_speed = 0.0;
-  if (task_->reward_machine_state_ == 0) {
+  if (task_->reward_machine_state_ <= 4 || task_->reward_machine_state_ == 6) {
     walk_speed = 0.0;
-  } else if (task_->reward_machine_state_ == 1) {
+  } else if (task_->reward_machine_state_ == 5) {
     walk_speed = 1.0;
   }
 
@@ -97,7 +97,9 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   residual[counter++] = std::exp(-reward);
   // ----- torso height ----- //
   double torso_height = SensorByName(model, data, "torso_position")[2];
-  residual[counter++] = torso_height - parameters_[0] - squat * (-0.35); // guessed value that squat is 0.5 m lower than standing
+  residual[counter++] =
+      torso_height - parameters_[0] -
+      squat * (-0.35);  // guessed value that squat is 0.5 m lower than standing
 
   // ----- pelvis / feet ----- //
   double *foot_right = SensorByName(model, data, "foot_right");
@@ -194,7 +196,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   mju_normalize(forward, 2);
 
   // Face in right-direction
-  if (task_->reward_machine_state_ == 1) {
+  if (task_->reward_machine_state_ == 5) {
     mju_sub(&residual[counter], forward, walk_direction, 2);
     mju_scl(&residual[counter], &residual[counter], standing, 2);
     counter += 2;
@@ -234,8 +236,9 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   delete[] desired_posture;  // Free the allocated memory
 
   // ----- right hand distance ----- //
-  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
-    mju_sub3(&residual[counter], right_hand_location, package_location);
+  if (task_->reward_machine_state_ >= 2 && task_->reward_machine_state_ <= 5) {
+    double *right_hand_target = SensorByName(model, data, "right_hand_target");
+    mju_sub3(&residual[counter], right_hand_location, right_hand_target);
     mju_scl3(&residual[counter], &residual[counter], standing);
     counter += 3;
   } else {
@@ -244,8 +247,9 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // ----- left hand distance ----- //
-  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
-    mju_sub3(&residual[counter], left_hand_location, package_location);
+  if (task_->reward_machine_state_ >= 2 && task_->reward_machine_state_ <= 5) {
+    double *left_hand_target = SensorByName(model, data, "left_hand_target");
+    mju_sub3(&residual[counter], left_hand_location, left_hand_target);
     mju_scl3(&residual[counter], &residual[counter], standing);
     counter += 3;
   } else {
@@ -254,7 +258,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // ----- goal distance ----- //
-  if (task_->reward_machine_state_ == 2) {
+  if (task_->reward_machine_state_ >= 5) {
     mju_sub3(&residual[counter], package_location, package_destination);
     mju_scl3(&residual[counter], &residual[counter], standing);
     counter += 3;
@@ -270,7 +274,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   residual[counter++] = package_location[2] - 0.5;
 
   // contact right hand
-  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+  if (task_->reward_machine_state_ >= 3 && task_->reward_machine_state_ <= 5) {
     bool contact_right_hand = CheckBodyCollision(
         model, data, "right_elbow_collision", "package_a_collision");
 
@@ -284,7 +288,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // contact left hand
-  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+  if (task_->reward_machine_state_ >= 3 && task_->reward_machine_state_ <= 5) {
     bool contact_left_hand = CheckBodyCollision(
         model, data, "left_elbow_collision", "package_a_collision");
 
@@ -298,7 +302,7 @@ void H1_package::ResidualFn::Residual(const mjModel *model, const mjData *data,
   }
 
   // no contact with the ground
-  if (task_->reward_machine_state_ == 0 || task_->reward_machine_state_ == 1) {
+  if (task_->reward_machine_state_ >= 3 && task_->reward_machine_state_ <= 5) {
     bool contact_ground =
         CheckBodyCollision(model, data, "floor", "package_a_collision");
 
@@ -377,39 +381,87 @@ void H1_package::TransitionLocked(mjModel *model, mjData *data) {
   // show the target position
   mju_copy3(data->mocap_pos, target_position_.data());
 
-  // update state machine
-  if (reward_machine_state_ == 0) {  // lift state
-    bool switch_to_walk = true;
+  if (data->time < 0.5 && reward_machine_state_ != 0) {
+    printf("Simulation has been reset\n");
+    reward_machine_state_ = 0;
+    squat_ = 0.0;
+  }
 
-    // check package height
-    double *package_location = SensorByName(model, data, "package_location");
-    if (package_location[2] < 1.0) {
-      switch_to_walk = false;
+  // update state machine
+  if (reward_machine_state_ == 0) {  // stand state
+    bool switch_to_squat = false;
+
+    // check total simulation time
+    if (data->time > 2.0) {
+      switch_to_squat = true;
     }
 
-    // check if package is gripped
-    bool contact_right_hand = CheckBodyCollision(
-        model, data, "right_elbow_collision", "package_a_collision");
+    if (data->time >= 1.0 && data->time <= 2.0) {
+      squat_ = data->time - 1.0;
+    }
+
+    if (switch_to_squat) {
+      reward_machine_state_ = 1;
+      squat_ = 1.0;
+      printf("Switching to squat\n");
+    }
+  } else if (reward_machine_state_ == 1) {
+    squat_ = 1.0;
+    if (data->time > 3.0) {
+      reward_machine_state_ = 2;
+      printf("Switching to hand close state\n");
+    }
+  }
+
+  else if (reward_machine_state_ == 2) {
+    squat_ = 1.0;
+    // check if both hands are close
+    double *left_hand_location = SensorByName(model, data, "left_hand_pos");
+    double *right_hand_location = SensorByName(model, data, "right_hand_pos");
+
+    double *left_hand_target = SensorByName(model, data, "left_hand_target");
+    double *right_hand_target = SensorByName(model, data, "right_hand_target");
+
+    auto *dist_vec_left = new double[3];
+    auto *dist_vec_right = new double[3];
+
+    mju_sub3(dist_vec_left, left_hand_location, left_hand_target);
+    mju_sub3(dist_vec_right, right_hand_location, right_hand_target);
+
+    double dist_left = mju_norm(dist_vec_left, 3);
+    double dist_right = mju_norm(dist_vec_right, 3);
+
+    if (dist_left < 0.05 && dist_right < 0.05) {
+      reward_machine_state_ = 3;
+      printf("Switching to grab state\n");
+    }
+  } else if (reward_machine_state_ == 3) {
+    // check if left hand contact with package
     bool contact_left_hand = CheckBodyCollision(
         model, data, "left_elbow_collision", "package_a_collision");
-    if (!contact_right_hand || !contact_left_hand) {
-      switch_to_walk = false;
+
+    // check if right hand contact with package
+    bool contact_right_hand = CheckBodyCollision(
+        model, data, "right_elbow_collision", "package_a_collision");
+
+    // check if package is on the ground
+    bool contact_ground =
+        CheckBodyCollision(model, data, "floor", "package_a_collision");
+
+    if (contact_left_hand && contact_right_hand && !contact_ground) {
+      reward_machine_state_ = 4;
+      squat_ = 0.0;
+      printf("Switching to stand up state\n");
     }
-
-    // check if package is not fast moving
-    double *package_velocity = SensorByName(model, data, "package_velocity");
-    double package_speed = mju_norm3(package_velocity);
-    if (package_speed > 0.2) {  // ToDo: fine tune this value
-      switch_to_walk = false;
-    }
-
-    // ToDo: check if robot is stable
-
-    if (switch_to_walk) {
-      reward_machine_state_ = 1;
+  } else if (reward_machine_state_ == 4) {
+    // check height of the package
+    double *package_location = SensorByName(model, data, "package_location");
+    if (package_location[2] > 0.4) {
+      reward_machine_state_ = 5;
+      squat_ = 0.0;
       printf("Switching to walk state\n");
     }
-  } else if (reward_machine_state_ == 1) {  // walk state
+  } else if (reward_machine_state_ == 5) {  // walk state
     bool switch_to_place = true;
 
     // check distance to target
@@ -422,7 +474,7 @@ void H1_package::TransitionLocked(mjModel *model, mjData *data) {
     }
 
     if (switch_to_place) {
-      reward_machine_state_ = 2;
+      reward_machine_state_ = 6;
       printf("Switching to place state\n");
     }
   }

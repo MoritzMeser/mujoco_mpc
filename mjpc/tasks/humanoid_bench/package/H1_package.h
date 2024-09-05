@@ -35,7 +35,7 @@ class H1_package : public Task {
     //
     //
     //            target_position_ = {dis_x(gen), dis_y(gen), 0.35};
-    target_position_ = {2.0, 2.0, 0.35};
+    target_position_ = {2.0, 2.0, 0.35}, squat_ = 0.0;
     printf("Initial target position: %f, %f\n", target_position_[0],
            target_position_[1]);
   }
@@ -55,6 +55,7 @@ class H1_package : public Task {
   ResidualFn residual_;
   int reward_machine_state_;
   std::array<double, 3> target_position_;
+  double squat_;
 };
 
 class Package_H1 : public H1_package {
