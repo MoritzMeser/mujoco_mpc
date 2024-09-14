@@ -6,8 +6,8 @@
     <worldbody>
         <body name="package_a" pos="0.5 0 0.35">
             <freejoint name='free_package'/>
-            <site name="left_hand_target" pos="-0.1 0.1 0.2" rgba="0 0 0 1"/>
-            <site name="right_hand_target" pos="-0.1 -0.1 0.2" rgba="0 0 0 1"/>
+            <site name="left_hand_target" pos="-0.0 0.1 0.2" rgba="0 0 0 1"/>
+            <site name="right_hand_target" pos="-0.0 -0.1 0.2" rgba="0 0 0 1"/>
             <geom name="package_a" type="box" size="0.2 0.1 0.35" material="package" class="visual" density="5"/>
             <geom name="package_a_collision" type="box" size="0.2 0.1 0.35" rgba="0.5 0.5 0.5 1" class="collision"
                   density="5"/>

@@ -451,15 +451,23 @@ void H1_package::TransitionLocked(mjModel *model, mjData *data) {
     if (contact_left_hand && contact_right_hand && !contact_ground) {
       reward_machine_state_ = 4;
       squat_ = 0.0;
+      timestamp_ = data->time;
       printf("Switching to stand up state\n");
     }
   } else if (reward_machine_state_ == 4) {
-    // check height of the package
-    double *package_location = SensorByName(model, data, "package_location");
-    if (package_location[2] > 0.4) {
+    //    // check height of the package
+    //    double *package_location = SensorByName(model, data,
+    //    "package_location"); if (package_location[2] > 0.4) {
+    //      reward_machine_state_ = 5;
+    //      squat_ = 0.0;
+    //      printf("Switching to walk state\n");
+    //    }
+    if (data->time - timestamp_ > 3.0) {
       reward_machine_state_ = 5;
       squat_ = 0.0;
       printf("Switching to walk state\n");
+    } else {
+      squat_ = (data->time - timestamp_) / 3.0;
     }
   } else if (reward_machine_state_ == 5) {  // walk state
     bool switch_to_place = true;
