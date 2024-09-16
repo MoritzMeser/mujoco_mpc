@@ -8,9 +8,9 @@
   </asset>
   <worldbody>
     <body name="door" pos="0.8 0 0">
-       <joint name="door_hinge" pos="-0.05 -0.5 1" axis="0 0 1" limited="true" range="0 1.4" stiffness="1"/>
-<!--      <joint name="door_hinge" pos="-0.05 -0.5 1" axis="0 0 1" limited="true" range="-1.4 0" stiffness="10"/>-->
-<!--      <joint name="door_hinge" pos="-0.05 -0.5 1" axis="0 0 1" limited="true" range="0 1.4" stiffness="50"/>-->
+      <joint name="door_hinge" pos="-0.05 -0.5 1" axis="0 0 1" limited="true" range="0 1.4" stiffness="1"/>
+      <!--      <joint name="door_hinge" pos="-0.05 -0.5 1" axis="0 0 1" limited="true" range="-1.4 0" stiffness="10"/>-->
+      <!--      <joint name="door_hinge" pos="-0.05 -0.5 1" axis="0 0 1" limited="true" range="0 1.4" stiffness="50"/>-->
 
 
       <geom name="door_body" type="box" rgba="0.8 0.8 0.83 1" pos="0 0 1" size="0.07 0.48 0.99" material="wooden_cover"
@@ -26,8 +26,10 @@
               material="metal_cover" class="visual"/>
         <geom name="door_hatch_inside" pos="-0.141 -0.1 0" size="0.02 0.1" zaxis="0 1 0" type="cylinder"
               material="metal_cover" class="visual"/>
+        <site name="door_hatch_inside" pos="-0.141 -0.1 0" rgba="0 0 0 1"/>
         <geom name="door_hatch_outside" pos="0.141 -0.1 0" size="0.02 0.1" zaxis="0 1 0" type="cylinder"
               material="metal_cover" class="visual"/>
+        <site name="door_hatch_outside" pos="0.141 -0.1 0" rgba="0 0 0 1"/>
         <geom name="door_lock" pos="0.15 0.07 0" size="0.01 0.07" zaxis="0 1 0" type="cylinder" material="metal_cover"
               class="visual"/>
         <geom name="door_lock_internal" pos="-0.15 0.07 0" size="0.01 0.07" zaxis="0 1 0" type="cylinder"

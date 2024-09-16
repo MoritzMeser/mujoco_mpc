@@ -39,7 +39,12 @@
 
     <user name="door_open" dim="1" user="6 10.0 0.0 100.0 0.01"/>
 
-    <user name="right" dim="3" user="6 10.0 0.0 100.0 0.01"/>
+    <user name="right" dim="3" user="6 2.0 0.0 100.0 0.01"/>
+
+    <user name="unwanted_collisions" dim="1" user="6 5.0 0.0 100.0 0.01"/>
+    <user name="x_pos" dim="1" user="2 10.0 0.0 100.0 0.01"/>
+    <user name="y_pos" dim="1" user="2 10.0 0.0 100.0 0.01"/>
+    <user name="close_door_penalty" dim="1" user="2 1000.0 0.0 1000.0 0.01"/>
 
     <!-- trace -->
     <framepos name="trace0" objtype="body" objname="torso_link"/>
@@ -75,5 +80,7 @@
     <framepos name="imu" objtype="site" objname="imu"/>
 
     <framepos name="door_hatch" objtype="body" objname="door_hatch"/>
+    <framepos name="door_hatch_inside" objtype="site" objname="door_hatch_inside"/>
+    <framepos name="door_hatch_outside" objtype="site" objname="door_hatch_outside"/>
   </sensor>
 </mujoco>

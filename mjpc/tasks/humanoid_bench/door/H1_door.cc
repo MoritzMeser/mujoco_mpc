@@ -22,7 +22,12 @@ void H1_door::ResidualFn::Residual(const mjModel *model, const mjData *data,
   // ----- set parameters ----- //
   double const standHeight = 1.65;
   double direction_goal = 0.0;
-  double speed_goal = 0.0;
+  double speed_goal;
+  if (task_->reward_machine_state_ <= 2) {
+    speed_goal = 0.0;
+  } else {  // state 3
+    speed_goal = 1.0;
+  }
 
   // ----- standing ----- //
   double head_height = SensorByName(model, data, "head_height")[2];
@@ -222,12 +227,61 @@ void H1_door::ResidualFn::Residual(const mjModel *model, const mjData *data,
   // door open
   residual[counter++] = data->qpos[model->nq - 2] - 1.4;
 
-  // right hand distance
-  double *right_hand_position =
-      SensorByName(model, data, "right_hand_position");
-  double *door_hatch = SensorByName(model, data, "door_hatch");
-  mju_sub3(&residual[counter], right_hand_position, door_hatch);
-  counter += 3;
+  if (task_->reward_machine_state_ == 1) {
+    // right hand distance
+    double *right_hand_position =
+        SensorByName(model, data, "right_hand_position");
+    double *door_hatch = SensorByName(model, data, "door_hatch_inside");
+    mju_sub3(&residual[counter], right_hand_position, door_hatch);
+    counter += 3;
+  } else if (task_->reward_machine_state_ == 2) {
+    // right hand distance
+    double *right_hand_position =
+        SensorByName(model, data, "right_hand_position");
+    double *door_hatch = SensorByName(model, data, "door_hatch_outside");
+    mju_sub3(&residual[counter], right_hand_position, door_hatch);
+    counter += 3;
+  } else {
+    mju_scl3(&residual[counter], right_hand_pos, 0.0);  // zero residual
+    counter += 3;
+  }
+
+  if (task_->reward_machine_state_ == 3) {
+    // unwanted collisions
+    int floor_idx = mj_name2id(model, mjOBJ_GEOM, "floor");
+
+    int unwanted_collision = 0;
+    for (int i = 0; i < data->ncon; i++) {
+      if (data->contact[i].geom1 != floor_idx &&
+          data->contact[i].geom2 != floor_idx) {
+        unwanted_collision++;
+      }
+    }
+    residual[counter++] = unwanted_collision;
+  } else {
+    residual[counter++] = 0.0;
+  }
+
+  // robot position
+  double x_displacement = data->qpos[model->nq - 2] / 3.0;
+  if (task_->reward_machine_state_ <= 2) {
+    if (data->qpos[0] < -x_displacement) {
+      residual[counter++] = 0.0;
+    } else {
+      residual[counter++] = data->qpos[0] + x_displacement;
+    }
+    if (data->qpos[1] > 0.25) {
+      residual[counter++] = 0.0;
+    } else {
+      residual[counter++] = -data->qpos[1] + 0.25   ;
+    }
+  } else {
+    residual[counter++] = 2.0 - data->qpos[0];
+    residual[counter++] = 0.0;
+  }
+
+  // close door penalty
+  residual[counter++] = std::abs(std::min(data->qvel[model->nv - 2], 0.0));
 
   // sensor dim sanity check
   // TODO: use this pattern everywhere and make this a utility function
@@ -249,6 +303,18 @@ void H1_door::ResidualFn::Residual(const mjModel *model, const mjData *data,
 // ------------------------------------------------------------ //
 void H1_door::TransitionLocked(mjModel *model, mjData *data) {
   //
+  if (reward_machine_state_ == 1) {
+    // check if door is open
+    if (data->qpos[model->nq - 2] > 0.5) {
+      reward_machine_state_ = 2;
+      printf("Door is half open - switch to state 2\n");
+    }
+  } else if (reward_machine_state_ == 2) {
+    if (data->qpos[model->nq - 2] > 1.3) {
+      reward_machine_state_ = 3;
+      printf("Door is full open - switch to state 3\n");
+    }
+  }
 }
 
 }  // namespace mjpc
