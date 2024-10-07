@@ -14,11 +14,13 @@ from compare_results.analyze import get_data
 from datetime import timedelta
 import re
 
+
 def parse_time_string(time_string):
     """Parse a time string formatted as 'H:MM:SS.mmmmmm' into a timedelta object."""
     parts = re.split('[:.]', time_string)
     hours, minutes, seconds, microseconds = parts[0], parts[1], parts[2], parts[3]
     return timedelta(hours=int(hours), minutes=int(minutes), seconds=int(seconds), microseconds=int(microseconds))
+
 
 def average_time(time_strings):
     """Calculate the average of a list of time strings."""
@@ -112,9 +114,159 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
 
     # show plot of qpos[0] and qpos[1]
     # Initialize a color palette, one color for each experiment
-    # colors = ['red', 'blue', 'green', 'orange', 'purple',
-    #           'brown']  # Extend this list based on the number of experiments
+    colors = ['red', 'blue', 'green', 'orange', 'purple',
+              'brown']  # Extend this list based on the number of experiments
+
+    # plot dist for reach task only
+    counter = 0
+    first_hits = []
+    if experiments[0].task_name == TaskName.Reach:
+        for j, exp in enumerate(experiments):
+            plt.figure(figsize=(10, 6))
+            for k in range(exp.num_runs):
+
+                idx = exp.cost_terms.index('abs_dist_value')
+
+                # Assuming `exp.costs[0][idx,:]` is the data being plotted
+                data = exp.costs[k][idx, :]
+                threshold = 0.05
+
+                plt.plot(data, color='lightgray')  # Plot all data points in medium light gray
+                plt.ylim(0, 6)
+
+                # Mark the first point where the threshold is crossed
+                previous_value = data[0]
+
+                first_hits.append(-1)
+                for i, value in enumerate(data[1:], start=1):
+                    if previous_value >= threshold and value < threshold:
+                        plt.plot(i, value, 'ro')  # 'ro' means red circle
+                        counter += 1
+                        #
+                        if first_hits[k] == -1:
+                            first_hits[k] = i
+                        #
+                        break
+                    previous_value = value
+
+                # make a horizontal line at 0.05
+            plt.axhline(y=threshold, color='black', linestyle='--', label='Threshold')
+            plt.ylim(0, 3)
+            plt.xlim(0, 2000)
+            plt.xlabel('Time (s)')
+            plt.ylabel('Target Distance (m)')
+            # Determine the number of ticks based on the length of the data
+            num_ticks = 5  # Number of ticks you want on the x-axis
+            tick_positions = np.linspace(0, len(data) - 1, num_ticks)
+
+            # Set the x-axis ticks
+            plt.xticks(tick_positions, labels=np.round(np.linspace(0, 4, num_ticks),
+                                                       2))  # Assuming the x-axis represents time in seconds
+
+            # Add subtitle with the number of threshold crossings
+            plt.title(f"Reach Task: distance between left hand and target, {exp.num_runs} runs")
+            # Add text below the plot with the number of threshold crossings
+            plt.figtext(0.5, 0.01, f"threshold crossings count: {counter}", ha="center", fontsize=12)
+
+            # plt.savefig(f"/Users/moritzmeser/Desktop/Reach_Task_hand_distance.pdf")
+            # plt.show()
+            print(f"First hits: {first_hits}")
+            # plt.savefig(f"/Users/moritzmeser/Desktop/dist_{k}.png")
+            # Assuming `first_hits` is already defined
+            # Filter out invalid entries
+            first_hits = [hit for hit in first_hits if hit != -1]
+            first_hits = [hit * 4 / 2000 for hit in first_hits]
+
+            plt.figure(figsize=(10, 6))
+
+            # Create a density plot
+            import seaborn as sns
+            sns.kdeplot(first_hits, shade=True, color='lightblue', alpha=0.6, fill=True)
+            # sns.kdeplot(first_hits, shade=True, color='blue', alpha=0.6, fill=False)
+
+            plt.xlabel('Time (s)')
+            plt.ylabel('Density')
+            plt.title('Density Plot of First Time Reaching the Target')
+            plt.xlim(0, 4)
+
+            plt.savefig(f"/Users/moritzmeser/Desktop/density_plot_of_first_time_reaching_target.pdf")
+            plt.show()
     #
+    #
+    #
+    first_hits = []
+    if experiments[0].task_name == TaskName.Maze:
+        plt.figure(figsize=(8, 8))
+        for k in range(experiments[0].num_runs):
+            plt.plot(experiments[0].qpos[k][0, :], experiments[0].qpos[k][1, :], 'lightgray')
+
+        plt.xlim(-1, 7)
+        plt.ylim(-1, 7)
+        plt.xlabel('x position (m)')
+        plt.ylabel('y position (m)')
+        plt.title('Maze Task: Trajectories trough the maze, 5 runs')
+        plt.savefig(f"/Users/moritzmeser/Desktop/Maze_Task_trajectories.pdf")
+        plt.show()
+
+        ## plot distance to goal
+        plt.figure(figsize=(10, 6))
+        for k in range(experiments[0].num_runs):
+            dist = []
+            for i in range(len(experiments[0].qpos[k][0, :])):
+                dist.append(np.linalg.norm([experiments[0].qpos[k][0, i] - 6, experiments[0].qpos[k][1, i] - 6]))
+            plt.plot(dist, 'lightgray')
+            first_hits.append(-1)
+            threshold = 0.1
+            previous_value = dist[0]
+            first_hits.append(-1)
+            for i, value in enumerate(dist[1:], start=1):
+                if previous_value >= threshold and value < threshold:
+                    plt.plot(i, value, 'ro')  # 'ro' means red circle
+                    #
+                    if first_hits[k] == -1:
+                        first_hits[k] = i
+                    #
+                    break
+                previous_value = value
+
+        plt.xlabel('Time (s)')
+        plt.xlim(0, 12500)
+        plt.ylabel('Target Distance (m)')
+
+        # Determine the number of ticks based on the length of the data
+        num_ticks = 6  # Number of ticks you want on the x-axis
+
+        tick_positions = np.linspace(0, len(dist) - 1, num_ticks)
+
+        # Set the x-axis ticks
+        plt.xticks(tick_positions, labels=np.round(np.linspace(0, 25, num_ticks),
+                                                   2))  # Assuming the x-axis represents time in seconds
+
+
+
+
+        plt.title(f"Maze Task: distance to goal, {experiments[0].num_runs} runs")
+        plt.savefig(f"/Users/moritzmeser/Desktop/Maze_Task_distance_to_goal.pdf")
+        plt.show()
+
+        first_hits = [hit for hit in first_hits if hit != -1]
+        first_hits = [hit * 25 / 12500 for hit in first_hits]
+
+        plt.figure(figsize=(10, 6))
+
+        # Create a density plot
+        import seaborn as sns
+        sns.kdeplot(first_hits, shade=True, color='lightblue', alpha=0.6, fill=True)
+        # sns.kdeplot(first_hits, shade=True, color='blue', alpha=0.6, fill=False)
+
+        plt.xlabel('Time (s)')
+        plt.ylabel('Density')
+        plt.title('Density Plot of Time to Get to the Goal')
+        plt.xlim(0, 25)
+
+        plt.savefig(f"/Users/moritzmeser/Desktop/density_plot_of_first_time_reaching_target_maze.pdf")
+        plt.show()
+
     # plt.figure(figsize=(10, 6))
     #
     # # Iterate through each experiment and plot qpos[0] vs qpos[1]
@@ -209,133 +361,133 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
     # plt.savefig("/Users/moritzmeser/Desktop/ctrl_vs_time.pdf")
     # # Display the plot
     # plt.show()
+    # #
+    # # order experiments by reward function
     #
-    # order experiments by reward function
-
-    filtered_experiments = []
-    for exp in experiments:
-        if exp.reward_function.name == 'ours_plus_hb':
-            filtered_experiments.append(exp)
-    for exp in experiments:
-        if exp.reward_function.name == 'hb':
-            filtered_experiments.append(exp)
-    experiments = filtered_experiments
-
-    print("Task: ", experiments[0].task_name.name)
-    for exp in experiments:
-        qvel = np.array(exp.qvel)
-        # print("before qvel shape: ", qvel.shape)
-        # remove the first 6 elements, as they are belong to the free base joint, not an actual joint
-        qvel = qvel[:, 6:, :]
-        if exp.task_name == TaskName.Push:  # the last 6 entries belong to the free base joint of the box
-            qvel = qvel[:, :19, :]
-
-        # print("after qvel shape: ", qvel.shape)
-        # compute v_dot^2
-        v_dot = np.diff(qvel, axis=2)
-        v_dot = np.linalg.norm(v_dot, axis=1)
-        v_dot = np.mean(v_dot, axis=1)
-
-        v_dot_mean = np.mean(v_dot, axis=0)
-        v_dot_std = np.std(v_dot, axis=0)
-
-        function_name = exp.reward_function.name
-        if function_name == 'ours_plus_hb':
-            function_name = 'ours'
-        print(f"{function_name} v_dot^2: {v_dot_mean:.3f} ± {v_dot_std:.3f}")
-
-
-
-
-    # # report inference time
+    # filtered_experiments = []
     # for exp in experiments:
-    #     print(f"Average Inference Time for {exp.task_name}, Planner {exp.planner.name}:, Simulated Time: {exp.total_time}, Planner Iterations: {exp.planner_iterations}, Agent Horizon: {exp.agent_horizon} Number of Runs: {exp.num_runs}, Reward Function: {exp.reward_function.name}")
-    #     parsed_times = [parse_time_string(time) for time in exp.inference_times]
-    #     average_time_string = average_time([str(time) for time in parsed_times])
-    #     print(f"Average Inference Time: {average_time_string}")
-
-
-
-
-
-    # make one plot, showing mean and std of rewards
-    plt.figure(figsize=(8.5, 4))  # Increase width to create space for text
-    plt.axes([0.07, 0.12, 0.64, 0.87])  # Adjust axes to leave space on the right
-    colors = ['b', 'g']
-    for i, exp in enumerate(experiments):
-        median = np.median(exp.rewards, axis=0)
-        mean = np.mean(exp.rewards, axis=0)
-        std = np.std(exp.rewards, axis=0)
-        label = exp.reward_function.name
-        if label == 'ours_plus_hb':
-            label = 'ours'
-        plt.plot(time_list[:-1], mean, label=label, color=colors[i])
-        plt.fill_between(time_list[:-1], mean - std, mean + std, alpha=0.3, color=colors[i])
-        plt.plot(time_list[:-1], median, linestyle='--', color=colors[i])
-    plt.xlabel("Time (s)")
-    plt.ylabel("HumanoidBench Instantaneous Reward")
-    plt.ylim(0, experiment.task_name.max_reward + 0.1)
-    # plt.title("Humanoid Bench Reward over Time Walk Task")
-
-    # add a vertical line at 2s
-    plt.axvline(x=2, color='black', linestyle=':', label='2s', linewidth=3)
-
-    # Define colors for each reward function
-    colors = {'ours': 'blue', 'hb': 'green'}
-
-    # Create custom legend handles for each reward function
-    legend_handles = []
-    for label, color in colors.items():
-        legend_handles.append(mlines.Line2D([], [], color=color, label=f'{label} Mean'))
-        legend_handles.append(mlines.Line2D([], [], color=color, linestyle='--', label=f'{label} Median'))
-        legend_handles.append(mpatches.Patch(color=color, alpha=0.3, label=f'{label} Standard Error'))
-
-    # Add custom legend to the plot
-    plt.legend(handles=legend_handles, bbox_to_anchor=(1.005, 1), fontsize=12)
-    plt.savefig("/Users/moritzmeser/Desktop/reward_over_time_walk.pdf")
-
-    plt.show()
-
-    # limit rewards to 1000 first steps, to make it comparable to Humanoid Bench
-    for exp in experiments:
-        exp.rewards = np.array([r[:1000] for r in exp.rewards])
-    if experiments[0].task_name == TaskName.Push:
-        for exp in experiments:
-            exp.rewards = np.array([r[:500] for r in exp.rewards])
-            for i, run in enumerate(exp.rewards):
-                for j, r in enumerate(run):
-                    if r > 0:
-                        run[j + 1:] = [0] * (len(run) - (j + 1))  # Set everything after index j to zero
-                        break
-                exp.rewards[i] = run
-
-    # make violin plot
-    violin_data = [np.sum(exp.rewards, axis=1) for exp in experiments]
-    violin_names = [f"{exp.reward_function.name}" for exp in experiments]
-    violin_names = ['ours' if v == 'ours_plus_hb' else v for v in violin_names]
-    violin_names = [f'MPC\n{s}' for s in violin_names]
-
-    # include also Algorithms from Humanoid Bench
-    if experiments[0].robot_name == Robot.H1:
-        means, stds, algo_names, all_data = get_data(experiments[0].task_name.name.lower())
-        violin_data += all_data
-        violin_names += algo_names
-
-    # plt.figure(figsize=(5, 6))
-    # # plt.axes([0.1, 0.2, 0.8, 0.7])  # Adjust axes to leave space on the right
-    # plt.violinplot(violin_data, showmeans=True, showextrema=True, showmedians=True)
+    #     if exp.reward_function.name == 'ours_plus_hb':
+    #         filtered_experiments.append(exp)
+    # for exp in experiments:
+    #     if exp.reward_function.name == 'hb':
+    #         filtered_experiments.append(exp)
+    # experiments = filtered_experiments
     #
-    # # Adding labels and title
-    # plt.xticks(np.arange(1, len(violin_names) + 1), violin_names, rotation=45, ha="right")
-    # plt.ylabel('Sum of Rewards')
-    # plt.title(f"Sum of Rewards for {experiments[0].task_name.name} Task with Robot {experiments[0].robot_name.name}")
+    # print("Task: ", experiments[0].task_name.name)
+    # for exp in experiments:
+    #     qvel = np.array(exp.qvel)
+    #     # print("before qvel shape: ", qvel.shape)
+    #     # remove the first 6 elements, as they are belong to the free base joint, not an actual joint
+    #     qvel = qvel[:, 6:, :]
+    #     if exp.task_name == TaskName.Push:  # the last 6 entries belong to the free base joint of the box
+    #         qvel = qvel[:, :19, :]
     #
-    # if not experiments[0].task_name == TaskName.Push:
-    #     plt.ylim(0, 1000)
+    #     # print("after qvel shape: ", qvel.shape)
+    #     # compute v_dot^2
+    #     v_dot = np.diff(qvel, axis=2)
+    #     v_dot = np.linalg.norm(v_dot, axis=1)
+    #     v_dot = np.mean(v_dot, axis=1)
     #
-    # #  crop figure bevor saving
-    # plt.tight_layout()
-    # # plt.savefig(f"/Users/moritzmeser/Desktop/sum_of_rewards_{experiments[0].task_name.name}_{experiments[0].robot_name.name}.pdf")
-    # # plt.show()
-
-    return violin_data, violin_names
+    #     v_dot_mean = np.mean(v_dot, axis=0)
+    #     v_dot_std = np.std(v_dot, axis=0)
+    #
+    #     function_name = exp.reward_function.name
+    #     if function_name == 'ours_plus_hb':
+    #         function_name = 'ours'
+    #     print(f"{function_name} v_dot^2: {v_dot_mean:.3f} ± {v_dot_std:.3f}")
+    #
+    #
+    #
+    #
+    # # # report inference time
+    # # for exp in experiments:
+    # #     print(f"Average Inference Time for {exp.task_name}, Planner {exp.planner.name}:, Simulated Time: {exp.total_time}, Planner Iterations: {exp.planner_iterations}, Agent Horizon: {exp.agent_horizon} Number of Runs: {exp.num_runs}, Reward Function: {exp.reward_function.name}")
+    # #     parsed_times = [parse_time_string(time) for time in exp.inference_times]
+    # #     average_time_string = average_time([str(time) for time in parsed_times])
+    # #     print(f"Average Inference Time: {average_time_string}")
+    #
+    #
+    #
+    #
+    #
+    # # make one plot, showing mean and std of rewards
+    # plt.figure(figsize=(8.5, 4))  # Increase width to create space for text
+    # plt.axes([0.07, 0.12, 0.64, 0.87])  # Adjust axes to leave space on the right
+    # colors = ['b', 'g']
+    # for i, exp in enumerate(experiments):
+    #     median = np.median(exp.rewards, axis=0)
+    #     mean = np.mean(exp.rewards, axis=0)
+    #     std = np.std(exp.rewards, axis=0)
+    #     label = exp.reward_function.name
+    #     if label == 'ours_plus_hb':
+    #         label = 'ours'
+    #     plt.plot(time_list[:-1], mean, label=label, color=colors[i])
+    #     plt.fill_between(time_list[:-1], mean - std, mean + std, alpha=0.3, color=colors[i])
+    #     plt.plot(time_list[:-1], median, linestyle='--', color=colors[i])
+    # plt.xlabel("Time (s)")
+    # plt.ylabel("HumanoidBench Instantaneous Reward")
+    # plt.ylim(0, experiment.task_name.max_reward + 0.1)
+    # # plt.title("Humanoid Bench Reward over Time Walk Task")
+    #
+    # # add a vertical line at 2s
+    # plt.axvline(x=2, color='black', linestyle=':', label='2s', linewidth=3)
+    #
+    # # Define colors for each reward function
+    # colors = {'ours': 'blue', 'hb': 'green'}
+    #
+    # # Create custom legend handles for each reward function
+    # legend_handles = []
+    # for label, color in colors.items():
+    #     legend_handles.append(mlines.Line2D([], [], color=color, label=f'{label} Mean'))
+    #     legend_handles.append(mlines.Line2D([], [], color=color, linestyle='--', label=f'{label} Median'))
+    #     legend_handles.append(mpatches.Patch(color=color, alpha=0.3, label=f'{label} Standard Error'))
+    #
+    # # Add custom legend to the plot
+    # plt.legend(handles=legend_handles, bbox_to_anchor=(1.005, 1), fontsize=12)
+    # plt.savefig("/Users/moritzmeser/Desktop/reward_over_time_walk.pdf")
+    #
+    # plt.show()
+    #
+    # # limit rewards to 1000 first steps, to make it comparable to Humanoid Bench
+    # for exp in experiments:
+    #     exp.rewards = np.array([r[:1000] for r in exp.rewards])
+    # if experiments[0].task_name == TaskName.Push:
+    #     for exp in experiments:
+    #         exp.rewards = np.array([r[:500] for r in exp.rewards])
+    #         for i, run in enumerate(exp.rewards):
+    #             for j, r in enumerate(run):
+    #                 if r > 0:
+    #                     run[j + 1:] = [0] * (len(run) - (j + 1))  # Set everything after index j to zero
+    #                     break
+    #             exp.rewards[i] = run
+    #
+    # # make violin plot
+    # violin_data = [np.sum(exp.rewards, axis=1) for exp in experiments]
+    # violin_names = [f"{exp.reward_function.name}" for exp in experiments]
+    # violin_names = ['ours' if v == 'ours_plus_hb' else v for v in violin_names]
+    # violin_names = [f'MPC\n{s}' for s in violin_names]
+    #
+    # # include also Algorithms from Humanoid Bench
+    # if experiments[0].robot_name == Robot.H1:
+    #     means, stds, algo_names, all_data = get_data(experiments[0].task_name.name.lower())
+    #     violin_data += all_data
+    #     violin_names += algo_names
+    #
+    # # plt.figure(figsize=(5, 6))
+    # # # plt.axes([0.1, 0.2, 0.8, 0.7])  # Adjust axes to leave space on the right
+    # # plt.violinplot(violin_data, showmeans=True, showextrema=True, showmedians=True)
+    # #
+    # # # Adding labels and title
+    # # plt.xticks(np.arange(1, len(violin_names) + 1), violin_names, rotation=45, ha="right")
+    # # plt.ylabel('Sum of Rewards')
+    # # plt.title(f"Sum of Rewards for {experiments[0].task_name.name} Task with Robot {experiments[0].robot_name.name}")
+    # #
+    # # if not experiments[0].task_name == TaskName.Push:
+    # #     plt.ylim(0, 1000)
+    # #
+    # # #  crop figure bevor saving
+    # # plt.tight_layout()
+    # # # plt.savefig(f"/Users/moritzmeser/Desktop/sum_of_rewards_{experiments[0].task_name.name}_{experiments[0].robot_name.name}.pdf")
+    # # # plt.show()
+    #
+    # return violin_data, violin_names

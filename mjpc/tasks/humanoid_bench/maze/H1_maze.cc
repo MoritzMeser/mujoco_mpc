@@ -24,7 +24,7 @@ namespace mjpc {
         double walk_speed = parameters_[1];
 
         int counter = 0;
-
+        residual[counter++] = 0.0; //TODO: implement humanoid bench reward !!!
 
 //        // ----- standing ----- //
 //        double head_height = SensorByName(model, data, "head_height")[2];

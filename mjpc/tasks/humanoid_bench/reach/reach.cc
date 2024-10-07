@@ -364,6 +364,9 @@ void Reach::ResidualFn::Residual(const mjModel *model, const mjData *data,
     counter += model->nu;
   }
 
+  // this is just for tracking the distance, not a cost that should be used for optimization
+  residual[counter++] = mju_dist3(left_hand_pos, task_->target_position_.data());
+
   // sensor dim sanity check
   // TODO: use this pattern everywhere and make this a utility function
   int user_sensor_dim = 0;
@@ -375,7 +378,7 @@ void Reach::ResidualFn::Residual(const mjModel *model, const mjData *data,
   if (user_sensor_dim != counter) {
     mju_error_i("mismatch between total user-sensor dimension "
                 "and actual length of residual %d",
-                counter);
+                user_sensor_dim);
   }
 }
 
@@ -387,11 +390,15 @@ void Reach::TransitionLocked(mjModel *model, mjData *data) {
 
   // check if task is done
   if (hand_dist < 0.05) {
+    printf("--------------------\n");
+    printf("task done\n");
+    printf("time %f\n", data->time);
+    printf("--------------------\n");
     // generate new random target
-//    std::array<double, 3> target_low = {-2, -2, 0.2};
-    std::array<double, 3> target_low = {-2, -2, 1.0}; //make it easier
-//    std::array<double, 3> target_high = {2, 2, 2};
-    std::array<double, 3> target_high = {2, 2, 1.6}; //make it easier
+    std::array<double, 3> target_low = {-2, -2, 0.2};
+//    std::array<double, 3> target_low = {-2, -2, 1.0}; //make it easier
+    std::array<double, 3> target_high = {2, 2, 2};
+//    std::array<double, 3> target_high = {2, 2, 1.6}; //make it easier
 
     std::random_device rd;
     std::mt19937 gen(rd());

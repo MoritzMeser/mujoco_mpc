@@ -62,6 +62,8 @@ def run_single_experiment(experiment: Experiment, index: int, show_tqdm: bool = 
         logger.info("Renderer initialized")
 
     # ------ Set up agent ------ #
+    print("task_id: ", task_id)
+    print("model: ", model)
     agent = agent_lib.Agent(task_id=task_id, model=model)
     logger.info("Agent initialized")
 
