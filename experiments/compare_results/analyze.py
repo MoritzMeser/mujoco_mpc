@@ -24,7 +24,9 @@ def list_fields_from_dict(data, depth, current_depth, key_path):
 
 
 def get_data(task_name):
-    with open('/Users/moritzmeser/lokal/Code_Local/MJPC/mujoco_mpc/experiments/compare_results/hb_original.json',
+    # with open('/Users/moritzmeser/lokal/Code_Local/MJPC/mujoco_mpc/experiments/compare_results/hb_original.json',
+    with open('/Users/moritzmeser/lokal/Code_Local/mjpc/experiments/compare_results/hb_original.json',
+
               'r') as f:
         data = json.load(f)
     data = data[task_name]

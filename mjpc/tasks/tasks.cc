@@ -180,7 +180,7 @@ namespace mjpc {
 //                std::make_shared<H1_cube_touch>(),
 //
 //                //Door Task
-//                std::make_shared<H1_door_position>(),
+                std::make_shared<H1_door_position>(),
 //                std::make_shared<H1_door_hand>(),
 //                std::make_shared<H1_door_gripper>(),
 //                std::make_shared<H1_door_simple_hand>(),

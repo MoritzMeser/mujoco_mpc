@@ -65,5 +65,7 @@ def planner_to_numeric(planner):
             return 2
         case Planner.Derivative:
             return 1
+        case Planner.SampleGradient:
+            return 6
         case _:
             return None  # Default case if planner does not match any case above

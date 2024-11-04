@@ -45,7 +45,9 @@ def run_single_experiment(experiment: Experiment, index: int, show_tqdm: bool = 
 
     # ------ Load model ------ #
     task_id = experiment.task_name.name + " " + experiment.robot_name.name
+    print("task_id: ", task_id)
     model_path = util.model_path_from_id(task_id)
+    print("model_path: ", model_path)
     model = mujoco.MjModel.from_xml_path(str(model_path))
     model.opt.timestep = sim_time_step
     logger.info(f"Model loaded from {model_path}")

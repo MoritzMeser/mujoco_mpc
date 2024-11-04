@@ -33,7 +33,7 @@ def main():
     paths = []
     # for reward_fuction in [RewardFunction.ours, RewardFunction.hb, RewardFunction.ours_plus_hb]:
     for reward_fuction in [RewardFunction.ours]:
-        home_path = pathlib.Path("/Users/moritzmeser/lokal/Maze")
+        home_path = pathlib.Path("/Users/moritzmeser/lokal/Door")
         curr_date = datetime.today().strftime("%Y_%m_%d")
         curr_time = datetime.today().strftime("%H_%M_%S")
         path = home_path / curr_date / curr_time
@@ -42,12 +42,12 @@ def main():
             folder_path=path,
             num_runs=5,
             robot_name=Robot.H1,
-            task_name=TaskName.Maze,
-            total_time=25.0,
+            task_name=TaskName.Door,
+            total_time=10.0,
             reward_function=reward_fuction,
-            planner=Planner.iLQG,
-            agent_horizon=0.35,  # 0.35
-            planner_iterations=2,  # 10
+            planner=Planner.SampleGradient,
+            agent_horizon=0.8,  # 0.35 -- 0.8
+            planner_iterations=10,  # 10
             render_video=True,
         )
 
@@ -77,19 +77,21 @@ def main():
 
 
 if __name__ == "__main__":
-    new_evaluation_method([pathlib.Path('/Users/moritzmeser/lokal/Maze/2024_10_02/12_58_00')])
+    # new_evaluation_method([pathlib.Path('/Users/moritzmeser/lokal/Door/2024_10_08/15_36_52')])
+
+
     # main()
     # Walk H1
-    # paths = [pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/morning_run/2024_06_27/10_19_40"),
-    #          pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/morning_run/2024_06_27/08_13_29"),
-    #          pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/morning_run/2024_06_27/12_54_04")]
-    # walk_data, walk_names = new_evaluation_method(paths)
-    # # #
-    # # Stand H1
-    # paths = [pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Nachmittag/2024_06_27/16_52_17"),
-    #          pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Nachmittag/2024_06_27/16_57_56"),
-    #          pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Nachmittag/2024_06_27/17_03_38")]
-    # stand_data, stand_names = new_evaluation_method(paths)
+    paths = [pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/morning_run/2024_06_27/10_19_40"),
+             pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/morning_run/2024_06_27/08_13_29"),
+             pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/morning_run/2024_06_27/12_54_04")]
+    walk_data, walk_names = new_evaluation_method(paths)
+
+    # Stand H1
+    paths = [pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Nachmittag/2024_06_27/16_52_17"),
+             pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Nachmittag/2024_06_27/16_57_56"),
+             pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Nachmittag/2024_06_27/17_03_38")]
+    stand_data, stand_names = new_evaluation_method(paths)
     # #
     # # # # Stand G1
     # # # paths = [pathlib.Path("/Users/moritzmeser/Desktop/Stand_G1/2024_06_27/18_12_28"),
@@ -97,55 +99,55 @@ if __name__ == "__main__":
     # # #          pathlib.Path("/Users/moritzmeser/Desktop/Stand_G1/2024_06_27/19_18_20")]
     # # # new_evaluation_method(paths)
     # # #
-    # # Push H1
-    # paths = [pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Push_H1/2024_06_27/21_03_46"),
-    #          pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Push_H1/2024_06_27/20_58_27"),
-    #          pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Push_H1/2024_06_27/20_33_01")]
-    # push_data, push_names = new_evaluation_method(paths)
+    # Push H1
+    paths = [pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Push_H1/2024_06_27/21_03_46"),
+             pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Push_H1/2024_06_27/20_58_27"),
+             pathlib.Path("/Users/moritzmeser/lokal/Code_Local/data/Push_H1/2024_06_27/20_33_01")]
+    push_data, push_names = new_evaluation_method(paths)
     # #
     # # # # Walk G1
     # # # paths = [pathlib.Path("/Users/moritzmeser/Desktop/Walk_G1/2024_06_28/11_28_37")]
     # # # new_evaluation_method(paths)
     # #
-    # plt.figure(figsize=(6, 4))
-    # plt.axes([0.14, 0.2, 0.85, 0.79])
-    #
-    #
-    # violin_parts = plt.violinplot(stand_data, showmeans=True, showextrema=True, showmedians=True)
-    # set_color(violin_parts, 'red')
-    #
-    # violin_parts = plt.violinplot(walk_data, showmeans=True, showextrema=True, showmedians=True)
-    # set_color(violin_parts, 'blue')
-    #
-    # violin_parts = plt.violinplot(push_data, showmeans=True, showextrema=True, showmedians=True)
-    # set_color(violin_parts, 'green')
-    #
-    # # Create custom legend handles
-    # legend_handles = [Patch(facecolor='red', edgecolor='black', label='Stand\nTask'),
-    #                   Patch(facecolor='blue', edgecolor='black', label='Walk\nTask'),
-    #                   Patch(facecolor='green', edgecolor='black', label='Push\nTask')]
-    #
-    # # Add the custom legend to the plot, positioning it outside the top right corner
-    # plt.legend(handles=legend_handles, loc='upper right')
-    #
-    # plt.xticks(np.arange(1, len(push_names) + 1), push_names, rotation=45, ha="right")
-    #
-    # # Retrieve the current x-axis tick labels
-    # labels = plt.gca().get_xticklabels()
-    #
-    # # Set the first label to bold
-    # if labels:  # Check if there are any labels
-    #     labels[0].set_weight('bold')
-    #
-    #
-    # # Set the ylabel with typewriter font using LaTeX syntax
-    # plt.ylabel("HumanoidBench Score")
-    #
-    # # # Apply logarithmic scale to y-axis
-    # # plt.yscale('log')
-    #
-    # plt.savefig("/Users/moritzmeser/Desktop/stand_walk_push.pdf")
-    # plt.show()
+    plt.figure(figsize=(6, 4))
+    plt.axes([0.14, 0.2, 0.85, 0.79])
+
+
+    violin_parts = plt.violinplot(stand_data, showmeans=True, showextrema=True, showmedians=True)
+    set_color(violin_parts, 'red')
+
+    violin_parts = plt.violinplot(walk_data, showmeans=True, showextrema=True, showmedians=True)
+    set_color(violin_parts, 'blue')
+
+    violin_parts = plt.violinplot(push_data, showmeans=True, showextrema=True, showmedians=True)
+    set_color(violin_parts, 'green')
+
+    # Create custom legend handles
+    legend_handles = [Patch(facecolor='red', edgecolor='black', label='Stand\nTask'),
+                      Patch(facecolor='blue', edgecolor='black', label='Walk\nTask'),
+                      Patch(facecolor='green', edgecolor='black', label='Push\nTask')]
+
+    # Add the custom legend to the plot, positioning it outside the top right corner
+    plt.legend(handles=legend_handles, loc='upper right')
+
+    plt.xticks(np.arange(1, len(push_names) + 1), push_names, rotation=45, ha="right")
+
+    # Retrieve the current x-axis tick labels
+    labels = plt.gca().get_xticklabels()
+
+    # Set the first label to bold
+    if labels:  # Check if there are any labels
+        labels[0].set_weight('bold')
+
+
+    # Set the ylabel with typewriter font using LaTeX syntax
+    plt.ylabel("HumanoidBench Score")
+
+    # # Apply logarithmic scale to y-axis
+    # plt.yscale('log')
+
+    plt.savefig("/Users/moritzmeser/Desktop/stand_walk_push.pdf")
+    plt.show()
 
 
 

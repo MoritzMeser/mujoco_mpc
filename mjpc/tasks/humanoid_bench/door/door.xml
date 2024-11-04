@@ -13,13 +13,22 @@
             <geom type="box" pos="0 0 1" size="0.07 0.48 0.99" class="collision"/>
 
             <body name="door_hatch" pos="0 0.4 1.2" gravcomp='1'>
-                <joint name="door_hatch_hinge" pos="0 0 0" axis="1 0 0" limited="true" range="0 2" stiffness="2" />
-                <geom name="door_hatch_axis_in" pos="-0.12 0 0" size="0.05 0.05" zaxis="1 0 0" type="cylinder" material="metal_cover" class="visual"/>
-                <geom name="door_hatch_axis_out" pos="0.12 0 0" size="0.05 0.05" zaxis="1 0 0" type="cylinder" material="metal_cover" class="visual"/>
-                <geom name="door_hatch_inside" pos="-0.141 -0.1 0" size="0.02 0.1" zaxis="0 1 0" type="cylinder" material="metal_cover" class="visual"/>
-                <geom name="door_hatch_outside" pos="0.141 -0.1 0" size="0.02 0.1" zaxis="0 1 0" type="cylinder" material="metal_cover" class="visual"/>
-                <geom name="door_lock" pos="0.15 0.07 0" size="0.01 0.07" zaxis="0 1 0" type="cylinder" material="metal_cover" class="visual"/>
-                <geom name="door_lock_internal" pos="-0.15 0.07 0" size="0.01 0.07" zaxis="0 1 0" type="cylinder" material="metal_cover" class="visual"/>
+                <joint name="door_hatch_hinge" pos="0 0 0" axis="1 0 0" limited="true" range="1.99 2" stiffness="2"/>
+<!--                 <joint name="door_hatch_hinge" pos="0 0 0" axis="1 0 0" limited="true" range="0 2" stiffness="2" />-->
+                <geom name="door_hatch_axis_in" pos="-0.12 0 0" size="0.05 0.05" zaxis="1 0 0" type="cylinder"
+                      material="metal_cover" class="visual"/>
+                <geom name="door_hatch_axis_out" pos="0.12 0 0" size="0.05 0.05" zaxis="1 0 0" type="cylinder"
+                      material="metal_cover" class="visual"/>
+                <geom name="door_hatch_inside" pos="-0.141 -0.1 0" size="0.02 0.1" zaxis="0 1 0" type="cylinder"
+                      material="metal_cover" class="visual"/>
+                <site name="door_hatch_inside" pos="-0.141 -0.1 0" rgba="0 0 0 1"/>
+                <geom name="door_hatch_outside" pos="0.141 -0.1 0" size="0.02 0.1" zaxis="0 1 0" type="cylinder"
+                      material="metal_cover" class="visual"/>
+                <site name="door_hatch_outside" pos="0.141 -0.1 0" rgba="0 0 0 1"/>
+                <geom name="door_lock" pos="0.15 0.07 0" size="0.01 0.07" zaxis="0 1 0" type="cylinder" material="metal_cover"
+                      class="visual"/>
+                <geom name="door_lock_internal" pos="-0.15 0.07 0" size="0.01 0.07" zaxis="0 1 0" type="cylinder"
+                      material="metal_cover" class="visual"/>
 
 
                 <geom type="cylinder" pos="-0.12 0 0" size="0.05 0.05" zaxis="1 0 0" class="collision"/>

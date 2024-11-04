@@ -19,6 +19,8 @@ class TaskName(Enum):
     Stairs = (auto(), 1.0)
     Reach = (auto(), 16.0)
     Maze = (auto(), 1.0)
+    Package = (auto(), 1.0)
+    Door = (auto(), 1.0)
 
     def __init__(self, _, max_reward):
         self._max_reward = max_reward
@@ -32,6 +34,7 @@ class Planner(Enum):
     iLQG = auto()
     Sampling = auto()
     Derivative = auto()
+    SampleGradient = auto()
 
 
 class RewardFunction(Enum):

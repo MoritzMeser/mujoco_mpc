@@ -267,6 +267,127 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
         plt.savefig(f"/Users/moritzmeser/Desktop/density_plot_of_first_time_reaching_target_maze.pdf")
         plt.show()
 
+    if experiments[0].task_name == TaskName.Package:
+        ## plot trajectories of the package
+        plt.figure(figsize=(8, 8))
+        for k in range(experiments[0].num_runs):
+           # plot position of package in x y plane
+            plt.plot(experiments[0].qpos[k][-7, :], experiments[0].qpos[k][-6, :], 'lightgray')
+        plt.title(f'Package Task: Trajectories of the package, {experiments[0].num_runs} runs')
+        plt.ylabel('y position (m)')
+        plt.xlabel('x position (m)')
+
+        # mark position at 0.75, 0
+        plt.plot(0.75, 0, 'bo', mfc='none', markersize=10, markeredgewidth=2)
+
+        # mark the position at 2, 2 with a blue cross
+        plt.plot(2, 2, 'bx', markersize=10, markeredgewidth=2)
+        # plt.savefig(f"/Users/moritzmeser/Desktop/Package_Task_trajectories_without_goal.pdf")
+        plt.show()
+
+        ## plot hight of the package
+        plt.figure(figsize=(10, 6))
+        for k in range(experiments[0].num_runs):
+            plt.plot(experiments[0].qpos[k][-5, :], 'lightgray')
+        plt.title(f'Package Task: Height of the package, {experiments[0].num_runs} runs')
+
+        length = len(experiments[0].qpos[0][-5, :])
+        plt.xlim(0, length)
+
+        num_ticks = 11  # Number of ticks you want on the x-axis
+        tick_positions = np.linspace(0, length - 1, num_ticks)
+
+        # Set the x-axis ticks
+        plt.xticks(tick_positions, labels=np.round(np.linspace(0, 10, num_ticks),
+                                                   2))  # Assuming the x-axis represents time in seconds
+
+        plt.xlabel('Time (s)')
+        plt.ylabel('Height (m)')
+        plt.ylim(0,2)
+        # plt.savefig(f"/Users/moritzmeser/Desktop/Package_Task_height.pdf")
+        plt.show()
+
+        ## plot distance to goal
+        plt.figure(figsize=(10, 6))
+        goal_position = [2, 2]
+        for k in range(experiments[0].num_runs):
+            dist = np.sqrt((experiments[0].qpos[k][-7, :] - goal_position[0])**2 + (experiments[0].qpos[k][-6, :] - goal_position[1])**2)
+            plt.plot(dist, 'lightgray')
+        plt.title(f'Package Task: Distance to goal, {experiments[0].num_runs} runs')
+
+        plt.xlim(0, length)
+        num_ticks = 11  # Number of ticks you want on the x-axis
+        tick_positions = np.linspace(0, length - 1, num_ticks)
+        # Set the x-axis ticks
+        plt.xticks(tick_positions, labels=np.round(np.linspace(0, 10, num_ticks),
+                                                   2))  # Assuming the x-axis represents time in seconds
+        plt.xlabel('Time (s)')
+
+        plt.ylabel('Distance to goal (m)')
+        plt.ylim(0, 4)
+        # plt.savefig(f"/Users/moritzmeser/Desktop/Package_Task_distance_to_goal.pdf")
+        plt.show()
+
+    if experiments[0].task_name == TaskName.Door:
+        threshold = 0.8
+        ## plot trajectories of the robot
+        # plt.figure(figsize=(8, 8))
+        # for k in range(experiments[0].num_runs):
+        #     plt.plot(experiments[0].qpos[k][0, :], experiments[0].qpos[k][1, :], 'lightgray')
+        # plt.title(f'Door Task: Trajectories of the robot, {experiments[0].num_runs} runs')
+        # plt.ylabel('y position (m)')
+        # plt.xlabel('x position (m)')
+        # # plt.savefig(f"/Users/moritzmeser/Desktop/Door_Task_trajectories.pdf")
+        # plt.show()
+        plt.figure(figsize=(10, 6))
+        for k in range(experiments[0].num_runs):
+            plt.plot(experiments[0].qpos[k][0, :], 'lightgray')
+            for idx , x in enumerate(experiments[0].qpos[k][0, :]):
+                if x > threshold:
+                    plt.plot(idx, x, 'ro')
+                    break
+            for idx , x in enumerate(experiments[0].qpos[k][0, :]):
+                if x > 1.2:
+                    plt.plot(idx, x, 'ro', c='blue')
+                    break
+        plt.title(f'Door Task: x Position of the Robot, {experiments[0].num_runs} Runs')
+        plt.xlabel('Time (s)')
+        plt.ylabel('x position (m)')
+        length = len(experiments[0].qpos[0][0, :])
+        plt.xlim(0, length)
+        num_ticks = 11  # Number of ticks you want on the x-axis
+        tick_positions = np.linspace(0, length - 1, num_ticks)
+        # Set the x-axis ticks
+        plt.xticks(tick_positions, labels=np.round(np.linspace(0, 10, num_ticks),
+                                                   2))  # Assuming the x-axis represents time in seconds
+
+
+        plt.axhline(y=0.8, color='black', linestyle='--', label='Threshold')
+        plt.axhline(y=1.2, color='black', linestyle='--', label='Threshold')
+
+
+        plt.savefig(f"/Users/moritzmeser/Desktop/Door_Task_x_position.pdf")
+        plt.show()
+
+        ##plot door openness
+        plt.figure(figsize=(10, 6))
+        for k in range(experiments[0].num_runs):
+            plt.plot(experiments[0].qpos[k][-2, :], 'lightgray')
+        plt.title(f'Door Task: Door Openness, {experiments[0].num_runs} Runs')
+        plt.xlabel('Time (s)')
+        plt.ylabel('Door openness')
+        length = len(experiments[0].qpos[0][-2, :])
+        plt.xlim(0, length)
+        num_ticks = 11  # Number of ticks you want on the x-axis
+        tick_positions = np.linspace(0, length - 1, num_ticks)
+        # Set the x-axis ticks
+        plt.xticks(tick_positions, labels=np.round(np.linspace(0, 10, num_ticks),
+                                                    2))
+        plt.savefig(f"/Users/moritzmeser/Desktop/Door_Task_door_openness.pdf")
+        plt.show()
+
+
+
     # plt.figure(figsize=(10, 6))
     #
     # # Iterate through each experiment and plot qpos[0] vs qpos[1]
@@ -364,14 +485,14 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
     # #
     # # order experiments by reward function
     #
-    # filtered_experiments = []
-    # for exp in experiments:
-    #     if exp.reward_function.name == 'ours_plus_hb':
-    #         filtered_experiments.append(exp)
-    # for exp in experiments:
-    #     if exp.reward_function.name == 'hb':
-    #         filtered_experiments.append(exp)
-    # experiments = filtered_experiments
+    filtered_experiments = []
+    for exp in experiments:
+        if exp.reward_function.name == 'ours_plus_hb':
+            filtered_experiments.append(exp)
+    for exp in experiments:
+        if exp.reward_function.name == 'hb':
+            filtered_experiments.append(exp)
+    experiments = filtered_experiments
     #
     # print("Task: ", experiments[0].task_name.name)
     # for exp in experiments:
@@ -448,30 +569,30 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
     #
     # plt.show()
     #
-    # # limit rewards to 1000 first steps, to make it comparable to Humanoid Bench
-    # for exp in experiments:
-    #     exp.rewards = np.array([r[:1000] for r in exp.rewards])
-    # if experiments[0].task_name == TaskName.Push:
-    #     for exp in experiments:
-    #         exp.rewards = np.array([r[:500] for r in exp.rewards])
-    #         for i, run in enumerate(exp.rewards):
-    #             for j, r in enumerate(run):
-    #                 if r > 0:
-    #                     run[j + 1:] = [0] * (len(run) - (j + 1))  # Set everything after index j to zero
-    #                     break
-    #             exp.rewards[i] = run
-    #
-    # # make violin plot
-    # violin_data = [np.sum(exp.rewards, axis=1) for exp in experiments]
-    # violin_names = [f"{exp.reward_function.name}" for exp in experiments]
-    # violin_names = ['ours' if v == 'ours_plus_hb' else v for v in violin_names]
-    # violin_names = [f'MPC\n{s}' for s in violin_names]
-    #
-    # # include also Algorithms from Humanoid Bench
-    # if experiments[0].robot_name == Robot.H1:
-    #     means, stds, algo_names, all_data = get_data(experiments[0].task_name.name.lower())
-    #     violin_data += all_data
-    #     violin_names += algo_names
+    # limit rewards to 1000 first steps, to make it comparable to Humanoid Bench
+    for exp in experiments:
+        exp.rewards = np.array([r[:1000] for r in exp.rewards])
+    if experiments[0].task_name == TaskName.Push:
+        for exp in experiments:
+            exp.rewards = np.array([r[:500] for r in exp.rewards])
+            for i, run in enumerate(exp.rewards):
+                for j, r in enumerate(run):
+                    if r > 0:
+                        run[j + 1:] = [0] * (len(run) - (j + 1))  # Set everything after index j to zero
+                        break
+                exp.rewards[i] = run
+
+    # make violin plot
+    violin_data = [np.sum(exp.rewards, axis=1) for exp in experiments]
+    violin_names = [f"{exp.reward_function.name}" for exp in experiments]
+    violin_names = ['ours' if v == 'ours_plus_hb' else v for v in violin_names]
+    violin_names = [f'MPC\n{s}' for s in violin_names]
+
+    # include also Algorithms from Humanoid Bench
+    if experiments[0].robot_name == Robot.H1:
+        means, stds, algo_names, all_data = get_data(experiments[0].task_name.name.lower())
+        violin_data += all_data
+        violin_names += algo_names
     #
     # # plt.figure(figsize=(5, 6))
     # # # plt.axes([0.1, 0.2, 0.8, 0.7])  # Adjust axes to leave space on the right
@@ -490,4 +611,4 @@ def new_evaluation_method(folder_paths: List[pathlib.Path]):
     # # # plt.savefig(f"/Users/moritzmeser/Desktop/sum_of_rewards_{experiments[0].task_name.name}_{experiments[0].robot_name.name}.pdf")
     # # # plt.show()
     #
-    # return violin_data, violin_names
+    return violin_data, violin_names
