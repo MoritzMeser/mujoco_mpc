@@ -1,5 +1,6 @@
 <mujoco model="Walk G1">
-    <include file="../g1/g1_modified.xml"/>
+<!--    <include file="../g1/g1_modified.xml"/>-->
+    <include file="../g1/g1_new.xml"/>
     <include file="../../common.xml"/>
 
     <worldbody>
