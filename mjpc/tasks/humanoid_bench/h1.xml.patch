@@ -1,5 +1,6 @@
---- /Users/moritzmeser/lokal/Code_Local/MJPC/mujoco_mpc/cmake-build-release/mjpc/tasks/humanoid_bench/assets/h1.xml	2024-07-11 16:38:31
-+++ /Users/moritzmeser/lokal/Code_Local/MJPC/mujoco_mpc/mjpc/tasks/humanoid_bench/h1_pos.xml	2024-07-11 16:39:33
+diff --git a/h1_modified.xml b/h1_modified.xml
+--- a/h1.xml
++++ b/h1_pos.xml
 @@ -1,16 +1,14 @@
 -<mujoco model="h1">
 +<mujoco model="Unitree H1">
@@ -52,7 +53,7 @@
      </default>
    </default>
 
-@@ -59,39 +81,42 @@
+@@ -59,44 +81,45 @@
      <light mode="targetbodycom" target="torso_link" pos="2 0 2.5"/>
      <body name="pelvis" pos="0 0 1.06" childclass="h1">
        <inertial pos="-0.0002 4e-05 -0.04522" quat="0.498303 0.499454 -0.500496 0.501741" mass="5.39"
@@ -103,8 +104,14 @@
 +                          diaginertia="0.00220848 0.00218961 0.000214202"/>
                  <joint name="left_ankle" axis="0 1 0" range="-0.87 0.52"/>
                  <geom class="visual" mesh="left_ankle_link"/>
-                 <geom class="foot1"/>
-@@ -104,34 +129,37 @@
+-                <geom class="foot1"/>
+-                <geom class="foot2"/>
+-                <geom class="foot3"/>
++                <geom class="collision" mesh="left_ankle_link"/>
+               </body>
+             </body>
+           </body>
+@@ -104,47 +127,49 @@
        </body>
        <body name="right_hip_yaw_link" pos="0 -0.0875 -0.1742">
          <inertial pos="-0.04923 -0.0001 0.0072" quat="0.641667 0.233287 0.219193 0.69699" mass="2.244"
@@ -149,8 +156,13 @@
 +                          diaginertia="0.00220848 0.00218961 0.000214202"/>
                  <joint name="right_ankle" axis="0 1 0" range="-0.87 0.52"/>
                  <geom class="visual" mesh="right_ankle_link"/>
-                 <geom class="foot1"/>
-@@ -143,8 +171,9 @@
+-                <geom class="foot1"/>
+-                <geom class="foot2"/>
+-                <geom class="foot3"/>
++                <geom class="collision" mesh="right_ankle_link"/>
+               </body>
+             </body>
+           </body>
          </body>
        </body>
        <body name="torso_link">
@@ -162,7 +174,7 @@
          <joint name="torso" axis="0 0 1" range="-2.35 2.35"/>
          <geom class="visual" mesh="torso_link"/>
          <geom class="visual" material="white" mesh="logo_link"/>
-@@ -152,59 +181,72 @@
+@@ -152,59 +177,72 @@
          <geom name="helmet" class="collision" type="sphere" size="0.073" pos="0.045 0 0.68"/>
          <geom name="torso" class="collision" type="box" size="0.07 0.1 0.22" pos="0 0 0.25"/>
          <geom name="hip" class="collision" type="capsule" size="0.05" fromto="0 -0.1 -0.05 0 0.1 -0.05"/>
@@ -253,7 +265,7 @@
                </body>
              </body>
            </body>
-@@ -219,24 +261,24 @@
+@@ -219,24 +257,24 @@
    </contact>
 
    <actuator>
@@ -297,3 +309,4 @@
 +    <position name="right_elbow" joint="right_elbow" ctrlrange="-1.25 2.61" class="elbow"/>
    </actuator>
  </mujoco>
+
