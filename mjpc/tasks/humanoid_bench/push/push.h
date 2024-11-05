@@ -44,16 +44,9 @@ class push : public Task {
 
   push() : residual_(this) {
     target_position_ = {0.85, 0.0, 1.0};
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis_x(0.7, 1.0);
-    std::uniform_real_distribution<> dis_y(-0.5, 0.5);
-    target_position_ = {dis_x(gen), dis_y(gen), 1.0};
   }
 
   void TransitionLocked(mjModel *model, mjData *data) override;
-
-  void ResetLocked(const mjModel *model) override;
 
  protected:
   std::unique_ptr<mjpc::ResidualFn> ResidualLocked() const

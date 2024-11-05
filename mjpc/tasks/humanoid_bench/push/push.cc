@@ -226,28 +226,6 @@ void push::ResidualFn::Residual(const mjModel *model, const mjData *data,
 // -------- Transition for humanoid_bench push task -------- //
 // ------------------------------------------------------------ //
 void push::TransitionLocked(mjModel *model, mjData *data) {
-  double *object_pos = SensorByName(model, data, "object_pos");
-  double goal_dist = mju_dist3(object_pos, target_position_.data());
-  if (goal_dist < 0.05) {  // consider task as solved
-    // set random target position
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis_x(0.7, 1.0);
-    std::uniform_real_distribution<> dis_y(-0.5, 0.5);
-    target_position_ = {dis_x(gen), dis_y(gen), 1.0};
-    printf("New target position: %f, %f\n", target_position_[0],
-           target_position_[1]);
-  }
-  mju_copy3(data->mocap_pos, target_position_.data());
-}
-
-void push::ResetLocked(const mjModel *model) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_real_distribution<> dis_x(0.7, 1.0);
-  std::uniform_real_distribution<> dis_y(-0.5, 0.5);
-  target_position_ = {dis_x(gen), dis_y(gen), 1.0};
-  printf("New target position: %f, %f\n", target_position_[0],
-         target_position_[1]);
+  mju_copy3(target_position_.data(), data->mocap_pos);
 }
 }  // namespace mjpc
